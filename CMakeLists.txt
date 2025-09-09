@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.31.6)
+project(hidden_bpf_lock)
+
+Include_directories(src/include)
+Include_directories(${CMAKE_BINARY_DIR}/src/include)
+add_subdirectory(src/bpf)
+add_subdirectory(src/k1cli)

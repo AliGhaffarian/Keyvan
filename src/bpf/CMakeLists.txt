@@ -1,0 +1,55 @@
+set(CMAKE_C_COMPILER clang)
+make_directory(${CMAKE_BINARY_DIR}/src/include/)
+
+# vmlinux.h
+add_custom_command(
+    OUTPUT ${CMAKE_BINARY_DIR}/src/include/vmlinux.h
+    DEPENDS /sys/kernel/btf/vmlinux
+    COMMAND bpftool 
+    ARGS btf dump file /sys/kernel/btf/vmlinux format c > ${CMAKE_BINARY_DIR}/src/include/vmlinux.h
+)
+add_custom_target(
+    vmlinux_hdr
+    ALL
+    DEPENDS ${CMAKE_BINARY_DIR}/src/include/vmlinux.h
+)
+
+file(GLOB BPF_TARGETS verdict/*.bpf.c auth_check/*.bpf.c)
+#list(APPEND BPF_TARGETS auth_check_execve.bpf verdict_execve_lsm.bpf)
+
+foreach(TARGET IN LISTS BPF_TARGETS)
+    get_filename_component(TARGET_FILE_NAME ${TARGET} NAME)
+    set(TARGET_OUTPUT_PATH ${CMAKE_BINARY_DIR}/src/bpf/${TARGET_FILE_NAME}.o)
+    add_custom_command(
+        OUTPUT ${TARGET_OUTPUT_PATH}
+        COMMAND ${CMAKE_C_COMPILER}
+        ARGS -O2 -target bpf -g -c ${TARGET} -I${CMAKE_SOURCE_DIR}/src/include -I${CMAKE_BINARY_DIR}/src/include -o ${TARGET_OUTPUT_PATH}
+    )
+    add_custom_target(
+        ${TARGET_FILE_NAME}
+        DEPENDS ${TARGET_OUTPUT_PATH}
+    )
+    list(APPEND BPF_OBJECT_LIBS ${TARGET_OUTPUT_PATH})
+endforeach()
+
+# skel files
+add_custom_command(
+    OUTPUT bpf_progs.o
+    DEPENDS ${BPF_OBJECT_LIBS}
+    COMMAND bpftool
+    ARGS gen obj bpf_progs.o ${BPF_OBJECT_LIBS}
+)
+
+# skel files
+add_custom_command(
+    OUTPUT ${CMAKE_BINARY_DIR}/src/include/bpf_progs.skel.h
+    DEPENDS bpf_progs.o
+    COMMAND bpftool
+    ARGS gen skel bpf_progs.o > ${CMAKE_BINARY_DIR}/src/include/bpf_progs.skel.h
+)
+
+add_custom_target(
+    skel
+    ALL
+    DEPENDS ${CMAKE_BINARY_DIR}/src/include/bpf_progs.skel.h
+)

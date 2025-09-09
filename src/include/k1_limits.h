@@ -1,0 +1,6 @@
+#ifndef K1_LIMITS
+#define K1_LIMITS
+
+#define K1_BPF_STRING_MAXSIZE 250
+#define K1_MAX_USER_AUTH_DETAILS 10
+#endif
