@@ -3,5 +3,7 @@ CMakeCache.txt
 cmake_install.cmake
 Makefile
 vmlinux.h
+compile_commands.json
+.cache
 *.skel.h
 *.o
