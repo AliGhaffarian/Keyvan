@@ -37,6 +37,9 @@ make
 sudo ./src/k1cli/k1cli -u 1000 -p some_secret_password
 ```
 
+## Notes
+The main purpose of k1cli is to communicate with a deamon that is responsible for managing the bpf programs. Until that deamon is implemented, k1cli will serve as a utility to enable using Keyvan.
+
 ### Implemented
 - [x] Execve authentication checker
 - [x] File execution verdict
