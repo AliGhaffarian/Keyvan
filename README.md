@@ -5,12 +5,6 @@ It provides silent authentication checks and access control verdicts for resourc
 (files, execs, and later network actions). The goal is to allow a machine to appear
 unlocked to an unauthorized user while restricting their access in order to confuse them.
 
-## Features (current)
-- **Authentication checkers**: eBPF programs that implement authentication logic.
-  - `K1_AUTH_TYPE_EXECVE`: authenticates a session when the secret (password) is executed (e.g. `./my_secret`).
-- **Verdicts**: eBPF(currently LSM based) checks that check the `is_authenticated` flag and deny access if the flag is not set.
-  - `K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC`: LSM hook that is triggered when executing a file.
-
 ## Quick demo
 
 Example: root is restricted until the secret is executed:
@@ -39,6 +33,12 @@ sudo ./src/k1cli/k1cli -u 1000 -p some_secret_password
 
 ## Notes
 The main purpose of k1cli is to communicate with a deamon that is responsible for managing the bpf programs. Until that deamon is implemented, k1cli will serve as a utility to enable using Keyvan.
+
+## Features (current)
+- **Authentication checkers**: eBPF programs that implement authentication logic.
+  - `K1_AUTH_TYPE_EXECVE`: authenticates a session when the secret (password) is executed (e.g. `./my_secret`).
+- **Verdicts**: eBPF(currently LSM based) checks that check the `is_authenticated` flag and deny access if the flag is not set.
+  - `K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC`: LSM hook that is triggered when executing a file.
 
 ### Implemented
 - [x] Execve authentication checker
