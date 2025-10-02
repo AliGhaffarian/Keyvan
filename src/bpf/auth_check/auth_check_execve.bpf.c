@@ -5,18 +5,7 @@
 #include <auth.h>
 #include <user_map.h>
 #include <k1_limits.h>
-
-int my_strcmp(char *first, char *second){
-    int cnt = 0;
-    while(*first && *second && cnt < K1_BPF_STRING_MAXSIZE){
-        if(*first != *second)
-            return *first;
-        first++;
-        second++;
-        cnt++;
-    }
-    return (*first || *second);
-}
+#include <k1_bpf_util.h>
 
 struct k1_user_map_struct k1_user_map SEC(".maps");
 
@@ -37,7 +26,7 @@ int BPF_PROG(auth_execve_check, void *a, void* b, char *filename){
         if( K1_AUTH_TYPE_EXECVE != elem->auth_details[i].auth_verdict_pair.auth_type )
             continue;
 
-        if(my_strcmp(buf, elem->auth_details[i].execve_details.pathname) == 0)
+        if(k1_strcmp(buf, elem->auth_details[i].execve_details.pathname) == 0)
             elem->auth_details[i].is_authenticated = !elem->auth_details[i].is_authenticated;
 
     }
