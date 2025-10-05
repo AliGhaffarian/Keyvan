@@ -6,14 +6,14 @@
 #include <auth_check.h>
 #include <verdict.h>
 
-struct k1_auth_details {
+struct k1_record {
     bool is_authenticated;
     enum K1_VERDICT_HOOK verdict_hook;
     struct k1_auth_check_detail auth_check_detail;
 };
 
-struct k1_auth_details_list {
+struct k1_record_list {
     int len;
-    struct k1_auth_details auth_details[K1_MAX_USER_AUTH_DETAILS];
+    struct k1_record records[K1_MAX_USER_RECORDS];
 };
 #endif

@@ -84,16 +84,16 @@ int main(int argc, char **argv){
     handle_args(argc, argv);
 
     struct bpf_progs *skel;
-    struct k1_auth_details details = {
+    struct k1_record record = {
         .is_authenticated = 0,
         .verdict_hook = K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC,
     };
-    details.auth_check_detail.auth_type = K1_AUTH_TYPE_EXECVE;
-    strcpy(details.auth_check_detail.auth_execve.pathname, password);
+    record.auth_check_detail.auth_type = K1_AUTH_TYPE_EXECVE;
+    strcpy(record.auth_check_detail.auth_execve.pathname, password);
     
-    struct k1_auth_details_list detail_list = {
+    struct k1_record_list record_list= {
         .len = 1,
-        .auth_details = {details}
+        .records = {record}
     };
 
     skel = bpf_progs__open_and_load();
@@ -102,8 +102,8 @@ int main(int argc, char **argv){
             skel->maps.k1_user_map, 
             &uid, 
             sizeof(uid),
-            &detail_list, 
-            sizeof(detail_list), 
+            &record_list,
+            sizeof(record_list),
             0
             );
     if(err){
