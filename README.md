@@ -5,6 +5,15 @@ It provides silent authentication checks and access control verdicts for resourc
 (files, execs, and later network actions). The goal is to allow a machine to appear
 unlocked to an unauthorized user while restricting their access in order to confuse them.
 
+## Table of Contents
+* [Quick demo](#quick-demo)
+* [Quick start](#quick-start)
+* [Notes](#notes)
+* [Features (current)](#features-current)
+  + [Implemented](#implemented)
+  + [Planned](#planned)
+* [Development roadmap](#development-roadmap)
+
 ## Quick demo
 
 Example: root is restricted until the secret is executed:
