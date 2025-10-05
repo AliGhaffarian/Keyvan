@@ -85,13 +85,11 @@ int main(int argc, char **argv){
 
     struct bpf_progs *skel;
     struct k1_auth_details details = {
-        .auth_verdict_pair = {
-            .auth_type = K1_AUTH_TYPE_EXECVE,
-            .verdict_hook = K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC
-        },
         .is_authenticated = 0,
+        .verdict_hook = K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC,
     };
-    strcpy(details.execve_details.pathname, password);
+    details.auth_check_detail.auth_type = K1_AUTH_TYPE_EXECVE;
+    strcpy(details.auth_check_detail.auth_execve.pathname, password);
     
     struct k1_auth_details_list detail_list = {
         .len = 1,

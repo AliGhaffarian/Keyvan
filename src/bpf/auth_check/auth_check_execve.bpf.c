@@ -25,10 +25,10 @@ int BPF_PROG(auth_execve_check, void *a, void* b, char *filename){
     }
 
     for(int i = 0; i < elem->len && i < K1_MAX_USER_AUTH_DETAILS; i++){
-        if( K1_AUTH_TYPE_EXECVE != elem->auth_details[i].auth_verdict_pair.auth_type )
+        if( K1_AUTH_TYPE_EXECVE != elem->auth_details[i].auth_check_detail.auth_type )
             continue;
 
-        if(k1_strcmp(buf, elem->auth_details[i].execve_details.pathname) == 0)
+        if(k1_strcmp(buf, elem->auth_details[i].auth_check_detail.auth_execve.pathname) == 0)
             elem->auth_details[i].is_authenticated = !elem->auth_details[i].is_authenticated;
 
     }

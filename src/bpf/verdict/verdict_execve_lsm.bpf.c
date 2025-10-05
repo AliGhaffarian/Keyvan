@@ -20,7 +20,7 @@ int BPF_PROG(verdict_execve_lsm){
         return LSM_ALLOW;
 
     for(int i = 0; i < elem->len && i < K1_MAX_USER_AUTH_DETAILS; i++){
-        if (K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC != elem->auth_details[i].auth_verdict_pair.verdict_hook)
+        if (K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC != elem->auth_details[i].verdict_hook)
             continue;
 
         if (!elem->auth_details[i].is_authenticated)

@@ -6,17 +6,10 @@
 #include <auth_check.h>
 #include <verdict.h>
 
-struct k1_auth_verdict_pair {
-    enum K1_AUTH_TYPE auth_type;
-    enum K1_VERDICT_HOOK verdict_hook;
-};
-
 struct k1_auth_details {
-    struct k1_auth_verdict_pair auth_verdict_pair;
     bool is_authenticated;
-    union {
-        struct k1_auth_execve execve_details;
-    };
+    enum K1_VERDICT_HOOK verdict_hook;
+    struct k1_auth_check_detail auth_check_detail;
 };
 
 struct k1_auth_details_list {
