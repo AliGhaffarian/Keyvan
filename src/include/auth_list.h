@@ -1,24 +1,10 @@
-#ifndef AUTH
-#define AUTH
+#ifndef AUTH_LIST
+#define AUTH_LIST
 
 #include <stdbool.h>
 #include <k1_limits.h>
-
-enum K1_AUTH_TYPE {
-    _K1_AUTH_UNSPEC,
-    K1_AUTH_TYPE_EXECVE,
-    _K1_AUTH_ENUM_SIZE
-};
-
-enum K1_VERDICT_HOOK {
-    _K1_VERDICT_HOOK_UNSPEC,
-    K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC,
-    _K1_VERDICT_HOOK_SIZE
-};
-
-struct k1_auth_execve {
-    char pathname[K1_BPF_STRING_MAXSIZE];
-};
+#include <auth_check.h>
+#include <verdict.h>
 
 struct k1_auth_verdict_pair {
     enum K1_AUTH_TYPE auth_type;

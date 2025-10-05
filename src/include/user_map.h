@@ -3,7 +3,7 @@
 
 #include <vmlinux.h>
 #include <bpf/bpf_helpers.h>
-#include <auth.h>
+#include <auth_list.h>
 
 
 struct k1_user_map_struct {

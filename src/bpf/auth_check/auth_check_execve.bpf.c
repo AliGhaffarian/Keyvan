@@ -2,7 +2,9 @@
 #include <bpf/bpf_helpers.h>
 #include <bpf/bpf_core_read.h>
 #include <bpf/bpf_tracing.h>
-#include <auth.h>
+
+#include <auth_list.h>
+#include <auth_check.h>
 #include <user_map.h>
 #include <k1_limits.h>
 #include <k1_bpf_util.h>

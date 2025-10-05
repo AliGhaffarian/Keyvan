@@ -2,7 +2,8 @@
 #include <bpf/bpf_helpers.h>
 #include <bpf/bpf_tracing.h>
 
-#include <auth.h>
+#include <verdict.h>
+#include <auth_list.h>
 #include <user_map.h>
 
 #define LSM_ALLOW 0

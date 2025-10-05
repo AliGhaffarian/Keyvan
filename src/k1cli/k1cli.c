@@ -4,9 +4,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include <auth.h>
+#include <auth_list.h>
 #include <bpf_progs.skel.h>
-#include <auth.h>
 
 #define _STR(x) #x
 #define STR(x) _STR(x)
