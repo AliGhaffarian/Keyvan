@@ -45,7 +45,7 @@ The main purpose of k1cli is to communicate with a deamon that is responsible fo
 
 ## Features (current)
 - **Authentication checkers**: eBPF programs that implement authentication logic.
-  - `K1_AUTH_TYPE_EXECVE`: authenticates a session when the secret (password) is executed (e.g. `./my_secret`).
+  - `K1_AUTH_TYPE_EXECVE`: authenticates a user when the secret (password) is executed (e.g. `./my_secret`).
 - **Verdicts**: eBPF(currently LSM based) checks that check the `is_authenticated` flag and deny access if the flag is not set.
   - `K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC`: LSM hook that is triggered when executing a file.
 
