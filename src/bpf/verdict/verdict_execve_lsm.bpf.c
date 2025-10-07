@@ -4,7 +4,7 @@
 
 #include <verdict.h>
 #include <auth_list.h>
-#include <user_map.h>
+#include <k1_map.h>
 
 #define LSM_ALLOW 0
 #define LSM_DENY -1

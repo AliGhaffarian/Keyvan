@@ -5,7 +5,7 @@
 
 #include <auth_list.h>
 #include <auth_check.h>
-#include <user_map.h>
+#include <k1_map.h>
 #include <k1_limits.h>
 #include <k1_bpf_util.h>
 

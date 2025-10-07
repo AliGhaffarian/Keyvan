@@ -6,7 +6,7 @@
 #include <auth_list.h>
 
 
-struct k1_user_map_struct {
+struct k1_auth_map_hash_sys {
     __uint(type, BPF_MAP_TYPE_HASH);
     __uint(max_entries, 1024);
     __type(key, __u32);
