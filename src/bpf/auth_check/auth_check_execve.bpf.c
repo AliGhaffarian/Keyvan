@@ -19,7 +19,7 @@ int BPF_PROG(auth_execve_check, void *a, void* b, char *filename){
     buf[K1_BPF_STRING_MAXSIZE - 1] = 0;
 
     u32 uid = bpf_get_current_uid_gid() & 0xffff;
-    struct k1_record_list *elem = bpf_map_lookup_elem(&auth_map_hash_sys, &uid);
+    struct k1_sys_record_list *elem = bpf_map_lookup_elem(&auth_map_hash_sys, &uid);
     if(!elem){
         return 0;
     }
