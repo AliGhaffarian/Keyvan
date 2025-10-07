@@ -6,5 +6,6 @@ vmlinux.h
 compile_commands.json
 output
 .cache
+cscope.*
 *.skel.h
 *.o
