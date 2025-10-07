@@ -4,6 +4,7 @@ cmake_install.cmake
 Makefile
 vmlinux.h
 compile_commands.json
+output
 .cache
 *.skel.h
 *.o

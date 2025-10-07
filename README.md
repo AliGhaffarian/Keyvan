@@ -37,7 +37,7 @@ cd build
 make
 
 # run Keyvan
-sudo ./src/k1cli/k1cli -u 1000 -p some_secret_password
+sudo ./output/k1cli -u 1000 -p some_secret_password
 ```
 
 ## Notes
