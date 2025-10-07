@@ -1,7 +1,6 @@
 #ifndef K1_BPF_UTIL
 #define K1_BPF_UTIL
 
-#include <vmlinux.h> //included for clarity: k1_map.h includes vmlinux.h and this include is to express it explicitly
 #include <k1_map.h>
 #include <bpf/bpf_helpers.h>
 #include <k1_limits.h>
