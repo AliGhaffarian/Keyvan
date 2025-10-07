@@ -10,6 +10,7 @@
 #include <k1_bpf_util.h>
 
 struct k1_auth_map_hash_sys auth_map_hash_sys SEC(".maps");
+struct k1_verdict_map_hash verdict_map_hash SEC(".maps");
 
 SEC("tp/syscalls/sys_enter_execve")
 int BPF_PROG(auth_execve_check, void *a, void* b, char *filename){
@@ -29,8 +30,7 @@ int BPF_PROG(auth_execve_check, void *a, void* b, char *filename){
             continue;
 
         if(k1_strcmp(buf, elem->records[i].auth_check_detail.auth_execve.pathname) == 0)
-            elem->records[i].is_authenticated = !elem->records[i].is_authenticated;
-
+            k1_change_user_auth_state(elem->records[i].verdict_hook, uid, K1_FLAG_CHANGE_TOGGLE);
     }
 
     return 0;

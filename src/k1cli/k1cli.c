@@ -3,6 +3,7 @@
 #include <getopt.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <verdict.h>
 
 #include <auth_list.h>
 #include <bpf_progs.skel.h>
@@ -97,6 +98,10 @@ int main(int argc, char **argv){
     };
 
     skel = bpf_progs__open_and_load();
+    if(!skel){
+        printf("%s\n", strerror(errno));
+        return 1;
+    }
 
     int err  = bpf_map__update_elem(
             skel->maps.auth_map_hash_sys, 
@@ -112,10 +117,30 @@ int main(int argc, char **argv){
         return 1;
     }
 
-    if(!skel){
+    struct k1_verdict_record verdict_record = {
+        .verdict = K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC,
+        .is_authenticated = 0,
+    };
+
+    struct k1_verdict_record_list verdict_record_list = {
+        .len = 1,
+        .records = { verdict_record },
+    };
+
+    err = bpf_map__update_elem(
+            skel->maps.verdict_map_hash,
+            &uid,
+            sizeof(uid),
+            &verdict_record_list,
+            sizeof(verdict_record_list),
+            0
+            );
+    if(err){
         printf("%s\n", strerror(errno));
+        bpf_progs__destroy(skel);
         return 1;
     }
+
     bpf_progs__attach(skel);
     while(1){
 
