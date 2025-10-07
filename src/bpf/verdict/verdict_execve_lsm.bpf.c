@@ -9,13 +9,13 @@
 #define LSM_ALLOW 0
 #define LSM_DENY -1
 
-struct k1_user_map_struct __attribute__((weak)) k1_user_map SEC(".maps");
+struct k1_auth_map_hash_sys __attribute__((weak)) auth_map_hash_sys SEC(".maps");
 
 SEC("lsm/bprm_creds_for_exec")
 int BPF_PROG(verdict_execve_lsm){
 
     u32 uid = bpf_get_current_uid_gid() & 0xffff;
-    struct k1_record_list *elem = bpf_map_lookup_elem(&k1_user_map, &uid);
+    struct k1_record_list *elem = bpf_map_lookup_elem(&auth_map_hash_sys, &uid);
     if(!elem)
         return LSM_ALLOW;
 

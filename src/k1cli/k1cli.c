@@ -99,7 +99,7 @@ int main(int argc, char **argv){
     skel = bpf_progs__open_and_load();
 
     int err  = bpf_map__update_elem(
-            skel->maps.k1_user_map, 
+            skel->maps.auth_map_hash_sys, 
             &uid, 
             sizeof(uid),
             &record_list,
