@@ -31,7 +31,7 @@ int BPF_PROG(auth_check_usb_create_sysfs, struct usb_device *udev){
             continue;
 
         if (k1_strcmp(udev->serial, elem->records[i].auth_check_detail.auth_usb.serial))
-            return 0;
+            continue;
 
         k1_change_user_auth_state(
                 elem->records[i].verdict_hook,
