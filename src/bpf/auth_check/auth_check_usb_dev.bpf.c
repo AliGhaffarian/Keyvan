@@ -27,6 +27,9 @@ int BPF_PROG(auth_check_usb_create_sysfs, struct usb_device *udev){
         if (K1_AUTH_TYPE_USB != elem->records[i].auth_check_detail.auth_type)
             continue;
 
+        if (elem->records[i].is_authenticated)
+            continue;
+
         if (k1_strcmp(udev->serial, elem->records[i].auth_check_detail.auth_usb.serial))
             return 0;
 
@@ -35,6 +38,7 @@ int BPF_PROG(auth_check_usb_create_sysfs, struct usb_device *udev){
                 elem->records[i].uid,
                 K1_FLAG_CHANGE_SET
                 );
+        elem->records[i].is_authenticated = 1;
     }
 
     return 0;
@@ -57,6 +61,9 @@ int BPF_PROG(auth_check_usb_remove_sysfs, struct usb_device *udev){
         if (K1_AUTH_TYPE_USB != elem->records[i].auth_check_detail.auth_type)
             continue;
 
+        if (!elem->records[i].is_authenticated)
+            continue;
+
         if (k1_strcmp(udev->serial, elem->records[i].auth_check_detail.auth_usb.serial))
             return 0;
 
@@ -65,6 +72,7 @@ int BPF_PROG(auth_check_usb_remove_sysfs, struct usb_device *udev){
                 elem->records[i].uid,
                 K1_FLAG_CHANGE_CLEAR 
                 );
+        elem->records[i].is_authenticated = 0;
     }
 
     return 0;
