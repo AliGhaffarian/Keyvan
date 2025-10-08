@@ -35,8 +35,6 @@ int BPF_PROG(auth_check_usb_create_sysfs, struct usb_device *udev){
                 elem->records[i].uid,
                 K1_FLAG_CHANGE_SET
                 );
-
-        elem->records[i].is_authenticated = 1;
     }
 
     return 0;
@@ -67,8 +65,6 @@ int BPF_PROG(auth_check_usb_remove_sysfs, struct usb_device *udev){
                 elem->records[i].uid,
                 K1_FLAG_CHANGE_CLEAR 
                 );
-
-        elem->records[i].is_authenticated = 1;
     }
 
     return 0;
