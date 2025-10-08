@@ -24,8 +24,8 @@ int BPF_PROG(auth_check_usb_create_sysfs, struct usb_device *udev){
 
 
     for(int i = 0; i < elem->len && i < K1_MAX_USER_RECORDS; i++){
-        if (K1_AUTH_TYPE_USB != elem->records[i].auth_check_detail.auth_type)
-            continue;
+
+        // we already looked up the records with the key `K1_AUTH_TYPE_USB`. don't check for it again
 
         if (elem->records[i].is_authenticated)
             continue;
