@@ -8,6 +8,7 @@
 
 #include <auth_list.h>
 #include <bpf_progs.skel.h>
+#include <common.h>
 
 #include "opt.h"
 
@@ -52,15 +53,10 @@ struct option long_options[] = {
     }
 };
 
-char *k1_auth_check_enum_to_string[] = {
-    [K1_AUTH_TYPE_EXECVE] = STR(K1_AUTH_TYPE_EXECVE),
-    [K1_AUTH_TYPE_USB] = STR(K1_AUTH_TYPE_USB),
-};
-
 static void print_supported_auth_check_type(){
     printf("AUTH_TYPE: ");
     for (int i = 1; i < _K1_AUTH_ENUM_SIZE; i++)
-        printf("%s,", k1_auth_check_enum_to_string[i]);
+        printf("%s,", enum_to_string_k1_auth_type[i]);
     puts("");
 }
 
@@ -82,7 +78,7 @@ void print_help_and_quit(){
 
 int parse_auth_type(char *action){
     for(int i = 1; i < _K1_AUTH_ENUM_SIZE; i++){
-        if(strcmp(action, k1_auth_check_enum_to_string[i]))
+        if(strcmp(action, enum_to_string_k1_auth_type[i]))
             continue;
 
         args.auth_check_detail.auth_type = i;

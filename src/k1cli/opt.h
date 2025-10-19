@@ -10,10 +10,6 @@
 #include <auth_list.h>
 #include <bpf_progs.skel.h>
 
-
-#define _STR(x) #x
-#define STR(x) _STR(x)
-
 extern char *usage_help;
 
 extern uid_t uid;
@@ -33,8 +29,6 @@ struct args_struct {
 };
 
 extern struct option long_options[];
-
-extern char *k1_auth_check_enum_to_string[];
 
 void print_help_and_quit();
 
