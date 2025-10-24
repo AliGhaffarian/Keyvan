@@ -1,5 +1,5 @@
-#ifndef VERDICT
-#define VERDICT
+#ifndef K1_VERDICT
+#define K1_VERDICT
 
 #include <stdbool.h>
 #include <auth_check.h>
