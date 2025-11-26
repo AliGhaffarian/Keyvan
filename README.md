@@ -40,7 +40,7 @@ cd build
 make
 
 # run Keyvan
-sudo ./build/output/k1cli -u 1000 -a K1_AUTH_TYPE_EXECVE -p some_secret_password
+sudo ./output/k1cli -u 1000 -a K1_AUTH_TYPE_EXECVE -p some_secret_password
 ```
 
 ## Notes
