@@ -1,3 +1,6 @@
+# Note to Reader
+During development, i revised Keyvan's architecture and changed my approach. This readme explains the current implementation. To see the planned Keyvan, please read [this file](https://github.com/AliGhaffarian/Keyvan/blob/main/PLANNED_README.md)
+
 # Keyvan (k1)
 
 **Keyvan** (aka `k1`) is a kernel level access control mechanism implemented using eBPF.
