@@ -9,7 +9,7 @@
 #include <k1_limits.h>
 #include <k1_bpf_util.h>
 
-struct k1_auth_map_hash_sys auth_map_hash_sys SEC(".maps");
+struct k1_sys_auth_map_hash sys_auth_map_hash SEC(".maps");
 struct k1_verdict_map_hash verdict_map_hash SEC(".maps");
 
 SEC("tp/syscalls/sys_enter_execve")
@@ -20,7 +20,7 @@ int BPF_PROG(auth_execve_check, void *a, void* b, char *filename){
     buf[K1_BPF_STRING_MAXSIZE - 1] = 0;
 
     u32 uid = bpf_get_current_uid_gid() & 0xffff;
-    struct k1_sys_record_list *elem = bpf_map_lookup_elem(&auth_map_hash_sys, &uid);
+    struct k1_sys_record_list *elem = bpf_map_lookup_elem(&sys_auth_map_hash, &uid);
     if(!elem){
         return 0;
     }

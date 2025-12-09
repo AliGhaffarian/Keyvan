@@ -160,7 +160,7 @@ void init_auth_execve(struct bpf_progs *skel, char *credential){
     };
 
     int err = bpf_map__update_elem(
-            skel->maps.auth_map_hash_sys,
+            skel->maps.sys_auth_map_hash,
             &args.uid, 
             sizeof(args.uid),
             &record_list,
