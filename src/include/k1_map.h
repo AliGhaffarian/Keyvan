@@ -3,7 +3,7 @@
 
 #include <vmlinux.h>
 #include <bpf/bpf_helpers.h>
-#include <auth_list.h>
+#include <auth_record.h>
 
 struct k1_auth_map_hash {
     __uint(type, BPF_MAP_TYPE_HASH);

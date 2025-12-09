@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <verdict.h>
 
-#include <auth_list.h>
+#include <auth_record.h>
 #include <bpf_progs.skel.h>
 
 #include "opt.h"
