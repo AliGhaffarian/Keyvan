@@ -24,7 +24,7 @@ extern char *execve_help;
 struct args_struct {
     uid_t uid;
     enum K1_VERDICT_HOOK verdict;
-    struct k1_auth_cred auth_check_detail;
+    struct k1_auth_cred auth_cred;
     char credential[K1_BPF_STRING_MAXSIZE];
 };
 

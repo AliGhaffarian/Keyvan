@@ -81,7 +81,7 @@ int parse_auth_type(char *action){
         if(strcmp(action, enum_to_string_k1_auth_type[i]))
             continue;
 
-        args.auth_check_detail.auth_type = i;
+        args.auth_cred.auth_type = i;
         return 0;
     }
     return 1;
@@ -111,7 +111,7 @@ void handle_args(int argc, char **argv){
 
                 break;
             case 'a':
-                if (args.auth_check_detail.auth_type != _K1_AUTH_UNSPEC)
+                if (args.auth_cred.auth_type != _K1_AUTH_UNSPEC)
                     break;
                 err = parse_auth_type(optarg);
                 if(err)
@@ -148,11 +148,11 @@ arg_fail:
 
 void init_auth_execve(struct bpf_progs *skel, char *credential){
     struct k1_sys_record record = {
-        .auth_check_detail.auth_type = K1_AUTH_TYPE_EXECVE,
+        .auth_cred.auth_type = K1_AUTH_TYPE_EXECVE,
         .is_authenticated = 0,
         .verdict_hook = args.verdict,
     };
-    strcpy(record.auth_check_detail.auth_execve.pathname, credential);
+    strcpy(record.auth_cred.auth_execve.pathname, credential);
 
     struct k1_sys_record_list record_list= {
         .len = 1,
@@ -172,12 +172,12 @@ void init_auth_execve(struct bpf_progs *skel, char *credential){
 void init_auth_usb(struct bpf_progs *skel, char *credential){
 
     struct k1_record record = {
-        .auth_check_detail.auth_type = K1_AUTH_TYPE_USB,
+        .auth_cred.auth_type = K1_AUTH_TYPE_USB,
         .is_authenticated = 0,
         .uid = args.uid,
         .verdict_hook = args.verdict
     };
-    strcpy(record.auth_check_detail.auth_usb.serial, credential);
+    strcpy(record.auth_cred.auth_usb.serial, credential);
 
     struct k1_record_list record_list= {
         .len = 1,
@@ -217,7 +217,7 @@ void init_verdict(struct bpf_progs *skel){
 }
 
 void init_maps_based_on_args(struct bpf_progs *skel){
-    switch (args.auth_check_detail.auth_type) {
+    switch (args.auth_cred.auth_type) {
         case K1_AUTH_TYPE_EXECVE:
             init_auth_execve(skel, args.credential);
             break;
