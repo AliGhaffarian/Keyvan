@@ -1,4 +1,4 @@
-#include <auth_check.h>
+#include <auth_cred.h>
 #include <string.h>
 
 #include "common.h"

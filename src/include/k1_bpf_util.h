@@ -4,7 +4,7 @@
 #include <k1_map.h>
 #include <bpf/bpf_helpers.h>
 #include <k1_limits.h>
-#include <verdict.h>
+#include <verdict_record.h>
 
 struct k1_verdict_map_hash __attribute__((weak)) verdict_map_hash SEC(".maps");
 

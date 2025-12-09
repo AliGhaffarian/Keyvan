@@ -6,7 +6,7 @@
 #include <getopt.h>
 #include <stdbool.h>
 #include <k1_limits.h>
-#include <verdict.h>
+#include <verdict_record.h>
 #include <auth_record.h>
 #include <bpf_progs.skel.h>
 
@@ -24,7 +24,7 @@ extern char *execve_help;
 struct args_struct {
     uid_t uid;
     enum K1_VERDICT_HOOK verdict;
-    struct k1_auth_check_detail auth_check_detail;
+    struct k1_auth_cred auth_check_detail;
     char credential[K1_BPF_STRING_MAXSIZE];
 };
 

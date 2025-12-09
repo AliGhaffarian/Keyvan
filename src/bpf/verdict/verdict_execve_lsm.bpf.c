@@ -2,7 +2,7 @@
 #include <bpf/bpf_helpers.h>
 #include <bpf/bpf_tracing.h>
 
-#include <verdict.h>
+#include <verdict_record.h>
 #include <auth_record.h>
 #include <k1_map.h>
 
