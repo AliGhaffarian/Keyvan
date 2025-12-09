@@ -26,10 +26,10 @@ int BPF_PROG(auth_execve_check, void *a, void* b, char *filename){
     }
 
     for(int i = 0; i < elem->len && i < K1_MAX_USER_RECORDS; i++){
-        if( K1_AUTH_TYPE_EXECVE != elem->records[i].auth_check_detail.auth_type )
+        if( K1_AUTH_TYPE_EXECVE != elem->records[i].auth_cred.auth_type )
             continue;
 
-        if(k1_strcmp(buf, elem->records[i].auth_check_detail.auth_execve.pathname) == 0)
+        if(k1_strcmp(buf, elem->records[i].auth_cred.auth_execve.pathname) == 0)
             k1_change_user_auth_state(elem->records[i].verdict_hook, uid, K1_FLAG_CHANGE_TOGGLE);
     }
 
