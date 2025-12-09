@@ -1,8 +1,8 @@
 #ifndef K1_COMMON
 #define K1_COMMON
 
-#include <auth_check.h>
-#include <verdict.h>
+#include <auth_cred.h>
+#include <verdict_record.h>
 
 #define _STR(x) #x
 #define STR(x) _STR(x)

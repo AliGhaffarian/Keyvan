@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <stdbool.h>
-#include <verdict.h>
+#include <verdict_record.h>
 
 #include <auth_record.h>
 #include <bpf_progs.skel.h>

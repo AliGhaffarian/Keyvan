@@ -3,7 +3,7 @@
 #include <getopt.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <verdict.h>
+#include <verdict_record.h>
 #include <inttypes.h>
 
 #include <auth_record.h>

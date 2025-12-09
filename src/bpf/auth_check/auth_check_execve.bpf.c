@@ -4,7 +4,7 @@
 #include <bpf/bpf_tracing.h>
 
 #include <auth_record.h>
-#include <auth_check.h>
+#include <auth_cred.h>
 #include <k1_map.h>
 #include <k1_limits.h>
 #include <k1_bpf_util.h>

@@ -2,7 +2,7 @@
 #define K1_VERDICT
 
 #include <stdbool.h>
-#include <auth_check.h>
+#include <auth_cred.h>
 #include <k1_limits.h>
 
 enum K1_VERDICT_HOOK {
