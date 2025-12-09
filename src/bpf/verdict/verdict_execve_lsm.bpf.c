@@ -3,7 +3,7 @@
 #include <bpf/bpf_tracing.h>
 
 #include <verdict.h>
-#include <auth_list.h>
+#include <auth_record.h>
 #include <k1_map.h>
 
 #define LSM_ALLOW 0

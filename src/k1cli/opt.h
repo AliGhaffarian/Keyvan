@@ -7,7 +7,7 @@
 #include <stdbool.h>
 #include <k1_limits.h>
 #include <verdict.h>
-#include <auth_list.h>
+#include <auth_record.h>
 #include <bpf_progs.skel.h>
 
 extern char *usage_help;
