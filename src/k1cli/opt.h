@@ -36,9 +36,9 @@ int parse_auth_type(char *action);
 
 void handle_args(int argc, char **argv);
 
-void init_auth_execve(struct bpf_progs *skel, char *credential);
+void init_auth_cred_execve(struct bpf_progs *skel, char *credential);
 
-void init_auth_usb(struct bpf_progs *skel, char *credential);
+void init_auth_cred_usb(struct bpf_progs *skel, char *credential);
 
 void init_maps_based_on_args(struct bpf_progs *skel);
 

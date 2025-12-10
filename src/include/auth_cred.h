@@ -11,17 +11,17 @@ enum K1_AUTH_TYPE {
     _K1_AUTH_ENUM_SIZE
 };
 
-struct k1_auth_execve {
+struct k1_auth_cred_execve {
     char pathname[K1_BPF_STRING_MAXSIZE];
 };
 
-struct k1_auth_usb {
+struct k1_auth_cred_usb {
     char serial[K1_BPF_STRING_MAXSIZE];
 };
 
 #define K1_AUTH_CRED_UNION union {\
-        struct k1_auth_execve auth_execve;\
-        struct k1_auth_usb auth_usb;\
+        struct k1_auth_cred_execve auth_cred_execve;\
+        struct k1_auth_cred_usb auth_cred_usb;\
     }\
 
 struct k1_auth_cred {

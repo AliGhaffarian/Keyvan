@@ -146,13 +146,13 @@ arg_fail:
     print_help_and_quit();
 }
 
-void init_auth_execve(struct bpf_progs *skel, char *credential){
+void init_auth_cred_execve(struct bpf_progs *skel, char *credential){
     struct k1_sys_record record = {
         .auth_cred.auth_type = K1_AUTH_TYPE_EXECVE,
         .is_authenticated = 0,
         .verdict_hook = args.verdict,
     };
-    strcpy(record.auth_cred.auth_execve.pathname, credential);
+    strcpy(record.auth_cred.auth_cred_execve.pathname, credential);
 
     struct k1_sys_record_list record_list= {
         .len = 1,
@@ -169,7 +169,7 @@ void init_auth_execve(struct bpf_progs *skel, char *credential){
             );
 }
 
-void init_auth_usb(struct bpf_progs *skel, char *credential){
+void init_auth_cred_usb(struct bpf_progs *skel, char *credential){
 
     struct k1_record record = {
         .auth_cred.auth_type = K1_AUTH_TYPE_USB,
@@ -177,7 +177,7 @@ void init_auth_usb(struct bpf_progs *skel, char *credential){
         .uid = args.uid,
         .verdict_hook = args.verdict
     };
-    strcpy(record.auth_cred.auth_usb.serial, credential);
+    strcpy(record.auth_cred.auth_cred_usb.serial, credential);
 
     struct k1_record_list record_list= {
         .len = 1,
@@ -219,10 +219,10 @@ void init_verdict(struct bpf_progs *skel){
 void init_maps_based_on_args(struct bpf_progs *skel){
     switch (args.auth_cred.auth_type) {
         case K1_AUTH_TYPE_EXECVE:
-            init_auth_execve(skel, args.credential);
+            init_auth_cred_execve(skel, args.credential);
             break;
         case K1_AUTH_TYPE_USB:
-            init_auth_usb(skel, args.credential);
+            init_auth_cred_usb(skel, args.credential);
             break; 
         default:
             print_help_and_quit();
