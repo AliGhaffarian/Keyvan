@@ -1,5 +1,5 @@
-#ifndef AUTH_LIST
-#define AUTH_LIST
+#ifndef AUTH_RECORD
+#define AUTH_RECORD
 
 #ifdef __BPF__
 #include <vmlinux.h>

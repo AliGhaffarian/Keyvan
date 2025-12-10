@@ -1,5 +1,5 @@
-#ifndef AUTH_CHECK
-#define AUTH_CHECK
+#ifndef AUTH_CRED
+#define AUTH_CRED
 
 #include <stdbool.h>
 #include <k1_limits.h>
