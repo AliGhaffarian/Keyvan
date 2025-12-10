@@ -27,7 +27,7 @@ struct k1_record_list {
 struct k1_sys_record {
     bool is_authenticated;
     enum K1_VERDICT_HOOK verdict_hook;
-    struct k1_auth_cred auth_cred;
+    K1_AUTH_CRED_UNION;
 };
 
 struct k1_sys_record_list {

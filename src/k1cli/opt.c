@@ -9,6 +9,7 @@
 #include <auth_record.h>
 #include <bpf_progs.skel.h>
 #include <common.h>
+#include <k1_map.h>
 
 #include "opt.h"
 
@@ -148,23 +149,22 @@ arg_fail:
 
 void init_auth_cred_execve(struct bpf_progs *skel, char *credential){
     struct k1_sys_record record = {
-        .auth_cred.auth_type = K1_AUTH_TYPE_EXECVE,
         .is_authenticated = 0,
         .verdict_hook = args.verdict,
     };
-    strcpy(record.auth_cred.auth_cred_execve.pathname, credential);
+    strcpy(record.auth_cred_execve.pathname, credential);
 
-    struct k1_sys_record_list record_list= {
-        .len = 1,
-        .records = {record}
+    struct k1_sys_auth_map_key key = {
+        .uid = args.uid,
+        .auth_type = K1_AUTH_TYPE_EXECVE,
     };
 
     int err = bpf_map__update_elem(
             skel->maps.sys_auth_map_hash,
-            &args.uid, 
-            sizeof(args.uid),
-            &record_list,
-            sizeof(record_list),
+            &key,
+            sizeof(key),
+            &record,
+            sizeof(record),
             0
             );
 }
