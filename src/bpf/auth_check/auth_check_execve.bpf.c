@@ -13,7 +13,7 @@ struct k1_sys_auth_map_hash sys_auth_map_hash SEC(".maps");
 struct k1_verdict_map_hash verdict_map_hash SEC(".maps");
 
 SEC("tp/syscalls/sys_enter_execve")
-int BPF_PROG(auth_execve_check, void *a, void* b, char *filename){
+int BPF_PROG(auth_cred_execve_check, void *a, void* b, char *filename){
 
     char buf[K1_BPF_STRING_MAXSIZE];
     bpf_core_read_user(buf, K1_BPF_STRING_MAXSIZE - 1, filename);
@@ -29,7 +29,7 @@ int BPF_PROG(auth_execve_check, void *a, void* b, char *filename){
         if( K1_AUTH_TYPE_EXECVE != elem->records[i].auth_cred.auth_type )
             continue;
 
-        if(k1_strcmp(buf, elem->records[i].auth_cred.auth_execve.pathname) == 0)
+        if(k1_strcmp(buf, elem->records[i].auth_cred.auth_cred_execve.pathname) == 0)
             k1_change_user_auth_state(elem->records[i].verdict_hook, uid, K1_FLAG_CHANGE_TOGGLE);
     }
 
