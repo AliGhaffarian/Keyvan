@@ -20,18 +20,17 @@ int BPF_PROG(auth_cred_execve_check, void *a, void* b, char *filename){
     buf[K1_BPF_STRING_MAXSIZE - 1] = 0;
 
     u32 uid = bpf_get_current_uid_gid() & 0xffff;
-    struct k1_sys_record_list *elem = bpf_map_lookup_elem(&sys_auth_map_hash, &uid);
+    struct k1_sys_auth_map_key key = {
+        .uid = uid,
+        .auth_type = K1_AUTH_TYPE_EXECVE,
+    };
+    struct k1_sys_record *elem = bpf_map_lookup_elem(&sys_auth_map_hash, &key);
     if(!elem){
         return 0;
     }
 
-    for(int i = 0; i < elem->len && i < K1_MAX_USER_RECORDS; i++){
-        if( K1_AUTH_TYPE_EXECVE != elem->records[i].auth_cred.auth_type )
-            continue;
-
-        if(k1_strcmp(buf, elem->records[i].auth_cred.auth_cred_execve.pathname) == 0)
-            k1_change_user_auth_state(elem->records[i].verdict_hook, uid, K1_FLAG_CHANGE_TOGGLE);
-    }
+    if(k1_strcmp(buf, elem->auth_cred_execve.pathname) == 0)
+        k1_change_user_auth_state(elem->verdict_hook, uid, K1_FLAG_CHANGE_TOGGLE);
 
     return 0;
 }
