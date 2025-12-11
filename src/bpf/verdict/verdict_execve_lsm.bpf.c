@@ -2,6 +2,10 @@
 #include <bpf/bpf_helpers.h>
 #include <bpf/bpf_tracing.h>
 
+#ifndef __BPF__
+#define __BPF__
+#endif
+
 #include <verdict_record.h>
 #include <auth_record.h>
 #include <k1_map.h>

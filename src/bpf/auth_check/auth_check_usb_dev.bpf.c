@@ -2,9 +2,14 @@
 #include <bpf/bpf_tracing.h>
 #include <bpf/bpf_core_read.h>
 
+#ifndef __BPF__
+#define __BPF__
+#endif
+
 #include <k1_limits.h>
 #include <k1_map.h>
 #include <k1_bpf_util.h>
+
 
 struct k1_auth_map_hash __attribute__((weak)) auth_map_hash SEC(".maps");
 struct k1_verdict_map_hash __attribute__((weak)) verdict_map_hash SEC(".maps");
