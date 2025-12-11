@@ -197,21 +197,20 @@ void init_auth_cred_usb(struct bpf_progs *skel, char *credential){
 
 void init_verdict(struct bpf_progs *skel){
     int err;
-    struct k1_verdict_record_list verdict_record_list = {
-        .len = 1,
-        .records = {
-            [0] = {
-                .verdict = args.verdict,
-                .is_authenticated = 0,
-            }
-        }
+    struct k1_verdict_record verdict_record = {
+        .is_authenticated = 0,
+    };
+
+    struct k1_verdict_map_key key = {
+        .uid = args.uid,
+        .hook_type = args.verdict,
     };
     err = bpf_map__update_elem(
             skel->maps.verdict_map_hash,
-            &args.uid,
-            sizeof(args.uid),
-            &verdict_record_list,
-            sizeof(verdict_record_list),
+            &key,
+            sizeof(key),
+            &verdict_record,
+            sizeof(verdict_record),
             0
             );
 }
