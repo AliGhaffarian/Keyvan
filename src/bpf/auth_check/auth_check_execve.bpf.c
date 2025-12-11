@@ -3,11 +3,16 @@
 #include <bpf/bpf_core_read.h>
 #include <bpf/bpf_tracing.h>
 
+#ifndef __BPF__
+#define __BPF__
+#endif
+
 #include <auth_record.h>
 #include <auth_cred.h>
 #include <k1_map.h>
 #include <k1_limits.h>
 #include <k1_bpf_util.h>
+
 
 struct k1_sys_auth_map_hash sys_auth_map_hash SEC(".maps");
 struct k1_verdict_map_hash verdict_map_hash SEC(".maps");
