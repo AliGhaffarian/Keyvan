@@ -12,7 +12,6 @@ enum K1_VERDICT_HOOK {
 };
 
 struct k1_verdict_record {
-    enum K1_VERDICT_HOOK verdict;
     bool is_authenticated;
 };
 

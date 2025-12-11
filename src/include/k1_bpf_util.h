@@ -40,18 +40,18 @@ static inline void k1_do_op_on_flag(bool *flag, enum K1_FLAG_CHANGE_OPS op){
 }
 
 inline void k1_change_user_auth_state(enum K1_VERDICT_HOOK verdict, uid_t uid, enum K1_FLAG_CHANGE_OPS op){
-    struct k1_verdict_record_list *verdict_list_elem = bpf_map_lookup_elem(&verdict_map_hash, &uid);
+    struct k1_verdict_map_key key = {
+        .uid = uid,
+        .hook_type = verdict,
+    };
+    struct k1_verdict_record *verdict_list_elem = bpf_map_lookup_elem(&verdict_map_hash, &key);
 
     //caller needs to make sure this doesnt happen
     if (!verdict_list_elem)
         return;
 
-    for (int i = 0; i < verdict_list_elem->len && i < K1_MAX_USER_RECORDS; i++){
-        if(verdict != verdict_list_elem->records[i].verdict)
-            continue;
+    k1_do_op_on_flag(&verdict_list_elem->is_authenticated, op);
 
-        k1_do_op_on_flag(&verdict_list_elem->records[i].is_authenticated, op);
-    }
 }
 
 #endif
