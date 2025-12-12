@@ -13,15 +13,14 @@
    * [Maps](#maps)
       + [PAM_map](#pam_map)
       + [API_map](#api_map)
-      + [sys_auth_check_map](#sys_auth_check_map)
+      + [k1_sys_auth_map_hash](#k1_sys_auth_map_hash)
       + [auth_check_map](#auth_check_map)
-      + [verdict_map](#verdict_map)
+      + [k1_verdict_map_hash](#k1_verdict_map_hash)
    * [BPF programs](#bpf-programs)
-      + [auth_checkers](#auth_checkers)
+      + [Authenticate Checkers](#authenticate-checkers)
          - [sys_auth_checkers](#sys_auth_checkers)
-         - [auth_checkers](#auth_checkers-1)
+         - [auth_checkers](#auth_checkers)
       + [verdicts](#verdicts-1)
-
 # What is this?
 Keyvan is a suite of bpf programs that together enable various interesting authentication methods.
 
@@ -172,7 +171,6 @@ Legend:
 A ->--->- B: A writes to B, B reads from A
 A --<->-- B: A and B talk
 *B* resresents the original B somewhere else in the diagram, for readability
-|C|: C is a map
 
 
 --------------                 
@@ -193,14 +191,17 @@ A --<->-- B: A and B talk
 |     |   |                                                                   
 |     |   \------------------->|PAM_map|--->*keyvand/cli*
 |     |                                                                    
-|     \------------>|verdict_map|-->--\                         
-|                                     ||
-/\   							      \/
-\--------------------------------< verdict
+|     \------------>|verdict_map|-<->--\                         
+|                                      /\
+/\   							       \/
+\--------------------------------<  verdict
 ```
 ### Diasgram explanation
 **verdict -> keyvand:**
 a verdict might want to request keyvand to query a pam service authorization
+note: this procedure may be replaced by kevand polling PAM and populating verdict_pam itself
+**veerdict -> verdict_map:**
+verdict stores the result of keyvand query to verdict map
 **PAM -> keyvand:**
 response to service authorization query
 **keyvand -> verdict_map:**
@@ -216,15 +217,39 @@ store user authentication status
 ### API_map
 **key**: api_handler (returned by keyvand)
 **value**: list of struct {uid, bool flag}
-### sys_auth_check_map
-**key**: uid
-**value**: {auth_flag, verdict hook, auth_type}
+### k1_sys_auth_map_hash
+**key**
+```c
+struct k1_sys_auth_map_key {
+    __u32 uid;
+    enum K1_AUTH_TYPE auth_type;
+};
+```
+**value**
+```c
+struct k1_sys_record {
+    bool is_authenticated;
+    enum K1_VERDICT_HOOK verdict_hook;
+    K1_AUTH_CRED_UNION;
+};
+```
 ### auth_check_map
 **key**: auth_type
 **value**: list of struct {uid, auth_flag, verdict hook, auth_type}
-### verdict_map
-**key**: uid
-**value**: {auth_flag, verdict_type}
+### k1_verdict_map_hash
+**key**:
+```c
+struct k1_verdict_map_key {
+    __u32 uid;
+    enum K1_VERDICT_HOOK hook_type;
+};
+```
+**value**:
+```c
+struct k1_verdict_record {
+    bool is_authenticated;
+};
+```
 ## BPF programs
 These programs are loaded into the kernel and their behavior is determined by values in the map they access.
 ### Authenticate Checkers
