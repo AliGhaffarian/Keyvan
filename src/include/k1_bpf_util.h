@@ -1,8 +1,13 @@
 #ifndef K1_BPF_UTIL
 #define K1_BPF_UTIL
 
-#include <k1_map.h>
+#ifndef __BPF__
+#define __BPF__
+#include <vmlinux.h>
 #include <bpf/bpf_helpers.h>
+#endif
+
+#include <k1_map.h>
 #include <k1_limits.h>
 #include <verdict_record.h>
 
