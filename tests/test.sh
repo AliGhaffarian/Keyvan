@@ -4,6 +4,13 @@
 #Note: we won't check if k1cli cleansup the maps afterwards as we will replace k1cli with keyvand later on, and the current implementation will probably be completely rewritten
 #TODO: make this test a python script that also checks the map values
 
+echo Warning: this test script is highly unstable, it is discouraged to use it. you may get locked out of your computer and need to reboot.
+
+read -p "run the test anyway? [y/N]:" input 
+if [ "$input" != "y" ] && [ "$input" != "Y" ]; then
+    exit 0
+fi
+
 TEST_BUILD_LOC=$(git rev-parse --show-toplevel)/test_build
 K1_BIN_PATH=$TEST_BUILD_LOC/output/k1cli
 
