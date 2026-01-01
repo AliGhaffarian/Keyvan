@@ -29,9 +29,4 @@ struct k1_sys_record {
     enum K1_VERDICT_HOOK verdict_hook;
     K1_AUTH_CRED_UNION;
 };
-
-struct k1_sys_record_list {
-    int len;
-    struct k1_sys_record records[K1_MAX_USER_RECORDS];
-};
 #endif
