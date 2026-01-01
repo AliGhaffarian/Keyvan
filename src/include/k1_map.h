@@ -45,6 +45,10 @@ struct k1_verdict_map_hash {
     __type(value, struct k1_verdict_record);
     __uint(pinning, LIBBPF_PIN_BY_NAME);
 };
+
+struct k1_auth_map_hash __attribute__((weak)) auth_map_hash SEC(".maps");
+struct k1_verdict_map_hash __attribute__((weak)) verdict_map_hash SEC(".maps");
+struct k1_sys_auth_map_hash __attribute__((weak)) sys_auth_map_hash SEC(".maps");
 #endif //__BPF__
 
 #endif

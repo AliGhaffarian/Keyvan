@@ -11,8 +11,6 @@
 #include <k1_bpf_util.h>
 
 
-struct k1_auth_map_hash __attribute__((weak)) auth_map_hash SEC(".maps");
-struct k1_verdict_map_hash __attribute__((weak)) verdict_map_hash SEC(".maps");
 
 static const enum K1_AUTH_TYPE const_auth_type_usb = K1_AUTH_TYPE_USB;
 

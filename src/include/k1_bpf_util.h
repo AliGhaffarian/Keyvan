@@ -11,8 +11,6 @@
 #include <k1_limits.h>
 #include <verdict_record.h>
 
-struct k1_verdict_map_hash __attribute__((weak)) verdict_map_hash SEC(".maps");
-
 inline int k1_strcmp(char *first, char *second){
     int cnt = 0;
     while(*first && *second && cnt < K1_BPF_STRING_MAXSIZE){

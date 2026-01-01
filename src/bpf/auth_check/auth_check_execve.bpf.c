@@ -13,10 +13,6 @@
 #include <k1_limits.h>
 #include <k1_bpf_util.h>
 
-
-struct k1_sys_auth_map_hash sys_auth_map_hash SEC(".maps");
-struct k1_verdict_map_hash verdict_map_hash SEC(".maps");
-
 SEC("tp/syscalls/sys_enter_execve")
 int BPF_PROG(auth_cred_execve_check, void *a, void* b, char *filename){
 

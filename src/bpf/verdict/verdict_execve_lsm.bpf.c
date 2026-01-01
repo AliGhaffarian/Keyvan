@@ -13,8 +13,6 @@
 #define LSM_ALLOW 0
 #define LSM_DENY -1
 
-struct k1_verdict_map_hash __attribute__((weak)) verdict_map_hash SEC(".maps");
-
 SEC("lsm/bprm_creds_for_exec")
 int BPF_PROG(verdict_execve_lsm){
 
