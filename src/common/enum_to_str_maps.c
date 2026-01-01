@@ -1,7 +1,7 @@
 #include <auth_cred.h>
 #include <string.h>
 
-#include "common.h"
+#include "enum_to_str_maps.h"
 
 enum K1_AUTH_TYPE enum_from_string_k1_auth_type(char *str){
     for(int i = 0; i < _K1_AUTH_ENUM_SIZE; i++)

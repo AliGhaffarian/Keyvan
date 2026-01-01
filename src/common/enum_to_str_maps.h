@@ -1,5 +1,5 @@
-#ifndef K1_COMMON
-#define K1_COMMON
+#ifndef K1_ENUM_TO_STRING_MAPS
+#define K1_ENUM_TO_STRING_MAPS
 
 #include <auth_cred.h>
 #include <verdict_record.h>
