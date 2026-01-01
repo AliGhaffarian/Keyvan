@@ -4,9 +4,6 @@
 #include <auth_cred.h>
 #include <verdict_record.h>
 
-#define _STR(x) #x
-#define STR(x) _STR(x)
-
 extern char *enum_to_string_k1_auth_type[];
 enum K1_AUTH_TYPE enum_from_string_k1_auth_type(char *);
 

@@ -1,5 +1,6 @@
 #include <auth_cred.h>
 #include <string.h>
+#include <helper.h>
 
 #include "enum_to_str_maps.h"
 
