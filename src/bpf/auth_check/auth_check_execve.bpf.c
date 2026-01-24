@@ -23,11 +23,11 @@ int BPF_PROG(auth_cred_execve_check, void *a, void *b, char *filename) {
     buf[K1_BPF_STRING_MAXSIZE - 1] = 0;
 
     u32 uid = bpf_get_current_uid_gid() & 0xffff;
-    struct k1_sys_auth_map_key key = {
+    struct k1_auth_map_key key = {
         .uid = uid,
         .auth_type = K1_AUTH_TYPE_EXECVE,
     };
-    struct k1_sys_record *elem = k1_bpf_lookup_auth_record(&key);
+    struct k1_auth_record *elem = k1_bpf_lookup_auth_record(&key);
     if(!elem) {
         return 0;
     }

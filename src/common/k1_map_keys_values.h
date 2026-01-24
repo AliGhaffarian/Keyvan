@@ -14,11 +14,11 @@
 
 /**
  * @brief get and set macros for auth_key, to decouple the code
-*/
+ */
 #define AUTHMAP_KEY_SET_UID(key_ptr, u) key_ptr->uid = u
-#define AUTHMAP_KEY_GET_UID(key_ptr) key_ptr->uid
+#define AUTHMAP_KEY_GET_UID(key_ptr)    key_ptr->uid
 
-struct k1_sys_auth_map_key {
+struct k1_auth_map_key {
     __u32 uid;
     enum K1_AUTH_TYPE auth_type;
 };

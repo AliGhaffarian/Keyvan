@@ -151,19 +151,19 @@ arg_fail:
 }
 
 void init_auth_cred_execve(struct bpf_progs *skel, char *credential){
-    struct k1_sys_record record = {
+    struct k1_auth_record record = {
         .is_authenticated = 0,
         .verdict_hook = args.verdict,
     };
     strcpy(record.auth_cred.auth_cred_execve.pathname, credential);
 
-    struct k1_sys_auth_map_key key = {
+    struct k1_auth_map_key key = {
         .uid = args.uid,
         .auth_type = K1_AUTH_TYPE_EXECVE,
     };
 
     int err = bpf_map__update_elem(
-            skel->maps.sys_auth_map_hash,
+            skel->maps.auth_map_hash,
             &key,
             sizeof(key),
             &record,
@@ -174,22 +174,22 @@ void init_auth_cred_execve(struct bpf_progs *skel, char *credential){
 
 void init_auth_cred_usb(struct bpf_progs *skel, char *credential){
 
-    struct k1_sys_record record = {
+    struct k1_auth_record record = {
         .auth_cred.auth_type = K1_AUTH_TYPE_USB,
         .is_authenticated = 0,
         .verdict_hook = args.verdict
     };
     strcpy(record.auth_cred.auth_cred_usb.serial, credential);
 
-    struct k1_sys_auth_map_key key = {
+    struct k1_auth_map_key key = {
         .uid = args.uid,
         .auth_type = K1_AUTH_TYPE_USB,
     };
 
     int err  = bpf_map__update_elem(
-            skel->maps.sys_auth_map_hash,
+            skel->maps.auth_map_hash,
             &key,
-            sizeof(struct k1_sys_auth_map_key),
+            sizeof(struct k1_auth_map_key),
             &record,
             sizeof(record),
             0

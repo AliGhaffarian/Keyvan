@@ -75,7 +75,7 @@ inline void k1_change_user_auth_state(
 }
 
 struct find_auth_record_ctx {
-    struct k1_sys_auth_map_key *key;
+    struct k1_auth_map_key *key;
     struct k1_auth_record *result;
 };
 
@@ -94,7 +94,7 @@ static long first_auth_record_with_uid_of_context(
 
     AUTHMAP_KEY_SET_UID(ctx_casted->key, current_uid);
 
-    lookup_result = bpf_map_lookup_elem(&sys_auth_map_hash, ctx_casted->key);
+    lookup_result = bpf_map_lookup_elem(&auth_map_hash, ctx_casted->key);
 
     if(!lookup_result) {
         AUTHMAP_KEY_SET_UID(ctx_casted->key, INVALID_UID);
@@ -106,7 +106,7 @@ static long first_auth_record_with_uid_of_context(
 }
 
 inline void *
-_k1_bpf_lookup_auth_record_any_uid(struct k1_sys_auth_map_key *key) {
+_k1_bpf_lookup_auth_record_any_uid(struct k1_auth_map_key *key) {
     __u32 tmp_ptr;
     __u32 uid_ptr;
     long err;
@@ -136,11 +136,11 @@ _k1_bpf_lookup_auth_record_any_uid(struct k1_sys_auth_map_key *key) {
  * @return result of bpf_map_lookup_elem, if uid is INVALID_UID, result of the
  * last called bpf_map_lookup_elem if returned
  */
-inline struct k1_sys_record *
-k1_bpf_lookup_auth_record(struct k1_sys_auth_map_key *key) {
+inline struct k1_auth_record *
+k1_bpf_lookup_auth_record(struct k1_auth_map_key *key) {
     if(AUTHMAP_KEY_GET_UID(key) == INVALID_UID) {
         return _k1_bpf_lookup_auth_record_any_uid(key);
     }
-    return bpf_map_lookup_elem((void *)&sys_auth_map_hash, (void *)key);
+    return bpf_map_lookup_elem((void *)&auth_map_hash, (void *)key);
 }
 #endif

@@ -21,11 +21,11 @@ int BPF_PROG(auth_check_usb_create_sysfs, struct usb_device *udev) {
 
     bpf_printk("connected udev: %s", udev->serial);
 
-    struct k1_sys_auth_map_key key = {
+    struct k1_auth_map_key key = {
         .uid = INVALID_UID,
         .auth_type = K1_AUTH_TYPE_USB,
     };
-    struct k1_sys_record *auth_record = k1_bpf_lookup_auth_record(&key);
+    struct k1_auth_record *auth_record = k1_bpf_lookup_auth_record(&key);
 
     if(!auth_record)
         return 0;
@@ -46,11 +46,11 @@ int BPF_PROG(auth_check_usb_remove_sysfs, struct usb_device *udev) {
 
     bpf_printk("disconnected udev: %s", udev->serial);
 
-    struct k1_sys_auth_map_key key = {
+    struct k1_auth_map_key key = {
         .uid = INVALID_UID,
         .auth_type = K1_AUTH_TYPE_USB,
     };
-    struct k1_sys_record *auth_record = k1_bpf_lookup_auth_record(&key);
+    struct k1_auth_record *auth_record = k1_bpf_lookup_auth_record(&key);
 
     if(!auth_record)
         return 0;
