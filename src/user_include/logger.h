@@ -2,6 +2,7 @@
 #define K1_LOGGER
 
 #include <stdarg.h>
+#include <stdio.h>
 
 #ifdef NDEBUG
 #define LOGGER_FMT "[%s]:"
@@ -22,23 +23,16 @@ enum LOG_LEVELS {
 extern const char *LOG_LEVELS2STR[];
 extern volatile int current_log_level;
 
-#ifdef __BPF__
-#include <k1_map.h>
-//log with ringbuf
-#define _log()
-#else
-#include <stdio.h>
-#define _log(log_lvl, dest, fmt, ...) fprintf(dest, LOGGER_FMT fmt, LOGGER_FMT_ARGS(log_lvl), __VA_ARGS__);
-#endif
+#define _logger(log_lvl, dest, fmt, ...) fprintf(dest, LOGGER_FMT fmt, LOGGER_FMT_ARGS(log_lvl), __VA_ARGS__);
 /*
  * @param log_lvl
  * @param dest: destination FILE*, ignored for bpfside
  * @param msg: msg to be logged
  */
-#define log(log_lvl, dest, fmt, ...) \
+#define logger(log_lvl, dest, fmt, ...) \
     do {                            \
     if(current_log_level > log_lvl) \
-        _log(log_lvl, dest, fmt, __VA_ARGS__) \
+        _logger(log_lvl, dest, fmt, __VA_ARGS__) \
     } while(0)
 
 

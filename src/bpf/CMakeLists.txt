@@ -26,7 +26,7 @@ foreach(TARGET IN LISTS BPF_TARGETS)
     add_custom_command(
         OUTPUT ${TARGET_OUTPUT_PATH}
         COMMAND ${CMAKE_C_COMPILER}
-        ARGS -O2 -target bpf -g -c ${TARGET} -I${CMAKE_SOURCE_DIR}/src/include -I${CMAKE_BINARY_DIR}/src/include -o ${TARGET_OUTPUT_PATH}
+        ARGS -O2 -target bpf -g -c ${TARGET} -I${CMAKE_SOURCE_DIR}/src/bpf/include -I${CMAKE_SOURCE_DIR}/src/common -I${CMAKE_BINARY_DIR}/src/include -o ${TARGET_OUTPUT_PATH}
     )
     add_custom_target(
         ${TARGET_FILE_NAME}
