@@ -31,7 +31,7 @@ extern volatile int current_log_level;
  */
 #define logger(log_lvl, dest, fmt, ...) \
     do {                            \
-    if(current_log_level > log_lvl) \
+    if(current_log_level >= log_lvl) \
         _logger(log_lvl, dest, fmt, __VA_ARGS__) \
     } while(0)
 
