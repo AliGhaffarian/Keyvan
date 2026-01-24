@@ -1,4 +1,5 @@
-include_directories(${CMAKE_SOURCE_DIR}/src/userspace_include)
+include_directories(${CMAKE_SOURCE_DIR}/src/user_include)
 file(GLOB COMMON_SOURCES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/src/common/*.c")
-add_executable(k1cli k1cli.c opt.c ${COMMON_SOURCES})
+file(GLOB INCLUDE_DEFS CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/src/user_include/*.c")
+add_executable(k1cli k1cli.c opt.c ${COMMON_SOURCES} ${INCLUDE_DEFS})
 target_link_libraries(k1cli bpf)
