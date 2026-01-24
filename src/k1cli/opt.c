@@ -174,7 +174,7 @@ void init_auth_cred_execve(struct bpf_progs *skel, char *credential){
 
 void init_auth_cred_usb(struct bpf_progs *skel, char *credential){
 
-    struct k1_record record = {
+    struct k1_auth_record record = {
         .auth_cred.auth_type = K1_AUTH_TYPE_USB,
         .is_authenticated = 0,
         .uid = args.uid,
@@ -182,7 +182,7 @@ void init_auth_cred_usb(struct bpf_progs *skel, char *credential){
     };
     strcpy(record.auth_cred.auth_cred_usb.serial, credential);
 
-    struct k1_record_list record_list= {
+    struct k1_auth_record_list record_list= {
         .len = 1,
         .records = {record}
     };

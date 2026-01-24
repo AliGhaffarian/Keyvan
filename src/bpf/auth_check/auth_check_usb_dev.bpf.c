@@ -21,7 +21,7 @@ int BPF_PROG(auth_check_usb_create_sysfs, struct usb_device *udev) {
 
     bpf_printk("connected udev: %s", udev->serial);
 
-    struct k1_record_list *elem =
+    struct k1_auth_record_list *elem =
         bpf_map_lookup_elem(&auth_map_hash, &const_auth_type_usb);
     if(!elem)
         return 0;
@@ -56,7 +56,7 @@ int BPF_PROG(auth_check_usb_remove_sysfs, struct usb_device *udev) {
 
     bpf_printk("disconnected udev: %s", udev->serial);
 
-    struct k1_record_list *elem =
+    struct k1_auth_record_list *elem =
         bpf_map_lookup_elem(&auth_map_hash, &const_auth_type_usb);
     if(!elem)
         return 0;
