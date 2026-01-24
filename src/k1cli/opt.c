@@ -230,5 +230,14 @@ void init_maps_based_on_args(struct bpf_progs *skel){
             print_help_and_quit();
     }
     init_verdict(skel);
+    register_user(skel, args.uid);
     return;
+}
+
+void register_user(struct bpf_progs *skel, uid_t uid){
+    bpf_map__update_elem(skel->maps.registered_uids_map_hash, &uid, 
+                         sizeof(struct k1_registered_uids_map_key), 
+                         &uid, 
+                         sizeof(DUMMY_MAP_VALUE_T), 
+                         BPF_ANY);
 }

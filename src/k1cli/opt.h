@@ -42,4 +42,6 @@ void init_auth_cred_usb(struct bpf_progs *skel, char *credential);
 
 void init_maps_based_on_args(struct bpf_progs *skel);
 
+void register_user(struct bpf_progs *skel, uid_t uid);
+
 #endif
