@@ -142,8 +142,9 @@ A --<->-- B: A and B talk
 /\                                  |                                     
 |     /---------------------------<-|->-------------\                        
 |	  \/			                				\/				         
-|     |<-----< sys_auth_checkers <-----------< |sys_auth_checker_map|          
-|     |<-----< auth_checkers     <-----------< |auth_checker_map|              
+|     |              /-----------------------< |registered_uids_map|
+|     |             \/                              \/
+|     |<-----< auth_checkers <---------------< |auth_checker_map|
 |     |                                                                    
 |     \------------>|verdict_map|-<->--\                         
 |                                      /\
@@ -178,12 +179,6 @@ These programs are loaded into the kernel and their behavior is determined by va
 
 ### Authenticate Checkers
 These programs run when the event associated them happens, check if the event context matches with a `auth_check` rule, if so they change the status of corresponding entry in `verdict` map.
-
-#### sys_auth_checkers
-These auth_checkers are triggered directly by a user (like syscalls). Currently providing syscall as password authentication method.
-
-#### auth_checkers
-These auth_checkers are not triggered by a user (like a function call in the kernel). Currently providing fprobe as password authentication method.
 
 ### verdicts
 These programs are responsible to allow/deny the associated event's procedure (like executing a file). All they do is:
