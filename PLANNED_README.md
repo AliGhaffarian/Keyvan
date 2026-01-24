@@ -48,8 +48,11 @@ Keyvan [-i config_file] [--stealth]
 TODO: enforce only one auth_type per uid for PAM Exports
 TODO: enforce only one type of verdict per uid
 ```c
-# deny execve until user executes `/some/password`
+
+# The following configs are related to uid 1000
 uid: 1000
+
+# deny execve until user executes `/some/password`
 auth {
 	type: execve
 	pathname: /some/password/
@@ -61,7 +64,6 @@ verdict {
 }
 
 # a registered verdict by a the user during configuration, if false, will query daemon to then query PAM using SERVICE_NAME, keyvand will map each present pam_mod to a number during startup
-uid: 1000
 auth {
     type: PAM
 	pam_details: SERVICE_NAME
@@ -70,8 +72,21 @@ verdict {
 	type: execve
 }
 
+# verdicts and auths don't need to necessarily come after each other
+verdict {
+    type: open
+    pathname: /etc/passwd
+}
+verdict {
+    type: open
+    pathname: /etc/resolv.conf
+}
+
+
+# The following configs are related to root user
+uid: 0
+
 # deny access to Keyvan files until a USB device with matching serial is inserted
-uid: 1000
 auth {
 	type: usb
 	serial: SOME_SERIAL
@@ -81,7 +96,6 @@ verdict {
 }
 
 # deny all outgoing packets until a packet arrives that matches the [bpfilter/iptables?] rule
-uid: 1000
 auth {
 	type: xdp
 	rule {
