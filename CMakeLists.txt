@@ -5,7 +5,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 set(K1_OUTPUT_DIR output)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${K1_OUTPUT_DIR})
 
-add_compile_options("-fmacro-prefix-map=${CMAKE_SOURCE_DIR}/=")
+add_compile_options("-fmacro-prefix-map=${CMAKE_SOURCE_DIR}/src/=")
 make_directory(${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 Include_directories(src/common)
