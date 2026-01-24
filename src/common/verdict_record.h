@@ -1,9 +1,9 @@
 #ifndef K1_VERDICT_RECORD
 #define K1_VERDICT_RECORD
 
-#include <stdbool.h>
 #include <auth_cred.h>
 #include <k1_limits.h>
+#include <stdbool.h>
 
 enum K1_VERDICT_HOOK {
     _K1_VERDICT_HOOK_UNSPEC,

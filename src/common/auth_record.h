@@ -7,8 +7,8 @@
 #include <sys/types.h>
 #endif
 
-#include <k1_limits.h>
 #include <auth_cred.h>
+#include <k1_limits.h>
 #include <verdict_record.h>
 
 struct k1_record {
@@ -22,7 +22,6 @@ struct k1_record_list {
     int len;
     struct k1_record records[K1_MAX_USER_RECORDS];
 };
-
 
 struct k1_sys_record {
     bool is_authenticated;

@@ -1,16 +1,16 @@
 #include <bpf/libbpf.h>
-#include <unistd.h>
 #include <getopt.h>
+#include <inttypes.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <verdict_record.h>
-#include <inttypes.h>
 
 #include <auth_record.h>
 #include <bpf_progs.skel.h>
 #include <enum_to_str_maps.h>
-#include <k1_map_keys_values.h>
 #include <helper.h>
+#include <k1_map_keys_values.h>
 
 #include "opt.h"
 

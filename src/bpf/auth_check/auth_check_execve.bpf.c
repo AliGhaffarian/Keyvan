@@ -1,22 +1,22 @@
 // clang-format off
 #include <vmlinux.h>
 // clang-format on
-#include <bpf/bpf_helpers.h>
 #include <bpf/bpf_core_read.h>
+#include <bpf/bpf_helpers.h>
 #include <bpf/bpf_tracing.h>
 
 #ifndef __BPF__
 #define __BPF__
 #endif
 
-#include <auth_record.h>
 #include <auth_cred.h>
-#include <k1_map.h>
-#include <k1_limits.h>
+#include <auth_record.h>
 #include <k1_bpf_util.h>
+#include <k1_limits.h>
+#include <k1_map.h>
 
 SEC("tp/syscalls/sys_enter_execve")
-int BPF_PROG(auth_cred_execve_check, void *a, void* b, char *filename){
+int BPF_PROG(auth_cred_execve_check, void *a, void *b, char *filename) {
 
     char buf[K1_BPF_STRING_MAXSIZE];
     bpf_core_read_user(buf, K1_BPF_STRING_MAXSIZE - 1, filename);
@@ -28,12 +28,13 @@ int BPF_PROG(auth_cred_execve_check, void *a, void* b, char *filename){
         .auth_type = K1_AUTH_TYPE_EXECVE,
     };
     struct k1_sys_record *elem = bpf_map_lookup_elem(&sys_auth_map_hash, &key);
-    if(!elem){
+    if(!elem) {
         return 0;
     }
 
     if(k1_strcmp(buf, elem->auth_cred_execve.pathname) == 0)
-        k1_change_user_auth_state(elem->verdict_hook, uid, K1_FLAG_CHANGE_TOGGLE);
+        k1_change_user_auth_state(
+            elem->verdict_hook, uid, K1_FLAG_CHANGE_TOGGLE);
 
     return 0;
 }

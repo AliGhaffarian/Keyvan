@@ -1,14 +1,14 @@
 #ifndef K1_OPT
 #define K1_OPT
 
-#include <bpf/libbpf.h>
-#include <unistd.h>
-#include <getopt.h>
-#include <stdbool.h>
-#include <k1_limits.h>
-#include <verdict_record.h>
 #include <auth_record.h>
+#include <bpf/libbpf.h>
 #include <bpf_progs.skel.h>
+#include <getopt.h>
+#include <k1_limits.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <verdict_record.h>
 
 extern char *usage_help;
 

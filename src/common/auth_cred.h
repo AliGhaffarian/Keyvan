@@ -1,8 +1,8 @@
 #ifndef AUTH_CRED
 #define AUTH_CRED
 
-#include <stdbool.h>
 #include <k1_limits.h>
+#include <stdbool.h>
 
 enum K1_AUTH_TYPE {
     _K1_AUTH_UNSPEC,
@@ -19,9 +19,10 @@ struct k1_auth_cred_usb {
     char serial[K1_BPF_STRING_MAXSIZE];
 };
 
-#define K1_AUTH_CRED_UNION union {\
-        struct k1_auth_cred_execve auth_cred_execve;\
-        struct k1_auth_cred_usb auth_cred_usb;\
+#define K1_AUTH_CRED_UNION                                                     \
+    union {                                                                    \
+        struct k1_auth_cred_execve auth_cred_execve;                           \
+        struct k1_auth_cred_usb auth_cred_usb;                                 \
     }
 
 struct k1_auth_cred {

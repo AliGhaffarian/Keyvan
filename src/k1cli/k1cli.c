@@ -1,7 +1,7 @@
 #include <bpf/libbpf.h>
-#include <unistd.h>
 #include <getopt.h>
 #include <stdbool.h>
+#include <unistd.h>
 #include <verdict_record.h>
 
 #include <auth_record.h>
@@ -9,13 +9,12 @@
 
 #include "opt.h"
 
-
-int main(int argc, char **argv){
+int main(int argc, char **argv) {
     handle_args(argc, argv);
 
     struct bpf_progs *skel;
     skel = bpf_progs__open_and_load();
-    if(!skel){
+    if(!skel) {
         printf("%s\n", strerror(errno));
         return 1;
     }
@@ -23,7 +22,6 @@ int main(int argc, char **argv){
     init_maps_based_on_args(skel);
 
     bpf_progs__attach(skel);
-    while(1){
-
+    while(1) {
     }
 }
