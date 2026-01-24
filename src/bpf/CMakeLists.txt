@@ -27,7 +27,7 @@ foreach(TARGET IN LISTS BPF_TARGETS)
         OUTPUT ${TARGET_OUTPUT_PATH}
         COMMAND ${CMAKE_C_COMPILER}
         ARGS -O2 -target bpf -g -c ${TARGET}
-            -I${CMAKE_SOURCE_DIR}/src/bpf/include -I${CMAKE_SOURCE_DIR}/src/common -I${CMAKE_BINARY_DIR}/src/include -I/home/user/Clones/linux/tools/lib
+            -I${CMAKE_SOURCE_DIR}/src/bpf/include -I${CMAKE_SOURCE_DIR}/src/common -I${CMAKE_BINARY_DIR}/src/include
             -fmacro-prefix-map=${CMAKE_SOURCE_DIR}/src/=
             -o ${TARGET_OUTPUT_PATH}
     )
