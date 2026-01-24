@@ -3,7 +3,9 @@
 
 #ifndef __BPF__
 #define __BPF__
+// clang-format off
 #include <vmlinux.h>
+// clang-format on
 #include <bpf/bpf_helpers.h>
 #endif
 

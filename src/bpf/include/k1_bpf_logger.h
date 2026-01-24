@@ -1,8 +1,10 @@
 #ifndef K1_BPF_LOGGER
 #define K1_BPF_LOGGER
 
-#include <stdarg.h>
+// clang-format off
 #include <vmlinux.h>
+// clang-format on
+#include <stdarg.h>
 #include <bpf/bpf_helpers.h>
 
 enum LOG_LEVELS {

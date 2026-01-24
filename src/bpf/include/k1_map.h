@@ -5,7 +5,9 @@
 #define __BPF__
 #endif
 
+// clang-format off
 #include <vmlinux.h>
+// clang-format on
 #include <bpf/bpf_helpers.h>
 
 #include <auth_record.h>

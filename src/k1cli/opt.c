@@ -19,19 +19,21 @@ struct args_struct args = {
     .credential = {0},
 };
 
+// clang-format off
 char *usage_help = "usage: k1cli -u[id] UID -a[thenticate_checking_mechanism] AUTH_TYPE -p[assword] PASSWORD";
 
 char *uid_help = "--uid: user id to apply the rule";
 
 char *credential_help = "--password: password to use as credential, must be no longer than " STR(K1_BPF_STRING_MAXSIZE) " characters";
 
-char *usb_help = STR(K1_AUTH_TYPE_USB)":\n\
+char *usb_help = STR(K1_AUTH_TYPE_USB) ":\n\
 description: authenticate the user when the expected usb device is connected\n\
 credential: usb device serial";
 
-char *execve_help = STR(K1_AUTH_TYPE_EXECVE)":\n\
+char *execve_help = STR(K1_AUTH_TYPE_EXECVE) ":\n\
 description: authenticate the user when the expected file is tried to be executed (can be non-existing)\n\
 credential: pathname of file";
+// clang-format off
 
 
 struct option long_options[] = {
