@@ -27,12 +27,12 @@ int BPF_PROG(auth_cred_execve_check, void *a, void *b, char *filename) {
         .uid = uid,
         .auth_type = K1_AUTH_TYPE_EXECVE,
     };
-    struct k1_sys_record *elem = bpf_map_lookup_elem(&sys_auth_map_hash, &key);
+    struct k1_sys_record *elem = k1_bpf_lookup_auth_record(&key);
     if(!elem) {
         return 0;
     }
 
-    if(k1_strcmp(buf, elem->auth_cred_execve.pathname) == 0)
+    if(k1_strcmp(buf, elem->auth_cred.auth_cred_execve.pathname) == 0)
         k1_change_user_auth_state(
             elem->verdict_hook, uid, K1_FLAG_CHANGE_TOGGLE);
 

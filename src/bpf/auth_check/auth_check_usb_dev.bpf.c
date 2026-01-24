@@ -21,29 +21,19 @@ int BPF_PROG(auth_check_usb_create_sysfs, struct usb_device *udev) {
 
     bpf_printk("connected udev: %s", udev->serial);
 
-    struct k1_auth_record_list *elem =
-        bpf_map_lookup_elem(&auth_map_hash, &const_auth_type_usb);
-    if(!elem)
+    struct k1_sys_auth_map_key key = {
+        .uid = INVALID_UID,
+        .auth_type = K1_AUTH_TYPE_USB,
+    };
+    struct k1_sys_record *auth_record = k1_bpf_lookup_auth_record(&key);
+
+    if(!auth_record)
         return 0;
 
-    for(int i = 0; i < elem->len && i < K1_MAX_USER_RECORDS; i++) {
+    k1_change_user_auth_state(
+        auth_record->verdict_hook, key.uid, K1_FLAG_CHANGE_SET);
 
-        // we already looked up the records with the key `K1_AUTH_TYPE_USB`.
-        // don't check for it again
-
-        if(elem->records[i].is_authenticated)
-            continue;
-
-        if(k1_strcmp(
-               udev->serial, elem->records[i].auth_cred.auth_cred_usb.serial))
-            continue;
-
-        k1_change_user_auth_state(
-            elem->records[i].verdict_hook,
-            elem->records[i].uid,
-            K1_FLAG_CHANGE_SET);
-        elem->records[i].is_authenticated = 1;
-    }
+    auth_record->is_authenticated = 1;
 
     return 0;
 }
@@ -56,28 +46,19 @@ int BPF_PROG(auth_check_usb_remove_sysfs, struct usb_device *udev) {
 
     bpf_printk("disconnected udev: %s", udev->serial);
 
-    struct k1_auth_record_list *elem =
-        bpf_map_lookup_elem(&auth_map_hash, &const_auth_type_usb);
-    if(!elem)
+    struct k1_sys_auth_map_key key = {
+        .uid = INVALID_UID,
+        .auth_type = K1_AUTH_TYPE_USB,
+    };
+    struct k1_sys_record *auth_record = k1_bpf_lookup_auth_record(&key);
+
+    if(!auth_record)
         return 0;
 
-    for(int i = 0; i < elem->len && i < K1_MAX_USER_RECORDS; i++) {
-        if(K1_AUTH_TYPE_USB != elem->records[i].auth_cred.auth_type)
-            continue;
+    k1_change_user_auth_state(
+        auth_record->verdict_hook, key.uid, K1_FLAG_CHANGE_SET);
 
-        if(!elem->records[i].is_authenticated)
-            continue;
-
-        if(k1_strcmp(
-               udev->serial, elem->records[i].auth_cred.auth_cred_usb.serial))
-            continue;
-
-        k1_change_user_auth_state(
-            elem->records[i].verdict_hook,
-            elem->records[i].uid,
-            K1_FLAG_CHANGE_CLEAR);
-        elem->records[i].is_authenticated = 0;
-    }
+    auth_record->is_authenticated = 0;
 
     return 0;
 }

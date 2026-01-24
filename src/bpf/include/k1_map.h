@@ -14,14 +14,6 @@
 #include <k1_map_keys_values.h>
 #include <verdict_record.h>
 
-struct k1_auth_map_hash {
-    __uint(type, BPF_MAP_TYPE_HASH);
-    __uint(max_entries, 1024);
-    __type(key, __u32);
-    __type(value, struct k1_auth_record_list);
-    __uint(pinning, LIBBPF_PIN_BY_NAME);
-};
-
 struct k1_sys_auth_map_hash {
     __uint(type, BPF_MAP_TYPE_HASH);
     __uint(max_entries, 1024);
@@ -46,8 +38,8 @@ struct k1_registered_uids_map_hash {
     __uint(pinning, LIBBPF_PIN_BY_NAME);
 };
 
-struct k1_registered_uids_map_hash __attribute__((weak)) registered_uids_map_hash SEC(".maps");
-struct k1_auth_map_hash __attribute__((weak)) auth_map_hash SEC(".maps");
+struct k1_registered_uids_map_hash
+    __attribute__((weak)) registered_uids_map_hash SEC(".maps");
 struct k1_verdict_map_hash __attribute__((weak)) verdict_map_hash SEC(".maps");
 struct k1_sys_auth_map_hash
     __attribute__((weak)) sys_auth_map_hash SEC(".maps");
