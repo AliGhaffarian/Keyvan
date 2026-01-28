@@ -76,7 +76,7 @@ inline void k1_change_user_auth_state(
 
 struct find_auth_record_ctx {
     struct k1_auth_map_key *key;
-    struct k1_auth_record *result;
+    struct k1_auth_map_value *result;
 };
 
 /**
@@ -105,8 +105,7 @@ static long first_auth_record_with_uid_of_context(
     return BPF_FOR_EACH_MAP_ELEM_STOP;
 }
 
-inline void *
-_k1_bpf_lookup_auth_record_any_uid(struct k1_auth_map_key *key) {
+inline void *_k1_bpf_auth_map_lookup_any_uid(struct k1_auth_map_key *key) {
     __u32 tmp_ptr;
     __u32 uid_ptr;
     long err;
@@ -136,10 +135,10 @@ _k1_bpf_lookup_auth_record_any_uid(struct k1_auth_map_key *key) {
  * @return result of bpf_map_lookup_elem, if uid is INVALID_UID, result of the
  * last called bpf_map_lookup_elem if returned
  */
-inline struct k1_auth_record *
-k1_bpf_lookup_auth_record(struct k1_auth_map_key *key) {
+inline struct k1_auth_map_value *
+k1_bpf_auth_map_lookup(struct k1_auth_map_key *key) {
     if(AUTHMAP_KEY_GET_UID(key) == INVALID_UID) {
-        return _k1_bpf_lookup_auth_record_any_uid(key);
+        return _k1_bpf_auth_map_lookup_any_uid(key);
     }
     return bpf_map_lookup_elem((void *)&auth_map_hash, (void *)key);
 }

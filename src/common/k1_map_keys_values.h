@@ -32,4 +32,12 @@ struct k1_registered_uids_map_key {
     __u32 uid;
 };
 
+struct k1_auth_map_value {
+    struct k1_auth_record record;
+};
+
+struct k1_verdict_map_value {
+    struct k1_verdict_record record;
+};
+
 #endif

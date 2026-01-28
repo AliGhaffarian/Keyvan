@@ -25,15 +25,15 @@ int BPF_PROG(auth_check_usb_create_sysfs, struct usb_device *udev) {
         .uid = INVALID_UID,
         .auth_type = K1_AUTH_TYPE_USB,
     };
-    struct k1_auth_record *auth_record = k1_bpf_lookup_auth_record(&key);
+    struct k1_auth_map_value *elem = k1_bpf_auth_map_lookup(&key);
 
-    if(!auth_record)
+    if(!elem)
         return 0;
 
     k1_change_user_auth_state(
-        auth_record->verdict_hook, key.uid, K1_FLAG_CHANGE_SET);
+        elem->record.verdict_hook, key.uid, K1_FLAG_CHANGE_SET);
 
-    auth_record->is_authenticated = 1;
+    elem->record.is_authenticated = 1;
 
     return 0;
 }
@@ -50,15 +50,15 @@ int BPF_PROG(auth_check_usb_remove_sysfs, struct usb_device *udev) {
         .uid = INVALID_UID,
         .auth_type = K1_AUTH_TYPE_USB,
     };
-    struct k1_auth_record *auth_record = k1_bpf_lookup_auth_record(&key);
+    struct k1_auth_map_value *elem = k1_bpf_auth_map_lookup(&key);
 
-    if(!auth_record)
+    if(!elem)
         return 0;
 
     k1_change_user_auth_state(
-        auth_record->verdict_hook, key.uid, K1_FLAG_CHANGE_SET);
+        elem->record.verdict_hook, key.uid, K1_FLAG_CHANGE_SET);
 
-    auth_record->is_authenticated = 0;
+    elem->record.is_authenticated = 0;
 
     return 0;
 }

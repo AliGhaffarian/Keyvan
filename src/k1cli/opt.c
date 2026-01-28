@@ -151,11 +151,13 @@ arg_fail:
 }
 
 void init_auth_cred_execve(struct bpf_progs *skel, char *credential){
-    struct k1_auth_record record = {
-        .is_authenticated = 0,
-        .verdict_hook = args.verdict,
+    struct k1_auth_map_value elem = {
+        .record = {
+            .is_authenticated = 0,
+            .verdict_hook = args.verdict,
+        },
     };
-    strcpy(record.auth_cred.auth_cred_execve.pathname, credential);
+    strcpy(elem.record.auth_cred.auth_cred_execve.pathname, credential);
 
     struct k1_auth_map_key key = {
         .uid = args.uid,
@@ -166,20 +168,22 @@ void init_auth_cred_execve(struct bpf_progs *skel, char *credential){
             skel->maps.auth_map_hash,
             &key,
             sizeof(key),
-            &record,
-            sizeof(record),
+            &elem,
+            sizeof(elem),
             0
             );
 }
 
 void init_auth_cred_usb(struct bpf_progs *skel, char *credential){
 
-    struct k1_auth_record record = {
-        .auth_cred.auth_type = K1_AUTH_TYPE_USB,
-        .is_authenticated = 0,
-        .verdict_hook = args.verdict
+    struct k1_auth_map_value elem = {
+        .record = {
+            .auth_cred.auth_type = K1_AUTH_TYPE_USB,
+            .is_authenticated = 0,
+            .verdict_hook = args.verdict
+        },
     };
-    strcpy(record.auth_cred.auth_cred_usb.serial, credential);
+    strcpy(elem.record.auth_cred.auth_cred_usb.serial, credential);
 
     struct k1_auth_map_key key = {
         .uid = args.uid,
@@ -190,8 +194,8 @@ void init_auth_cred_usb(struct bpf_progs *skel, char *credential){
             skel->maps.auth_map_hash,
             &key,
             sizeof(struct k1_auth_map_key),
-            &record,
-            sizeof(record),
+            &elem,
+            sizeof(elem),
             0
             );
 
@@ -199,8 +203,10 @@ void init_auth_cred_usb(struct bpf_progs *skel, char *credential){
 
 void init_verdict(struct bpf_progs *skel){
     int err;
-    struct k1_verdict_record verdict_record = {
-        .is_authenticated = 0,
+    struct k1_verdict_map_value elem = {
+        .record = {
+            .is_authenticated = 0,
+        }
     };
 
     struct k1_verdict_map_key key = {
@@ -211,8 +217,8 @@ void init_verdict(struct bpf_progs *skel){
             skel->maps.verdict_map_hash,
             &key,
             sizeof(key),
-            &verdict_record,
-            sizeof(verdict_record),
+            &elem,
+            sizeof(elem),
             0
             );
 }

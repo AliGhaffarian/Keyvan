@@ -21,12 +21,12 @@ int BPF_PROG(verdict_execve_lsm) {
     u32 uid = bpf_get_current_uid_gid() & 0xffff;
     struct k1_verdict_map_key key = {
         .uid = uid, .hook_type = K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC};
-    struct k1_verdict_record *elem =
+    struct k1_verdict_map_value *elem =
         bpf_map_lookup_elem(&verdict_map_hash, &key);
     if(!elem)
         return LSM_ALLOW;
 
-    if(!elem->is_authenticated)
+    if(!elem->record.is_authenticated)
         return LSM_DENY;
 
     return LSM_ALLOW;
