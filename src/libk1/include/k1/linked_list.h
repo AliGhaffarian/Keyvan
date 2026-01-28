@@ -6,7 +6,7 @@ struct k1_node {
     void *data;
 };
 
-void linked_list_append(struct k1_node **, struct k1_node **);
-struct k1_node *make_node(void **);
-void linked_list_free(struct k1_node *);
+void k1_linked_list_append(struct k1_node **, struct k1_node **);
+struct k1_node *k1_make_node(void **);
+void k1_linked_list_free(struct k1_node *);
 #endif

@@ -1,7 +1,7 @@
 #include <k1/linked_list.h>
 #include <stdlib.h>
 
-void linked_list_append(struct k1_node **head, struct k1_node **to_append) {
+void k1_linked_list_append(struct k1_node **head, struct k1_node **to_append) {
     struct k1_node **ptr_of_interest = head;
 
     while(*ptr_of_interest != (struct k1_node *)NULL)
@@ -11,7 +11,7 @@ void linked_list_append(struct k1_node **head, struct k1_node **to_append) {
     *to_append = NULL;
 }
 
-struct k1_node *make_node(void **data) {
+struct k1_node *k1_make_node(void **data) {
     struct k1_node *tmp_node = malloc(sizeof(struct k1_node));
     if(!tmp_node)
         return (struct k1_node *)NULL;
@@ -23,7 +23,7 @@ struct k1_node *make_node(void **data) {
     return tmp_node;
 }
 
-void linked_list_free(struct k1_node *head) {
+void k1_linked_list_free(struct k1_node *head) {
     struct k1_node *current = head;
     struct k1_node *next = current->next;
     while(current != (struct k1_node *)NULL) {
