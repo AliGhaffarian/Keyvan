@@ -2,6 +2,7 @@ include_directories(include)
 add_library(
     k1
     linked_list.c
+    logger.c
 )
 install(TARGETS k1)
 install(
