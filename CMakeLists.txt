@@ -14,4 +14,5 @@ Include_directories(${CMAKE_BINARY_DIR}/src/include)
 
 add_subdirectory(devtools)
 add_subdirectory(src/bpf)
+add_subdirectory(src/libk1)
 add_subdirectory(src/k1cli)
