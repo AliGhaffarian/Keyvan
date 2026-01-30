@@ -11,7 +11,6 @@ This readme explains the current implementation. To see the planned, stable vers
 ## Quick demo
 
 Example: root is restricted until the secret is executed:
-
 ```
 $ls
 zsh: operation not permitted: ls
@@ -24,6 +23,27 @@ Clones  Desktop  Documents  Downloads  Templates  Tools  Videos
 ```
 
 ## Quick start
+
+Example config:
+
+```
+# The following configs are related to uid 1000
+uid: 1000
+
+# deny execve until user executes `/some/password`
+auth {
+	type: execve
+	pathname: /some/password #need to execute this pathname to authenticate
+
+    # the following verdict associates with the container auth
+    verdict {
+        type: execve
+    }
+}
+```
+
+Running Keyvan:
+
 ```
 # build from source
 cmake -S . -B build
@@ -31,7 +51,7 @@ cd build
 make
 
 # run Keyvan
-sudo ./output/k1cli -u 1000 -a K1_AUTH_TYPE_EXECVE -p some_secret_password
+sudo ./output/k1cli --config-file CONFIG_FILENAME
 ```
 
 ## Features
@@ -46,7 +66,7 @@ sudo ./output/k1cli -u 1000 -a K1_AUTH_TYPE_EXECVE -p some_secret_password
 - [ ] Consider requiring re-authentication for each sesssion (like sudo)?
 - [x] More flexible approach to store authentication information in maps
 - [ ] Implement userspace daemon to load/write maps so Keyvan can persist across reboots
-- [ ] Implement config parser
+- [x] Implement config parser
 - [ ] Determine white list programs to prevent locking the user out
 - [x] Implement logging
 - [x] Implement SHA512 or port from OpenSSL(BPF and userspace side)

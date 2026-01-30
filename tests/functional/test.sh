@@ -18,6 +18,24 @@ LINE_DELIM="############"
 
 K1_CLI_PID=0
 
+PASSWORD_EXECVE="/some/password"
+
+EXPECT_ERROR=1
+EXPECT_NO_ERROR=0
+
+TEST_CONFIG="\
+uid: 1000 #some comment\n\
+#another comment\n\
+auth: {\n\
+#comment\n\
+    type: execve\n\
+    pathname: $PASSWORD_EXECVE\n\
+    verdict: {\n\
+        type: execve\n\
+    }\n\
+}\n\
+"
+
 log_msg(){
     echo
     echo $LINE_DELIM
@@ -38,6 +56,19 @@ cleanup_n_quit() {
     exit
 }
 
+run_test_case(){
+    cmd="$1"
+    do_expect_err="$2"
+
+    "$cmd" "${arg_array[@]}" &> /dev/null 
+    err=$?
+
+    if (( ($do_expect_err != 0) != ($err != 0) )) ;then
+        log_msg "failed test. cmd: $cmd, expect error: $do_expect_err"
+        cleanup_n_quit 1
+    fi
+}
+
 main() {
 
     cd $(git rev-parse --show-toplevel)
@@ -45,35 +76,27 @@ main() {
     log_msg "Building"
     build
 
-    sudo $K1_BIN_PATH -u $(id -u) -a K1_AUTH_TYPE_EXECVE -p /some/password&
+    tmp_config_file=$(mktemp)
+    echo -e "$TEST_CONFIG" > $tmp_config_file
+
+    sudo $K1_BIN_PATH -c $tmp_config_file&
+    err=$?
     K1_CLI_PID=$!
+    if (( $err != 0 ));then
+        log_msg "failed to run k1cli"
+        exit 1
+    fi
 
     log_msg "Sleeping for k1cli to setup"
     sleep 1
 
     log_msg "Testing"
 
-    if ping -c 2 google.com &> /dev/null ;then
-        log_msg "Failed to deny ping"
-        cleanup_n_quit 1
-    fi
+    run_test_case "ls" $EXPECT_ERROR
 
-    if ls &> /dev/null ;then
-        log_msg "Failed to deny ls"
-        cleanup_n_quit 1
-    fi
+    run_test_case "$PASSWORD_EXECVE" $EXPECT_ERROR #execs afterwards should succeed
 
-    if /random_command &> /dev/null ;then
-        log_msg "Failed to deny /random_command"
-        cleanup_n_quit 1
-    fi
-
-    /some/password &> /dev/null
-
-    if ! ls &> /dev/null ;then
-        log_msg "Failed to allow ls"
-        cleanup_n_quit 1
-    fi
+    run_test_case "ls" $EXPECT_NO_ERROR
 
     log_msg "Passed"
     cleanup_n_quit 0

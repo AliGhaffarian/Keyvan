@@ -1,20 +1,19 @@
 set(CMAKE_C_COMPILER clang)
 set(K1_BPF_OUTPUT_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bpf)
 
-make_directory(${CMAKE_BINARY_DIR}/src/include/)
 make_directory(${K1_BPF_OUTPUT_DIR})
 
 # vmlinux.h
 add_custom_command(
-    OUTPUT ${CMAKE_BINARY_DIR}/src/include/vmlinux.h
+    OUTPUT ${CMAKE_BINARY_DIR}/src/bpf/include/vmlinux.h
     DEPENDS /sys/kernel/btf/vmlinux
     COMMAND bpftool 
-    ARGS btf dump file /sys/kernel/btf/vmlinux format c > ${CMAKE_BINARY_DIR}/src/include/vmlinux.h
+    ARGS btf dump file /sys/kernel/btf/vmlinux format c > ${CMAKE_BINARY_DIR}/src/bpf/include/vmlinux.h
 )
 add_custom_target(
     vmlinux_hdr
     ALL
-    DEPENDS ${CMAKE_BINARY_DIR}/src/include/vmlinux.h
+    DEPENDS ${CMAKE_BINARY_DIR}/src/bpf/include/vmlinux.h
 )
 
 file(GLOB BPF_TARGETS verdict/*.bpf.c auth_check/*.bpf.c)
@@ -27,7 +26,7 @@ foreach(TARGET IN LISTS BPF_TARGETS)
         OUTPUT ${TARGET_OUTPUT_PATH}
         COMMAND ${CMAKE_C_COMPILER}
         ARGS -O2 -target bpf -g -c ${TARGET}
-            -I${CMAKE_SOURCE_DIR}/src/bpf/include -I${CMAKE_SOURCE_DIR}/src/common -I${CMAKE_BINARY_DIR}/src/include
+            -I${CMAKE_SOURCE_DIR}/src/bpf/include -I${CMAKE_SOURCE_DIR}/src/common -I${CMAKE_BINARY_DIR}/src/bpf/include
             -fmacro-prefix-map=${CMAKE_SOURCE_DIR}/src/=
             -o ${TARGET_OUTPUT_PATH}
     )

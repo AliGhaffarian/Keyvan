@@ -40,4 +40,14 @@ struct k1_verdict_map_value {
     struct k1_verdict_record record;
 };
 
+struct k1_auth_map_key_value {
+    struct k1_auth_map_key key;
+    struct k1_auth_map_value value;
+};
+
+struct k1_verdict_map_key_value {
+    struct k1_verdict_map_key key;
+    struct k1_verdict_map_value value;
+};
+
 #endif
