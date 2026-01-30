@@ -78,11 +78,9 @@ sudo ./output/k1cli --config-file CONFIG_FILENAME
 ## Adding an authentication mechanism
 1. Add the authentication checker BPF program under [`bpf/auth_check`](https://github.com/AliGhaffarian/Keyvan/blob/main/src/bpf/auth_check)
 2. Add the authentication type in `include/auth_cred.h` in `K1_AUTH_TYPE` enum
-3. Add the credential struct in `include/auth_cred.h`
-4. Add the credential struct in `k1_auth_cred` union in `include/auth_cred.h`
-5. Add `init_auth_cred_<auth_mechanism_name>()` to parse the credentials and populate the appropriate map
-6. Add `init_auth_cred_<auth_mechanism_name>()` to `init_maps_based_on_args()`
-7. Update `enum_to_string_k1_auth_type` inside `common/enum_to_str_maps.c`
-8. Add `<authentication_mechanism_name>_help` on top of `k1cli/opt.c`
+3. Define the credential struct in `include/auth_cred.h`
+4. Add the credential struct in `K1_AUTH_CRED_UNION` in `include/auth_cred.h`
+5. Update the lexer and parser
+6. Update `enum_to_string_k1_auth_type` inside `common/enum_to_str_maps.c`
 
 **Note:** Authentication checker program must call `k1_change_user_auth_state()` when intending to change a record's authentication status.
