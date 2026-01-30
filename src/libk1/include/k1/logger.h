@@ -25,7 +25,7 @@ extern const char *LOG_LEVELS2STR[];
 extern volatile int current_log_level;
 
 #define _logger(log_lvl, dest, fmt, ...)                                       \
-    fprintf(dest, LOGGER_FMT fmt, LOGGER_FMT_ARGS(log_lvl), __VA_ARGS__);
+    fprintf(dest, LOGGER_FMT fmt, LOGGER_FMT_ARGS(log_lvl), ##__VA_ARGS__);
 /*
  * @param log_lvl
  * @param dest: destination FILE*, ignored for bpfside
@@ -34,7 +34,7 @@ extern volatile int current_log_level;
 #define logger(log_lvl, dest, fmt, ...)                                        \
     do {                                                                       \
         if(current_log_level >= log_lvl)                                       \
-            _logger(log_lvl, dest, fmt, __VA_ARGS__)                           \
+            _logger(log_lvl, dest, fmt, ##__VA_ARGS__)                         \
     } while(0)
 
 #endif // K1_LOGGER
