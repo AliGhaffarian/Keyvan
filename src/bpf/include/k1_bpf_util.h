@@ -62,7 +62,7 @@ inline void k1_change_user_auth_state(
     enum K1_VERDICT_HOOK verdict, uid_t uid, enum K1_FLAG_CHANGE_OPS op) {
     struct k1_verdict_map_key key = {
         .uid = uid,
-        .hook_type = verdict,
+        .verdict_hook = verdict,
     };
     struct k1_verdict_record *verdict_list_elem =
         bpf_map_lookup_elem(&verdict_map_hash, &key);

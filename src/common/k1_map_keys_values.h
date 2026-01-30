@@ -25,7 +25,7 @@ struct k1_auth_map_key {
 
 struct k1_verdict_map_key {
     __u32 uid;
-    enum K1_VERDICT_HOOK hook_type;
+    enum K1_VERDICT_HOOK verdict_hook;
 };
 
 struct k1_registered_uids_map_key {

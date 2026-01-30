@@ -211,7 +211,7 @@ void init_verdict(struct bpf_progs *skel){
 
     struct k1_verdict_map_key key = {
         .uid = args.uid,
-        .hook_type = args.verdict,
+        .verdict_hook = args.verdict,
     };
     err = bpf_map__update_elem(
             skel->maps.verdict_map_hash,
