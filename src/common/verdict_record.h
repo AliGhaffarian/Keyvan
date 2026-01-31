@@ -1,6 +1,10 @@
 #ifndef K1_VERDICT_RECORD
 #define K1_VERDICT_RECORD
 
+#ifndef __BPF__
+#include <linux/types.h>
+#endif
+
 #include <auth_cred.h>
 #include <k1_limits.h>
 #include <stdbool.h>
@@ -12,7 +16,7 @@ enum K1_VERDICT_HOOK {
 };
 
 struct k1_verdict_record {
-    bool is_authenticated;
+    __u64 is_authenticated;
 };
 
 struct k1_verdict_record_list {

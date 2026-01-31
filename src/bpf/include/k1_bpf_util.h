@@ -40,16 +40,17 @@ enum K1_FLAG_CHANGE_OPS {
     _K1_FLAG_CHANGE_OPS_ENUM_SIZE,
 };
 
-static inline void k1_do_op_on_flag(bool *flag, enum K1_FLAG_CHANGE_OPS op) {
+static inline void k1_do_op_on_flag(__u64 *flag, enum K1_FLAG_CHANGE_OPS op) {
     switch(op) {
     case(K1_FLAG_CHANGE_CLEAR):
+        __sync_lock_test_and_set(flag, 0);
         *flag = 0;
         break;
     case(K1_FLAG_CHANGE_SET):
-        *flag = 1;
+        __sync_lock_test_and_set(flag, 1);
         break;
     case(K1_FLAG_CHANGE_TOGGLE):
-        *flag ^= 1;
+        __sync_fetch_and_xor(flag, 1);
         break;
     // should never happen
     default:
