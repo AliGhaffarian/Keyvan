@@ -19,15 +19,4 @@ struct k1_auth_cred_usb {
     char serial[K1_BPF_STRING_MAXSIZE];
 };
 
-#define K1_AUTH_CRED_UNION                                                     \
-    union {                                                                    \
-        struct k1_auth_cred_execve auth_cred_execve;                           \
-        struct k1_auth_cred_usb auth_cred_usb;                                 \
-    }
-
-struct k1_auth_cred {
-    enum K1_AUTH_TYPE auth_type;
-    K1_AUTH_CRED_UNION;
-};
-
 #endif

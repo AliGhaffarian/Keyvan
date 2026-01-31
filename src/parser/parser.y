@@ -39,7 +39,6 @@
 
     struct k1_auth_cred_execve *auth_cred_execve;
     struct k1_auth_cred_usb *auth_cred_usb;
-    struct k1_auth_cred *auth_cred;
 
     struct k1_verdict_map_key *verdict_map_key;
 
@@ -114,10 +113,10 @@ auth_policy_specs:
                  struct k1_auth_map_key_value *self = malloc(sizeof(*self));
                  if(!self) yyerror("nomem");
 
-                 memcpy(&self->value.record.auth_cred.auth_cred_execve, $1, sizeof(*$1));
+                 memcpy(&self->value.record.auth_cred_execve, $1, sizeof(*$1));
                  free($1);
 
-                 self->value.record.auth_cred.auth_type = K1_AUTH_TYPE_EXECVE;
+                 self->value.record.auth_type = K1_AUTH_TYPE_EXECVE;
                  self->key.auth_type = K1_AUTH_TYPE_EXECVE;
 
                  $$ = self;
@@ -127,10 +126,10 @@ auth_policy_specs:
                  struct k1_auth_map_key_value *self = malloc(sizeof(*self));
                  if(!self) yyerror("nomem");
 
-                 memcpy(&self->value.record.auth_cred.auth_cred_usb, $1, sizeof(*$1));
+                 memcpy(&self->value.record.auth_cred_usb, $1, sizeof(*$1));
                  free($1);
 
-                 self->value.record.auth_cred.auth_type = K1_AUTH_TYPE_USB;
+                 self->value.record.auth_type = K1_AUTH_TYPE_USB;
                  self->key.auth_type = K1_AUTH_TYPE_USB;
 
                  $$ = self;

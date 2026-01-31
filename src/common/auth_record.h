@@ -13,7 +13,13 @@
 
 struct k1_auth_record {
     bool is_authenticated;
+
     enum K1_VERDICT_HOOK verdict_hook;
-    struct k1_auth_cred auth_cred;
+
+    enum K1_AUTH_TYPE auth_type;
+    union {
+        struct k1_auth_cred_execve auth_cred_execve;
+        struct k1_auth_cred_usb auth_cred_usb;
+    };
 };
 #endif
