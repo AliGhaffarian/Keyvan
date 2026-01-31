@@ -49,17 +49,17 @@
 %type <void> uid
 %type <str> pathname
 
-%type <auth_cred_execve> execve_auth_config
-%type <auth_cred_execve> execve_auth_specs
+%type <auth_cred_execve> execve_auth_fields
+%type <auth_cred_execve> execve_auth_struct
 
 %type <str> usb_serial
-%type <auth_cred_usb> usb_auth_config
-%type <auth_cred_usb> usb_auth_specs
+%type <auth_cred_usb> usb_auth_fields
+%type <auth_cred_usb> usb_auth_struct
 
 %type <auth_map_key_value> auth_policy_specs
 %type <void> auth_policy
 
-%type <verdict_map_key_value> execve_verdict_specs
+%type <verdict_map_key_value> execve_verdict_struct
 %type <verdict_map_key_value> verdict_policy_specs
 %type <void> verdict_policy
 
@@ -72,7 +72,7 @@ uid: UID ':' NUMBER { parser_ctx.current_uid = $3; };
 
 pathname: PATHNAME ':' STRING { $$ = strdup($3); } ;
 
-execve_auth_config:
+execve_auth_fields:
                   pathname
                   {
                   struct k1_auth_cred_execve *self = malloc(sizeof(*self));
@@ -87,11 +87,11 @@ execve_auth_config:
                   $$ = self;
                   };
 
-execve_auth_specs: TYPE ':' EXECVE execve_auth_config { $$ = $4; };
+execve_auth_struct: TYPE ':' EXECVE execve_auth_fields { $$ = $4; };
 
 usb_serial: SERIAL ':' STRING { $$ = $3; };
 
-usb_auth_config: 
+usb_auth_fields: 
                usb_serial 
                {
                 struct k1_auth_cred_usb *self = malloc(sizeof(*self));
@@ -106,10 +106,10 @@ usb_auth_config:
                 $$ = self;
                };
 
-usb_auth_specs: TYPE ':' USB usb_auth_config { $$ = $4; };
+usb_auth_struct: TYPE ':' USB usb_auth_fields { $$ = $4; };
 
 auth_policy_specs:
-                 execve_auth_specs {
+                 execve_auth_struct {
                  struct k1_auth_map_key_value *self = malloc(sizeof(*self));
                  if(!self) yyerror("nomem");
 
@@ -121,7 +121,7 @@ auth_policy_specs:
 
                  $$ = self;
                  }
-                 | usb_auth_specs
+                 | usb_auth_struct
                  {
                  struct k1_auth_map_key_value *self = malloc(sizeof(*self));
                  if(!self) yyerror("nomem");
@@ -163,7 +163,7 @@ auth_policy:
            k1_linked_list_append(&head_auth_map_key_value, &auth_node);
            };
 
-execve_verdict_specs: TYPE ':' EXECVE 
+execve_verdict_struct: TYPE ':' EXECVE
                    { 
                    struct k1_verdict_map_key_value *self = malloc(sizeof(*self));
                    if(!self) yyerror("nomem");
@@ -171,7 +171,7 @@ execve_verdict_specs: TYPE ':' EXECVE
                    $$ = self;
                    };
 
-verdict_policy_specs: execve_verdict_specs;
+verdict_policy_specs: execve_verdict_struct;
 
 verdict_policy: VERDICT ':' '{' verdict_policy_specs '}'
            {
