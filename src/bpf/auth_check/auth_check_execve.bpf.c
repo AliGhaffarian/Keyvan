@@ -22,7 +22,7 @@ int BPF_PROG(auth_cred_execve_check, void *a, void *b, char *filename) {
     bpf_core_read_user(buf, K1_BPF_STRING_MAXSIZE - 1, filename);
     buf[K1_BPF_STRING_MAXSIZE - 1] = 0;
 
-    u32 uid = bpf_get_current_uid_gid() & 0xffff;
+    u32 uid = bpf_get_current_uid_gid() & 0xffffffff;
     struct k1_auth_map_key key = {
         .uid = uid,
         .auth_type = K1_AUTH_TYPE_EXECVE,
