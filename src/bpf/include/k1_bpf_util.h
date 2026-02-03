@@ -3,11 +3,12 @@
 
 #ifndef __BPF__
 #define __BPF__
+#endif
 // clang-format off
 #include <vmlinux.h>
 // clang-format on
+#include <bpf/bpf_core_read.h>
 #include <bpf/bpf_helpers.h>
-#endif
 
 #include <auth_record.h>
 #include <errno.h>
@@ -149,5 +150,18 @@ k1_bpf_auth_map_lookup(struct k1_auth_map_key *key) {
         return _k1_bpf_auth_map_lookup_any_uid(key);
     }
     return bpf_map_lookup_elem((void *)&auth_map_hash, (void *)key);
+}
+
+inline __u64 k1_bpf_get_current_sessionid() {
+
+    struct task_struct *current_task = NULL;
+    current_task = (struct task_struct *)bpf_get_current_task_btf();
+    if(!current_task) {
+        bpf_printk("unexpected error getting current session id");
+        return INVALID_SESSIONID;
+    }
+
+    return BPF_CORE_READ(
+        current_task, signal, pids[PIDTYPE_SID], numbers[0].nr);
 }
 #endif

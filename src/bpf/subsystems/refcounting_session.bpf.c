@@ -6,6 +6,7 @@
 #include <bpf/bpf_tracing.h>
 #include <errno.h>
 #include <helper.h>
+#include <k1_bpf_util.h>
 #include <k1_map.h>
 
 #ifndef __BPF__
@@ -23,19 +24,6 @@ struct k1_refcounting_map_old_sessionid_hash {
 };
 struct k1_refcounting_map_old_sessionid_hash
     __attribute__((weak)) refcounting_map_old_sessionid_hash SEC(".maps");
-
-inline __u64 k1_bpf_get_current_sessionid() {
-
-    struct task_struct *current_task = NULL;
-    current_task = (struct task_struct *)bpf_get_current_task_btf();
-    if(!current_task) {
-        bpf_printk("unexpected error getting current session id");
-        return INVALID_SESSIONID;
-    }
-
-    return BPF_CORE_READ(
-        current_task, signal, pids[PIDTYPE_SID], numbers[0].nr);
-}
 
 inline int k1_bpf_cleanup_sessionid(__u64 sid) {
     bpf_printk("cleaning up sid: %d", sid);
