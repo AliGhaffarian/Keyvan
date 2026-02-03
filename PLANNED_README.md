@@ -146,10 +146,11 @@ A --<->-- B: A and B talk
 |     |             \/                              \/
 |     |<-----< auth_checkers <---------------< |auth_checker_map|
 |     |                                                                    
-|     \------------>|verdict_map|-<->--\                         
-|                                      /\
-/\   							       \/
-\---------------------------------< verdict
+|     \------------>|verdict_map_user|----<->--\                         
+|     \------------>|verdict_map_session|-<->--|                         
+|                                             /\
+/\                                            \/
+\----------------------------------------< verdicts
 ```
 ### Diagram explanation
 The following sections describe the portion of the diagram that enable PAM compatibility.

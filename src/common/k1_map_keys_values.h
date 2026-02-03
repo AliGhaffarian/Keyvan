@@ -56,6 +56,20 @@ struct k1_verdict_map_user_value {
     struct k1_verdict_record record;
 };
 
+struct k1_verdict_map_session_key {
+    pid_t sid;
+    enum K1_VERDICT_HOOK verdict_hook;
+};
+
+struct k1_verdict_map_session_value {
+    struct k1_verdict_record record;
+};
+
+struct k1_verdict_map_session_key_value {
+    struct k1_verdict_map_session_key key;
+    struct k1_verdict_map_session_value value;
+};
+
 struct k1_auth_map_key_value {
     struct k1_auth_map_key key;
     struct k1_auth_map_value value;
