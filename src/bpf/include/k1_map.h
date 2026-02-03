@@ -14,6 +14,14 @@
 #include <k1_map_keys_values.h>
 #include <verdict_record.h>
 
+struct k1_refcounting_map_session_hash {
+    __uint(type, BPF_MAP_TYPE_HASH);
+    __uint(max_entries, 1024);
+    __type(key, struct k1_refcounting_map_session_key);
+    __type(value, struct k1_refcounting_map_session_value);
+    __uint(pinning, LIBBPF_PIN_BY_NAME);
+};
+
 struct k1_verdict_map_session_hash {
     __uint(type, BPF_MAP_TYPE_HASH);
     __uint(max_entries, 1024);
@@ -46,6 +54,8 @@ struct k1_registered_uids_map_hash {
     __uint(pinning, LIBBPF_PIN_BY_NAME);
 };
 
+struct k1_refcounting_map_session_hash
+    __attribute__((weak)) refcounting_map_session_hash SEC(".maps");
 struct k1_verdict_map_session_hash
     __attribute__((weak)) verdict_map_session_hash SEC(".maps");
 struct k1_registered_uids_map_hash

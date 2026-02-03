@@ -16,7 +16,7 @@ add_custom_target(
     DEPENDS ${CMAKE_BINARY_DIR}/src/bpf/include/vmlinux.h
 )
 
-file(GLOB BPF_TARGETS verdict/*.bpf.c auth_check/*.bpf.c)
+file(GLOB BPF_TARGETS verdict/*.bpf.c auth_check/*.bpf.c subsystems/*.bpf.c)
 
 # build individual bpf programs
 foreach(TARGET IN LISTS BPF_TARGETS)

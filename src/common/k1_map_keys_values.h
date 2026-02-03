@@ -17,8 +17,8 @@
 /**
  * @brief get and set macros for auth_key, to decouple the code
  */
-#define AUTHMAP_KEY_SET_UID(key_ptr, u) key_ptr->uid = u
-#define AUTHMAP_KEY_GET_UID(key_ptr)    key_ptr->uid
+#define AUTHMAP_KEY_SET_UID(key_ptr, u) (key_ptr)->uid = u
+#define AUTHMAP_KEY_GET_UID(key_ptr)    ((key_ptr)->uid)
 
 enum K1_VERDICT_MAP_TYPE {
     _K1_VERDICT_MAP_UNSPEC,
@@ -54,6 +54,13 @@ struct k1_auth_map_value {
 
 struct k1_verdict_map_user_value {
     struct k1_verdict_record record;
+};
+
+struct k1_refcounting_map_session_key {
+    __u64 sid;
+};
+struct k1_refcounting_map_session_value {
+    __u64 refcount;
 };
 
 struct k1_verdict_map_session_key {
