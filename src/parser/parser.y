@@ -10,7 +10,7 @@
     #include <k1_limits.h>
 
     struct k1_node *head_auth_map_key_value;
-    struct k1_node *head_verdict_map_key_value;
+    struct k1_node *head_verdict_map_user_key_value;
 
     struct {
         uid_t current_uid;
@@ -40,10 +40,10 @@
     struct k1_auth_cred_execve *auth_cred_execve;
     struct k1_auth_cred_usb *auth_cred_usb;
 
-    struct k1_verdict_map_key *verdict_map_key;
+    struct k1_verdict_map_user_key *verdict_map_user_key;
 
     struct k1_auth_map_key_value *auth_map_key_value;
-    struct k1_verdict_map_key_value *verdict_map_key_value;
+    struct k1_verdict_map_user_key_value *verdict_map_user_key_value;
 }
 
 %type <void> uid
@@ -59,8 +59,8 @@
 %type <auth_map_key_value> auth_policy_specs
 %type <void> auth_policy
 
-%type <verdict_map_key_value> execve_verdict_struct
-%type <verdict_map_key_value> verdict_policy_specs
+%type <verdict_map_user_key_value> execve_verdict_struct
+%type <verdict_map_user_key_value> verdict_policy_specs
 %type <void> verdict_policy
 
 %type <void> policy
@@ -139,20 +139,20 @@ auth_policy:
            AUTH ':' '{' auth_policy_specs VERDICT ':' '{' verdict_policy_specs '}' '}'
            {
            struct k1_auth_map_key_value *current_auth_map_key_value = $4;
-           struct k1_verdict_map_key_value *current_verdict_map_key_value = $8;
+           struct k1_verdict_map_user_key_value *current_verdict_map_user_key_value = $8;
 
-           current_auth_map_key_value->value.record.verdict_hook = current_verdict_map_key_value->key.verdict_hook;
+           current_auth_map_key_value->value.verdict_entry_lookup_info.verdict_hook = current_verdict_map_user_key_value->key.verdict_hook;
 
            current_auth_map_key_value->key.uid = parser_ctx.current_uid;
-           current_verdict_map_key_value->key.uid = parser_ctx.current_uid;
+           current_verdict_map_user_key_value->key.uid = parser_ctx.current_uid;
 
            struct k1_node *auth_node = k1_make_node((void **)&current_auth_map_key_value);
            if(!auth_node) yyerror("nomem");
-           struct k1_node *verdict_node = k1_make_node((void **)&current_verdict_map_key_value);
+           struct k1_node *verdict_node = k1_make_node((void **)&current_verdict_map_user_key_value);
            if(!verdict_node) yyerror("nomem");
 
            k1_linked_list_append(&head_auth_map_key_value, &auth_node);
-           k1_linked_list_append(&head_verdict_map_key_value, &verdict_node);
+           k1_linked_list_append(&head_verdict_map_user_key_value, &verdict_node);
            }
            | AUTH ':' '{' auth_policy_specs '}'
            {
@@ -165,7 +165,7 @@ auth_policy:
 
 execve_verdict_struct: TYPE ':' EXECVE
                    { 
-                   struct k1_verdict_map_key_value *self = malloc(sizeof(*self));
+                   struct k1_verdict_map_user_key_value *self = malloc(sizeof(*self));
                    if(!self) yyerror("nomem");
                    self->key.verdict_hook = K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC;
                    $$ = self;
@@ -175,11 +175,11 @@ verdict_policy_specs: execve_verdict_struct;
 
 verdict_policy: VERDICT ':' '{' verdict_policy_specs '}'
            {
-           struct k1_verdict_map_key_value *current_verdict_map_key_value = $4;
-           current_verdict_map_key_value->key.uid = parser_ctx.current_uid;
-           struct k1_node *verdict_register = k1_make_node((void **)&current_verdict_map_key_value);
+           struct k1_verdict_map_user_key_value *current_verdict_map_user_key_value = $4;
+           current_verdict_map_user_key_value->key.uid = parser_ctx.current_uid;
+           struct k1_node *verdict_register = k1_make_node((void **)&current_verdict_map_user_key_value);
            if(!verdict_register) yyerror("nomem");
-           k1_linked_list_append(&head_verdict_map_key_value, &verdict_register);
+           k1_linked_list_append(&head_verdict_map_user_key_value, &verdict_register);
            };
 
 policy: auth_policy | verdict_policy;

@@ -60,19 +60,26 @@ static inline void k1_do_op_on_flag(__u64 *flag, enum K1_FLAG_CHANGE_OPS op) {
 }
 
 inline void k1_change_user_auth_state(
-    enum K1_VERDICT_HOOK verdict, uid_t uid, enum K1_FLAG_CHANGE_OPS op) {
-    struct k1_verdict_map_key key = {
+    struct k1_verdict_entry_lookup_info *verdict_entry_lookup_info,
+    uid_t uid,
+    enum K1_FLAG_CHANGE_OPS op) {
+
+    struct k1_verdict_map_user_value *elem = NULL;
+    struct k1_verdict_map_user_key key = {
         .uid = uid,
-        .verdict_hook = verdict,
+        .verdict_hook = verdict_entry_lookup_info->verdict_hook,
     };
-    struct k1_verdict_record *verdict_list_elem =
-        bpf_map_lookup_elem(&verdict_map_hash, &key);
+
+    if(uid == INVALID_UID)
+        key.uid = bpf_get_current_uid_gid() & 0xffffffff;
+
+    elem = bpf_map_lookup_elem(&verdict_map_user_hash, &key);
 
     // caller needs to make sure this doesnt happen
-    if(!verdict_list_elem)
+    if(!elem)
         return;
 
-    k1_do_op_on_flag(&verdict_list_elem->is_authenticated, op);
+    k1_do_op_on_flag(&elem->record.is_authenticated, op);
 }
 
 struct find_auth_record_ctx {

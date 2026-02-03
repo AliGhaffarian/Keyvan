@@ -32,10 +32,12 @@ int BPF_PROG(auth_cred_execve_check, void *a, void *b, char *filename) {
         return 0;
     }
 
-    if(k1_strcmp(buf, elem->record.auth_cred_execve.pathname) == 0)
-        k1_change_user_auth_state(
-            elem->record.verdict_hook, uid, K1_FLAG_CHANGE_TOGGLE);
+    if(k1_strcmp(buf, elem->record.auth_cred_execve.pathname) != 0)
+        return 0;
 
+    // authenticate the user
+    k1_change_user_auth_state(
+        &elem->verdict_entry_lookup_info, uid, K1_FLAG_CHANGE_TOGGLE);
     return 0;
 }
 

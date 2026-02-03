@@ -12,7 +12,7 @@
 #include "opt.h"
 
 extern struct k1_node *head_auth_map_key_value;
-extern struct k1_node *head_verdict_map_key_value;
+extern struct k1_node *head_verdict_map_user_key_value;
 
 int yyparse();
 
@@ -46,10 +46,10 @@ int register_verdict_pairs_to_map(
 
     struct k1_node *current_verdict = head;
     while(current_verdict) {
-        struct k1_verdict_map_key_value *current_verdict_key_value =
+        struct k1_verdict_map_user_key_value *current_verdict_key_value =
             current_verdict->data;
         err = bpf_map__update_elem(
-            skel->maps.verdict_map_hash,
+            skel->maps.verdict_map_user_hash,
             &current_verdict_key_value->key,
             sizeof(current_verdict_key_value->key),
             &current_verdict_key_value->value,
@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
     err = register_auth_pairs_to_map(skel, head_auth_map_key_value);
     if(err)
         return err;
-    err = register_verdict_pairs_to_map(skel, head_verdict_map_key_value);
+    err = register_verdict_pairs_to_map(skel, head_verdict_map_user_key_value);
     if(err)
         return err;
 

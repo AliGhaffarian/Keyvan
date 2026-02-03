@@ -12,10 +12,6 @@
 #include <verdict_record.h>
 
 struct k1_auth_record {
-    __u64 is_authenticated;
-
-    enum K1_VERDICT_HOOK verdict_hook;
-
     enum K1_AUTH_TYPE auth_type;
     union {
         struct k1_auth_cred_execve auth_cred_execve;

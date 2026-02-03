@@ -31,9 +31,9 @@ int BPF_PROG(auth_check_usb_create_sysfs, struct usb_device *udev) {
         return 0;
 
     k1_change_user_auth_state(
-        elem->record.verdict_hook, key.uid, K1_FLAG_CHANGE_SET);
+        &elem->verdict_entry_lookup_info, key.uid, K1_FLAG_CHANGE_SET);
 
-    elem->record.is_authenticated = 1;
+    elem->is_authenticated = 1;
 
     return 0;
 }
@@ -56,9 +56,9 @@ int BPF_PROG(auth_check_usb_remove_sysfs, struct usb_device *udev) {
         return 0;
 
     k1_change_user_auth_state(
-        elem->record.verdict_hook, key.uid, K1_FLAG_CHANGE_SET);
+        &elem->verdict_entry_lookup_info, key.uid, K1_FLAG_CHANGE_SET);
 
-    elem->record.is_authenticated = 0;
+    elem->is_authenticated = 0;
 
     return 0;
 }
