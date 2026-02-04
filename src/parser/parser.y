@@ -83,6 +83,7 @@ execve_auth_fields:
                         yyerror("bpf string exceeds max len");
 
                   memcpy(self->pathname, $1, pathname_strlen);
+                  self->pathname[pathname_strlen] = 0;
                   free($1);
                   $$ = self;
                   };
@@ -98,10 +99,11 @@ usb_auth_fields:
                 int serial_strlen = strlen($1);
                 if(!self) yyerror("nomem");
 
-                if(serial_strlen >= K1_BPF_STRING_MAXSIZE)
+                if(serial_strlen >= K1_BPF_STRING_MAXSIZE - 1)
                     yyerror("bpf string exceeds max len");
 
                 memcpy(self->serial, $1, serial_strlen);
+                self->serial[serial_strlen] = 0;
                 free($1);
                 $$ = self;
                };
