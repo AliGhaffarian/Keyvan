@@ -8,6 +8,7 @@
     #include <k1_map_keys_values.h>
     #include <stdlib.h>
     #include <k1_limits.h>
+    #include <enum_to_str_maps.h>
 
     struct k1_node *head_auth_map_key_value;
     struct k1_node *head_verdict_map_user_key_value;
@@ -30,6 +31,7 @@
 %token USB
 %token AUTH
 %token VERDICT
+%token VERDICT_SUB_TYPE
 
 %union {
     int number;
@@ -84,6 +86,7 @@ execve_auth_fields:
 
                   memcpy(self->pathname, $1, pathname_strlen);
                   self->pathname[pathname_strlen] = 0;
+
                   free($1);
                   $$ = self;
                   };
@@ -92,8 +95,8 @@ execve_auth_struct: TYPE ':' EXECVE execve_auth_fields { $$ = $4; };
 
 usb_serial: SERIAL ':' STRING { $$ = $3; };
 
-usb_auth_fields: 
-               usb_serial 
+usb_auth_fields:
+               usb_serial
                {
                 struct k1_auth_cred_usb *self = malloc(sizeof(*self));
                 int serial_strlen = strlen($1);
@@ -104,6 +107,7 @@ usb_auth_fields:
 
                 memcpy(self->serial, $1, serial_strlen);
                 self->serial[serial_strlen] = 0;
+
                 free($1);
                 $$ = self;
                };
@@ -138,14 +142,18 @@ auth_policy_specs:
                  };
 
 auth_policy:
-           AUTH ':' '{' auth_policy_specs VERDICT ':' '{' verdict_policy_specs '}' '}'
+           AUTH ':' '{' auth_policy_specs VERDICT_SUB_TYPE ':' STRING VERDICT ':' '{' verdict_policy_specs '}' '}'
            {
            struct k1_auth_map_key_value *current_auth_map_key_value = $4;
-           struct k1_verdict_map_user_key_value *current_verdict_map_user_key_value = $8;
+           struct k1_verdict_map_user_key_value *current_verdict_map_user_key_value = $11;
 
            current_auth_map_key_value->value.verdict_entry_lookup_info.verdict_hook = current_verdict_map_user_key_value->key.verdict_hook;
+           current_auth_map_key_value->value.verdict_entry_lookup_info.verdict_map_type = enum_from_string_k1_verdict_map_type($7);
+           if(current_auth_map_key_value->value.verdict_entry_lookup_info.verdict_map_type == _K1_VERDICT_MAP_UNSPEC)
+                yyerror("unknown verdict_sub_type");
 
            current_auth_map_key_value->key.uid = parser_ctx.current_uid;
+
            current_verdict_map_user_key_value->key.uid = parser_ctx.current_uid;
 
            struct k1_node *auth_node = k1_make_node((void **)&current_auth_map_key_value);

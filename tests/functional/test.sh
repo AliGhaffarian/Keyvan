@@ -30,6 +30,7 @@ auth: {\n\
 #comment\n\
     type: execve\n\
     pathname: $PASSWORD_EXECVE\n\
+    verdict_sub_type: K1_VERDICT_MAP_UID\n\
     verdict: {\n\
         type: execve\n\
     }\n\

@@ -16,6 +16,7 @@
 "usb"               { return USB; }
 
 "serial"            { return SERIAL; }
+"verdict_sub_type" {return VERDICT_SUB_TYPE;}
 
 "pathname"        { return PATHNAME; }
 [0-9]+              { yylval.number = atoi(yytext); return NUMBER; }
