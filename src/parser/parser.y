@@ -81,7 +81,7 @@ execve_auth_fields:
                   int pathname_strlen = strlen($1);
                   if(!self) yyerror("nomem");
 
-                  if(pathname_strlen >= K1_BPF_STRING_MAXSIZE)
+                  if(pathname_strlen >= K1_BPF_STRING_MAXSIZE - 1)
                         yyerror("bpf string exceeds max len");
 
                   memcpy(self->pathname, $1, pathname_strlen);
