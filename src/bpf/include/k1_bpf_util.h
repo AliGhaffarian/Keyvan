@@ -60,6 +60,49 @@ static inline void k1_do_op_on_flag(__u64 *flag, enum K1_FLAG_CHANGE_OPS op) {
     return;
 }
 
+inline __u64 k1_bpf_get_current_sessionid() {
+
+    struct task_struct *current_task = NULL;
+    current_task = (struct task_struct *)bpf_get_current_task_btf();
+    if(!current_task) {
+        bpf_printk("unexpected error getting current session id");
+        return INVALID_SESSIONID;
+    }
+
+    return BPF_CORE_READ(
+        current_task, signal, pids[PIDTYPE_SID], numbers[0].nr);
+}
+
+inline void k1_change_session_auth_state(
+    struct k1_verdict_entry_lookup_info *verdict_entry_lookup_info, pid_t sessionid, enum K1_FLAG_CHANGE_OPS op) {
+
+    const int zero = 0;
+    struct k1_verdict_map_session_value *elem = NULL;
+    struct k1_verdict_map_session_key key = {
+        .sid = sessionid,
+        .verdict_hook = verdict_entry_lookup_info->verdict_hook,
+    };
+
+    if(sessionid == INVALID_SESSIONID)
+        key.sid = k1_bpf_get_current_sessionid();
+
+    elem =
+        bpf_map_lookup_elem(&verdict_map_session_hash, &key);
+
+    // first time operating on this session
+    if(!elem){
+        // TODO: Decide what to do if this fails
+        bpf_map_update_elem(&verdict_map_session_hash, &key, &zero, BPF_ANY);
+        elem =
+            bpf_map_lookup_elem(&verdict_map_session_hash, &key);
+
+        // just to satisfay the verifier
+        if(!elem) return;
+    }
+
+    k1_do_op_on_flag(&elem->record.is_authenticated, op);
+}
+
 inline void k1_change_user_auth_state(
     struct k1_verdict_entry_lookup_info *verdict_entry_lookup_info,
     uid_t uid,
@@ -152,16 +195,4 @@ k1_bpf_auth_map_lookup(struct k1_auth_map_key *key) {
     return bpf_map_lookup_elem((void *)&auth_map_hash, (void *)key);
 }
 
-inline __u64 k1_bpf_get_current_sessionid() {
-
-    struct task_struct *current_task = NULL;
-    current_task = (struct task_struct *)bpf_get_current_task_btf();
-    if(!current_task) {
-        bpf_printk("unexpected error getting current session id");
-        return INVALID_SESSIONID;
-    }
-
-    return BPF_CORE_READ(
-        current_task, signal, pids[PIDTYPE_SID], numbers[0].nr);
-}
 #endif
