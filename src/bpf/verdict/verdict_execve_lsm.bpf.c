@@ -20,7 +20,7 @@ SEC("lsm/bprm_creds_for_exec")
 int BPF_PROG(verdict_execve_lsm) {
 
     __u64 current_sid = k1_bpf_get_current_sessionid();
-    u32 uid = bpf_get_current_uid_gid() & 0xffffffff;
+    u32 uid = bpf_get_current_uid_gid() & NBYTES_MASK(4);
     struct k1_verdict_map_session_key session_key = {
         .verdict_hook = K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC,
         .sid = k1_bpf_get_current_sessionid(),

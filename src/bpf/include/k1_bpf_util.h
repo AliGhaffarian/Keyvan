@@ -115,7 +115,7 @@ inline void k1_change_user_auth_state(
     };
 
     if(uid == INVALID_UID)
-        key.uid = bpf_get_current_uid_gid() & 0xffffffff;
+        key.uid = bpf_get_current_uid_gid() & NBYTES_MASK(4);
 
     elem = bpf_map_lookup_elem(&verdict_map_user_hash, &key);
 

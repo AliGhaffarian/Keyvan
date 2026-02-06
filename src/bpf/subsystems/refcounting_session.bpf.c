@@ -84,7 +84,7 @@ SEC("tp/sched/sched_process_fork")
 int BPF_PROG(refcount_session_sched_process_fork) {
     __u64 current_sid = k1_bpf_get_current_sessionid();
     struct k1_refcounting_map_session_value refcount_one = {.refcount = 1};
-    pid_t current_uid = bpf_get_current_uid_gid() & 0xffffffff;
+    pid_t current_uid = bpf_get_current_uid_gid() & NBYTES_MASK(4);
     void *do_track_session =
         bpf_map_lookup_elem(&registered_uids_map_hash, &current_uid);
 
@@ -108,7 +108,7 @@ int BPF_PROG(refcount_session_exit_setsid, int nr, int ret) {
     struct k1_refcounting_map_session_value refcounting_map_session_value = {
         .refcount = 1};
     struct task_struct *current_task = NULL;
-    __u32 current_uid = bpf_get_current_uid_gid() & 0xffffffff;
+    __u32 current_uid = bpf_get_current_uid_gid() & NBYTES_MASK(4);
     __u64 original_refcount = -1;
 
     if(ret < 0)
