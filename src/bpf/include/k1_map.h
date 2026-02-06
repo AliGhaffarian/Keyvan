@@ -11,7 +11,7 @@
 #include <bpf/bpf_helpers.h>
 
 #include <auth_record.h>
-#include <k1_map_keys_values.h>
+#include <k1_map_pairs.h>
 #include <verdict_record.h>
 
 struct k1_refcounting_map_session_hash {

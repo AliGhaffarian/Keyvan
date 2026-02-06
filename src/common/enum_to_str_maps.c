@@ -1,7 +1,7 @@
 #include <auth_cred.h>
 #include <helper.h>
 #include <string.h>
-#include <k1_map_keys_values.h>
+#include <k1_map_pairs.h>
 
 #include "enum_to_str_maps.h"
 

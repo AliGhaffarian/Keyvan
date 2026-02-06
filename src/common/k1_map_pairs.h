@@ -1,5 +1,5 @@
-#ifndef K1_MAP_KEYS_VALUES
-#define K1_MAP_KEYS_VALUES
+#ifndef K1_MAP_pairs
+#define K1_MAP_pairs
 
 #ifdef __BPF__
 #include <vmlinux.h>
@@ -72,17 +72,17 @@ struct k1_verdict_map_session_value {
     struct k1_verdict_record record;
 };
 
-struct k1_verdict_map_session_key_value {
+struct k1_verdict_map_session_pair {
     struct k1_verdict_map_session_key key;
     struct k1_verdict_map_session_value value;
 };
 
-struct k1_auth_map_key_value {
+struct k1_auth_map_pair {
     struct k1_auth_map_key key;
     struct k1_auth_map_value value;
 };
 
-struct k1_verdict_map_user_key_value {
+struct k1_verdict_map_user_pair {
     struct k1_verdict_map_user_key key;
     struct k1_verdict_map_user_value value;
 };

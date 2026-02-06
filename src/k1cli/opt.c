@@ -10,7 +10,7 @@
 #include <bpf_progs.skel.h>
 #include <enum_to_str_maps.h>
 #include <helper.h>
-#include <k1_map_keys_values.h>
+#include <k1_map_pairs.h>
 #include <string.h>
 
 #include "opt.h"

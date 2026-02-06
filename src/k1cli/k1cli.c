@@ -1,7 +1,7 @@
 #include <bpf/libbpf.h>
 #include <getopt.h>
 #include <k1/linked_list.h>
-#include <k1_map_keys_values.h>
+#include <k1_map_pairs.h>
 #include <stdbool.h>
 #include <unistd.h>
 #include <verdict_record.h>
@@ -11,8 +11,8 @@
 
 #include "opt.h"
 
-extern struct k1_node *head_auth_map_key_value;
-extern struct k1_node *head_verdict_map_user_key_value;
+extern struct k1_node *head_auth_map_pair;
+extern struct k1_node *head_verdict_map_user_pair;
 
 int yyparse();
 
@@ -21,14 +21,14 @@ int register_auth_pairs_to_map(struct bpf_progs *skel, struct k1_node *head) {
 
     struct k1_node *current_auth = head;
     while(current_auth) {
-        struct k1_auth_map_key_value *current_auth_key_value =
+        struct k1_auth_map_pair *current_auth_pair =
             current_auth->data;
         err = bpf_map__update_elem(
             skel->maps.auth_map_hash,
-            &current_auth_key_value->key,
-            sizeof(current_auth_key_value->key),
-            &current_auth_key_value->value,
-            sizeof(current_auth_key_value->value),
+            &current_auth_pair->key,
+            sizeof(current_auth_pair->key),
+            &current_auth_pair->value,
+            sizeof(current_auth_pair->value),
             0);
         if(err) {
             printf("%s\n", strerror(errno));
@@ -46,14 +46,14 @@ int register_verdict_pairs_to_map(
 
     struct k1_node *current_verdict = head;
     while(current_verdict) {
-        struct k1_verdict_map_user_key_value *current_verdict_key_value =
+        struct k1_verdict_map_user_pair *current_verdict_pair =
             current_verdict->data;
         err = bpf_map__update_elem(
             skel->maps.verdict_map_user_hash,
-            &current_verdict_key_value->key,
-            sizeof(current_verdict_key_value->key),
-            &current_verdict_key_value->value,
-            sizeof(current_verdict_key_value->value),
+            &current_verdict_pair->key,
+            sizeof(current_verdict_pair->key),
+            &current_verdict_pair->value,
+            sizeof(current_verdict_pair->value),
             0);
         if(err) {
             printf("%s\n", strerror(errno));
@@ -85,10 +85,10 @@ int main(int argc, char **argv) {
     yyparse();
     stdin = stdin_bak;
 
-    err = register_auth_pairs_to_map(skel, head_auth_map_key_value);
+    err = register_auth_pairs_to_map(skel, head_auth_map_pair);
     if(err)
         return err;
-    err = register_verdict_pairs_to_map(skel, head_verdict_map_user_key_value);
+    err = register_verdict_pairs_to_map(skel, head_verdict_map_user_pair);
     if(err)
         return err;
 

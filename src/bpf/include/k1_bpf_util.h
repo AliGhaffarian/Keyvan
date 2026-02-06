@@ -15,7 +15,7 @@
 #include <helper.h>
 #include <k1_limits.h>
 #include <k1_map.h>
-#include <k1_map_keys_values.h>
+#include <k1_map_pairs.h>
 #include <verdict_record.h>
 
 #define BPF_FOR_EACH_MAP_ELEM_STOP     1
