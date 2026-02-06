@@ -1,7 +1,7 @@
 #include <auth_cred.h>
 #include <helper.h>
-#include <string.h>
 #include <k1_map_pairs.h>
+#include <string.h>
 
 #include "enum_to_str_maps.h"
 
@@ -40,7 +40,5 @@ enum K1_VERDICT_MAP_TYPE enum_from_string_k1_verdict_map_type(char *str) {
 
 char *enum_to_string_k1_verdict_map_type[] = {
     [_K1_VERDICT_MAP_UNSPEC] = STR(_K1_VERDICT_MAP_UNSPEC),
-    [K1_VERDICT_MAP_UID] =
-        STR(K1_VERDICT_MAP_UID),
-    [K1_VERDICT_MAP_SID] = STR(K1_VERDICT_MAP_UID)
-};
+    [K1_VERDICT_MAP_UID] = STR(K1_VERDICT_MAP_UID),
+    [K1_VERDICT_MAP_SID] = STR(K1_VERDICT_MAP_SID)};

@@ -25,7 +25,7 @@
 %token <ival> NUMBER
 %token PATHNAME
 %token <str> STRING
-%token SERIAL
+%token <str> SERIAL
 %token TYPE
 %token EXECVE
 %token USB
@@ -54,7 +54,6 @@
 %type <auth_cred_execve> execve_auth_fields
 %type <auth_cred_execve> execve_auth_struct
 
-%type <str> usb_serial
 %type <auth_cred_usb> usb_auth_fields
 %type <auth_cred_usb> usb_auth_struct
 
@@ -93,10 +92,8 @@ execve_auth_fields:
 
 execve_auth_struct: TYPE ':' EXECVE execve_auth_fields { $$ = $4; };
 
-usb_serial: SERIAL ':' STRING { $$ = $3; };
-
 usb_auth_fields:
-               usb_serial
+               SERIAL
                {
                 struct k1_auth_cred_usb *self = malloc(sizeof(*self));
                 int serial_strlen = strlen($1);
@@ -149,8 +146,10 @@ auth_policy:
 
            current_auth_map_pair->value.verdict_entry_lookup_info.verdict_hook = current_verdict_map_user_pair->key.verdict_hook;
            current_auth_map_pair->value.verdict_entry_lookup_info.verdict_map_type = enum_from_string_k1_verdict_map_type($7);
-           if(current_auth_map_pair->value.verdict_entry_lookup_info.verdict_map_type == _K1_VERDICT_MAP_UNSPEC)
+           if(current_auth_map_pair->value.verdict_entry_lookup_info.verdict_map_type == _K1_VERDICT_MAP_UNSPEC){
+                printf("got verdict_sub_type:%s\n", $7);
                 yyerror("unknown verdict_sub_type");
+                }
 
            current_auth_map_pair->key.uid = parser_ctx.current_uid;
 

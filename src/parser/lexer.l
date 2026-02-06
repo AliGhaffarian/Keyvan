@@ -2,6 +2,9 @@
 #include "parser.tab.h"
 %}
 
+%s BEGIN_SERIAL_MATCH
+
+str [a-zA-Z0-9_/.-]+
 %%
 
 #.*\n
@@ -15,7 +18,15 @@
 "execve"            { return EXECVE; }
 "usb"               { return USB; }
 
-"serial"            { return SERIAL; }
+"serial"[[:blank:]]*: { BEGIN(BEGIN_SERIAL_MATCH); }
+<BEGIN_SERIAL_MATCH>{
+    {str} {
+        BEGIN(INITIAL);
+        yylval.str = strdup(yytext);
+        return SERIAL;
+    }
+}
+
 "verdict_sub_type" {return VERDICT_SUB_TYPE;}
 
 "pathname"        { return PATHNAME; }
