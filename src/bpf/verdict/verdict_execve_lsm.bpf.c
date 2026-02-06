@@ -9,9 +9,9 @@
 #endif
 
 #include <auth_record.h>
+#include <k1_bpf_util.h>
 #include <k1_map.h>
 #include <verdict_record.h>
-#include <k1_bpf_util.h>
 
 #define LSM_ALLOW 0
 #define LSM_DENY  -1
@@ -31,11 +31,12 @@ int BPF_PROG(verdict_execve_lsm) {
     struct k1_verdict_map_session_value *session_elem = NULL;
 
     // is user registered for session based verdict
-    if(bpf_map_lookup_elem(&registered_uids_map_hash, &uid)){
+    if(bpf_map_lookup_elem(&users_having_sid_verdict_map_hash, &uid)) {
         if(!bpf_map_lookup_elem(&refcounting_map_session_hash, &current_sid))
             goto fallback_uid_mode;
 
-        if((session_elem = bpf_map_lookup_elem(&verdict_map_session_hash, &session_key)) == NULL)
+        if((session_elem = bpf_map_lookup_elem(
+                &verdict_map_session_hash, &session_key)) == NULL)
             return LSM_DENY; // no auth checker has interacted with this session
         if(!session_elem->record.is_authenticated)
             return LSM_DENY;

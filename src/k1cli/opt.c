@@ -65,7 +65,17 @@ void register_user(struct bpf_progs *skel, uid_t uid) {
     bpf_map__update_elem(
         skel->maps.registered_uids_map_hash,
         &uid,
-        sizeof(struct k1_registered_uids_map_key),
+        sizeof(struct k1_users_having_sid_verdict_map_key),
+        &uid,
+        sizeof(DUMMY_MAP_VALUE_T),
+        BPF_ANY);
+}
+
+int register_user_wanting_sid_verdict(struct bpf_progs *skel, uid_t uid) {
+    return bpf_map__update_elem(
+        skel->maps.users_having_sid_verdict_map_hash,
+        &uid,
+        sizeof(struct k1_users_having_sid_verdict_map_key),
         &uid,
         sizeof(DUMMY_MAP_VALUE_T),
         BPF_ANY);

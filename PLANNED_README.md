@@ -142,7 +142,8 @@ A --<->-- B: A and B talk
 /\                                  |                                     
 |     /---------------------------<-|->-------------\                        
 |	  \/			                				\/				         
-|     |              /-----------------------< |registered_uids_map|
+|     |              /-----------------------< |users_having_sid_verdict_map|
+|     |              /-----------------------< |registerd_uids_map|
 |     |             \/                              \/
 |     |<-----< auth_checkers <---------------< |auth_checker_map|
 |     |                                                                    

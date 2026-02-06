@@ -21,8 +21,7 @@ int register_auth_pairs_to_map(struct bpf_progs *skel, struct k1_node *head) {
 
     struct k1_node *current_auth = head;
     while(current_auth) {
-        struct k1_auth_map_pair *current_auth_pair =
-            current_auth->data;
+        struct k1_auth_map_pair *current_auth_pair = current_auth->data;
         err = bpf_map__update_elem(
             skel->maps.auth_map_hash,
             &current_auth_pair->key,
@@ -34,6 +33,9 @@ int register_auth_pairs_to_map(struct bpf_progs *skel, struct k1_node *head) {
             printf("%s\n", strerror(errno));
             goto finish;
         }
+        if(current_auth_pair->value.verdict_entry_lookup_info
+               .verdict_map_type == K1_VERDICT_MAP_SID)
+            register_user_wanting_sid_verdict(skel, current_auth_pair->key.uid);
         current_auth = current_auth->next;
     }
 finish:
@@ -59,6 +61,7 @@ int register_verdict_pairs_to_map(
             printf("%s\n", strerror(errno));
             goto finish;
         }
+        register_user(skel, current_verdict_pair->key.uid);
         current_verdict = current_verdict->next;
     }
 finish:

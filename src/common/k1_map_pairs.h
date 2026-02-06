@@ -42,6 +42,10 @@ struct k1_verdict_map_user_key {
     enum K1_VERDICT_HOOK verdict_hook;
 };
 
+struct k1_users_having_sid_verdict_map_key {
+    __u32 uid;
+};
+
 struct k1_registered_uids_map_key {
     __u32 uid;
 };
