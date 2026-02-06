@@ -35,26 +35,31 @@ int BPF_PROG(auth_cred_execve_check, void *a, void *b, char *filename) {
     if(k1_strcmp(buf, elem->record.auth_cred_execve.pathname) != 0)
         return 0;
 
-    // TODO: users must have the option for multiple instances of authentication methods of the same type, with different verdict records
-    switch(elem->verdict_entry_lookup_info.verdict_map_type){
-        case K1_VERDICT_MAP_SID:{
-            if(current_sessionid == INVALID_SESSIONID)
-                return 0; /*unexpected*/
-            if(!bpf_map_lookup_elem(&refcounting_map_session_hash, &current_sessionid))
-                return 0; /*this session is started before us, thus not tracked*/
-            bpf_printk("changing state of session");
-            k1_do_op_on_flag(&elem->is_authenticated, K1_FLAG_CHANGE_TOGGLE);
-            k1_change_session_auth_state(&elem->verdict_entry_lookup_info, current_sessionid, K1_FLAG_CHANGE_TOGGLE);
-            break;
-        }
-        case K1_VERDICT_MAP_UID:{
-            k1_do_op_on_flag(&elem->is_authenticated, K1_FLAG_CHANGE_TOGGLE);
-            k1_change_user_auth_state(
-                &elem->verdict_entry_lookup_info, uid, K1_FLAG_CHANGE_TOGGLE);
-            break;
-        }
-        default:
-            return 0; /*should be unreachable*/
+    // TODO: users must have the option for multiple instances of authentication
+    // methods of the same type, with different verdict records
+    switch(elem->verdict_entry_lookup_info.verdict_map_type) {
+    case K1_VERDICT_MAP_SID: {
+        if(current_sessionid == INVALID_SESSIONID)
+            return 0; /*unexpected*/
+        if(!bpf_map_lookup_elem(
+               &refcounting_map_session_hash, &current_sessionid))
+            return 0; /*this session is started before us, thus not tracked*/
+        bpf_printk("changing state of session");
+        k1_do_op_on_flag(&elem->is_authenticated, K1_FLAG_CHANGE_TOGGLE);
+        k1_change_session_auth_state(
+            &elem->verdict_entry_lookup_info,
+            current_sessionid,
+            K1_FLAG_CHANGE_TOGGLE);
+        break;
+    }
+    case K1_VERDICT_MAP_UID: {
+        k1_do_op_on_flag(&elem->is_authenticated, K1_FLAG_CHANGE_TOGGLE);
+        k1_change_user_auth_state(
+            &elem->verdict_entry_lookup_info, uid, K1_FLAG_CHANGE_TOGGLE);
+        break;
+    }
+    default:
+        return 0; /*should be unreachable*/
     }
     return 0;
 }

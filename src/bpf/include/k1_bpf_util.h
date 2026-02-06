@@ -74,7 +74,9 @@ inline __u64 k1_bpf_get_current_sessionid() {
 }
 
 inline void k1_change_session_auth_state(
-    struct k1_verdict_entry_lookup_info *verdict_entry_lookup_info, pid_t sessionid, enum K1_FLAG_CHANGE_OPS op) {
+    struct k1_verdict_entry_lookup_info *verdict_entry_lookup_info,
+    pid_t sessionid,
+    enum K1_FLAG_CHANGE_OPS op) {
 
     const int zero = 0;
     struct k1_verdict_map_session_value *elem = NULL;
@@ -86,18 +88,17 @@ inline void k1_change_session_auth_state(
     if(sessionid == INVALID_SESSIONID)
         key.sid = k1_bpf_get_current_sessionid();
 
-    elem =
-        bpf_map_lookup_elem(&verdict_map_session_hash, &key);
+    elem = bpf_map_lookup_elem(&verdict_map_session_hash, &key);
 
     // first time operating on this session
-    if(!elem){
+    if(!elem) {
         // TODO: Decide what to do if this fails
         bpf_map_update_elem(&verdict_map_session_hash, &key, &zero, BPF_ANY);
-        elem =
-            bpf_map_lookup_elem(&verdict_map_session_hash, &key);
+        elem = bpf_map_lookup_elem(&verdict_map_session_hash, &key);
 
         // just to satisfay the verifier
-        if(!elem) return;
+        if(!elem)
+            return;
     }
 
     k1_do_op_on_flag(&elem->record.is_authenticated, op);
