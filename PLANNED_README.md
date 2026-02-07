@@ -33,6 +33,7 @@ Some characteristics of Keyvan include:
 	- TODO bluetooth
 	- TODO ethernet
 	- TODO key press combinations
+    - TODO packet matching
 
 # Verdicts
 - **TODO Packet filtering:** restricting a user's access to the network
@@ -41,72 +42,7 @@ Some characteristics of Keyvan include:
 # Quick start
 **usage:**
 ```
-Keyvan [-i config_file] [--stealth]
-```
-
-## TODO Config example
-TODO: enforce only one auth_type per uid for PAM Exports
-TODO: enforce only one type of verdict per uid
-```c
-
-# The following configs are related to uid 1000
-uid: 1000
-
-# deny execve until user executes `/some/password`
-auth {
-	type: execve
-	pathname: /some/password/
-	loglevel: (ERROR | WARN | INFO | DEBUG) #can't be used in daemonless mode
-}
-verdict {
-	type: execve
-	[pathname: /some/secret/file] # all files, if ommited
-}
-
-# a registered verdict by a the user during configuration, if false, will query daemon to then query PAM using SERVICE_NAME, keyvand will map each present pam_mod to a number during startup
-auth {
-    type: PAM
-	pam_details: SERVICE_NAME
-}
-verdict {
-	type: execve
-}
-
-# verdicts and auths don't need to necessarily come after each other
-verdict {
-    type: open
-    pathname: /etc/passwd
-}
-verdict {
-    type: open
-    pathname: /etc/resolv.conf
-}
-
-
-# The following configs are related to root user
-uid: 0
-
-# deny access to Keyvan files until a USB device with matching serial is inserted
-auth {
-	type: usb
-	serial: SOME_SERIAL
-}
-verdict {
-	type: k1admin
-}
-
-# deny all outgoing packets until a packet arrives that matches the [bpfilter/iptables?] rule
-auth {
-	type: xdp
-	rule {
-		ip.src equal 192.168.1.1
-		tcp.dport equal 8000
-		tcp.flag equal reserved
-		}
-}
-verdict {
-	type: tc/egress
-}
+Keyvan [-c config_file] [--stealth]
 ```
 
 ## TODO Keyvan inside a PAM module
