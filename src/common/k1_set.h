@@ -30,15 +30,18 @@ struct k1_set {
 
 /**
  * @brief Clears a specific bit within a single batch entry.
- * This is a helper function that targets a bit relative to the start of the 
+ * This is a helper function that targets a bit relative to the start of the
  * provided batch.
  *
  * @param batch        Pointer to the specific batch (word) to modify.
- * @param bit_position The bit index within the batch (0 to K1_SET_ELEMS_IN_ONE_ENTRY - 1).
- * @return int         0 on success, -1 if bit_position is out of bounds (sets errno to -EINVAL).
+ * @param bit_position The bit index within the batch (0 to
+ * K1_SET_ELEMS_IN_ONE_ENTRY - 1).
+ * @return int         0 on success, -1 if bit_position is out of bounds (sets
+ * errno to -EINVAL).
  */
 __always_inline int
-k1_set_clearelem_onbatch(k1_set_batch_t *batch, __u64 bit_position) {
+k1_set_clearelem_onbatch(k1_set_batch_t *batch, __u64 bit_position)
+{
     if(bit_position >= K1_SET_ELEMS_IN_ONE_ENTRY) {
         errno = -EINVAL;
         return -1;
@@ -51,15 +54,17 @@ k1_set_clearelem_onbatch(k1_set_batch_t *batch, __u64 bit_position) {
 
 /**
  * @brief Sets or clears the Nth element in the set.
- * Maps the global index @p nth to a specific batch and bit position, then 
+ * Maps the global index @p nth to a specific batch and bit position, then
  * updates it to the boolean @p value.
  *
  * @param set   Pointer to the k1_set structure.
  * @param nth   Index of the element to set.
  * @param value Value to store.
- * @return int  0 on success, -1 if nth exceeds capacity (sets errno to -EINVAL).
+ * @return int  0 on success, -1 if nth exceeds capacity (sets errno to
+ * -EINVAL).
  */
-__always_inline int k1_set_setelem(struct k1_set *set, __u64 nth, bool value) {
+__always_inline int k1_set_setelem(struct k1_set *set, __u64 nth, bool value)
+{
     __u64 entry;
     __u64 bit_position;
 
@@ -82,10 +87,11 @@ __always_inline int k1_set_setelem(struct k1_set *set, __u64 nth, bool value) {
  *
  * @param set Pointer to the k1_set structure.
  * @param nth The global index of the element to retrieve.
- * @return true if the bit is set, false otherwise. 
+ * @return true if the bit is set, false otherwise.
  * @note Sets errno to -EINVAL if nth is out of bounds.
  */
-__always_inline bool k1_set_getelem(struct k1_set *set, __u64 nth) {
+__always_inline bool k1_set_getelem(struct k1_set *set, __u64 nth)
+{
     __u64 entry;
     __u64 bit_position;
     bool ret;

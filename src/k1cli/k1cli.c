@@ -16,7 +16,8 @@ extern struct k1_node *head_verdict_map_user_pair;
 
 int yyparse();
 
-int register_auth_pairs_to_map(struct bpf_progs *skel, struct k1_node *head) {
+int register_auth_pairs_to_map(struct bpf_progs *skel, struct k1_node *head)
+{
     int err = 0;
 
     struct k1_node *current_auth = head;
@@ -42,8 +43,8 @@ finish:
     return err;
 }
 
-int register_verdict_pairs_to_map(
-    struct bpf_progs *skel, struct k1_node *head) {
+int register_verdict_pairs_to_map(struct bpf_progs *skel, struct k1_node *head)
+{
     int err = 0;
 
     struct k1_node *current_verdict = head;
@@ -68,7 +69,8 @@ finish:
     return err;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     FILE *stdin_bak = stdin;
     FILE *config_file = NULL;
     int err = 0;

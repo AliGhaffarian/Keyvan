@@ -32,3 +32,6 @@ AlignConsecutiveMacros:
 
 AllowShortEnumsOnASingleLine: false
 
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterFunction: true

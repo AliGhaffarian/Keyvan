@@ -25,7 +25,8 @@ struct k1_refcounting_map_old_sessionid_hash {
 struct k1_refcounting_map_old_sessionid_hash
     __attribute__((weak)) refcounting_map_old_sessionid_hash SEC(".maps");
 
-inline int k1_bpf_cleanup_sessionid(__u64 sid) {
+inline int k1_bpf_cleanup_sessionid(__u64 sid)
+{
     bpf_printk("cleaning up sid: %d", sid);
 
     struct k1_verdict_map_session_key verdict_map_session_key = {
@@ -41,7 +42,8 @@ inline int k1_bpf_cleanup_sessionid(__u64 sid) {
     bpf_for(
         current_verdict_hook,
         _K1_VERDICT_HOOK_UNSPEC + 1,
-        _K1_VERDICT_HOOK_SIZE) {
+        _K1_VERDICT_HOOK_SIZE)
+    {
         verdict_map_session_key.verdict_hook = current_verdict_hook;
         bpf_map_delete_elem(
             &verdict_map_session_hash, &verdict_map_session_key);
@@ -49,7 +51,8 @@ inline int k1_bpf_cleanup_sessionid(__u64 sid) {
     return 0;
 }
 
-inline __u64 k1_bpf_dec_sessionid_refcount(__u64 sessionid) {
+inline __u64 k1_bpf_dec_sessionid_refcount(__u64 sessionid)
+{
     struct k1_refcounting_map_session_key refcounting_map_session_key = {
         .sid = sessionid};
     struct k1_refcounting_map_session_value *refcounting_map_session_value =
@@ -64,7 +67,8 @@ inline __u64 k1_bpf_dec_sessionid_refcount(__u64 sessionid) {
     return __sync_fetch_and_sub(&refcounting_map_session_value->refcount, 1);
 }
 
-inline __u64 k1_bpf_inc_sessionid_refcount(__u64 sessionid) {
+inline __u64 k1_bpf_inc_sessionid_refcount(__u64 sessionid)
+{
     struct k1_refcounting_map_session_key refcounting_map_session_key = {
         .sid = sessionid,
     };
@@ -81,7 +85,8 @@ inline __u64 k1_bpf_inc_sessionid_refcount(__u64 sessionid) {
 }
 
 SEC("tp/sched/sched_process_fork")
-int BPF_PROG(refcount_session_sched_process_fork) {
+int BPF_PROG(refcount_session_sched_process_fork)
+{
     __u64 current_sid = k1_bpf_get_current_sessionid();
     struct k1_refcounting_map_session_value refcount_one = {.refcount = 1};
     pid_t current_uid = bpf_get_current_uid_gid() & NBYTES_MASK(4);
@@ -99,7 +104,8 @@ int BPF_PROG(refcount_session_sched_process_fork) {
     return 0;
 }
 SEC("tp/syscalls/sys_exit_setsid")
-int BPF_PROG(refcount_session_exit_setsid, int nr, int ret) {
+int BPF_PROG(refcount_session_exit_setsid, int nr, int ret)
+{
     struct k1_refcounting_map_old_sessionid_value
         *refcounting_map_old_sessionid_value = NULL;
     struct k1_refcounting_map_session_key refcounting_map_session_key = {
@@ -148,7 +154,8 @@ int BPF_PROG(refcount_session_exit_setsid, int nr, int ret) {
 }
 
 SEC("tp/syscalls/sys_enter_setsid")
-int BPF_PROG(refcount_session_enter_setsid) {
+int BPF_PROG(refcount_session_enter_setsid)
+{
     struct task_struct *current_task =
         (struct task_struct *)bpf_get_current_task_btf();
     struct k1_refcounting_map_old_sessionid_value value = {
@@ -179,7 +186,8 @@ int BPF_PROG(refcount_session_enter_setsid) {
 }
 
 SEC("tp/sched/sched_process_exit")
-int BPF_PROG(refcount_session_sched_process_exit) {
+int BPF_PROG(refcount_session_sched_process_exit)
+{
     __u64 current_sessionid = k1_bpf_get_current_sessionid();
     __u64 original_refcount = -1;
 

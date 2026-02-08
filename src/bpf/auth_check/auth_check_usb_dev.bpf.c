@@ -15,7 +15,8 @@
 static const enum K1_AUTH_TYPE const_auth_type_usb = K1_AUTH_TYPE_USB;
 
 SEC("fentry/usb_create_sysfs_dev_files")
-int BPF_PROG(auth_check_usb_create_sysfs, struct usb_device *udev) {
+int BPF_PROG(auth_check_usb_create_sysfs, struct usb_device *udev)
+{
     if(!udev->serial)
         return 0;
 
@@ -39,7 +40,8 @@ int BPF_PROG(auth_check_usb_create_sysfs, struct usb_device *udev) {
 }
 
 SEC("fentry/usb_remove_sysfs_dev_files")
-int BPF_PROG(auth_check_usb_remove_sysfs, struct usb_device *udev) {
+int BPF_PROG(auth_check_usb_remove_sysfs, struct usb_device *udev)
+{
 
     if(!udev->serial)
         return 0;

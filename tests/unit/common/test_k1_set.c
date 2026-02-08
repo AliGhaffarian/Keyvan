@@ -11,7 +11,8 @@
 
 #define SET_NTH_BIT(n) (((k1_set_batch_t)1) << (n));
 
-void test_k1_set_clearelem_onbatch(void **state) {
+void test_k1_set_clearelem_onbatch(void **state)
+{
     // valid clear
     {
         k1_set_batch_t batch = -1;
@@ -81,7 +82,8 @@ void test_k1_set_clearelem_onbatch(void **state) {
     }
 }
 
-void test_k1_set_setelem(void **state) {
+void test_k1_set_setelem(void **state)
+{
     // valid set
     {
         struct k1_set set = {0};
@@ -145,7 +147,8 @@ void test_k1_set_setelem(void **state) {
     }
 }
 
-void test_k1_set_getelem(void **state) {
+void test_k1_set_getelem(void **state)
+{
     // valid get
     {
         struct k1_set set = {0};
@@ -212,7 +215,8 @@ void test_k1_set_getelem(void **state) {
     }
 }
 
-int test_k1_set() {
+int test_k1_set()
+{
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(test_k1_set_clearelem_onbatch),
         cmocka_unit_test(test_k1_set_setelem),

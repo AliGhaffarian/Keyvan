@@ -21,7 +21,8 @@
 #define BPF_FOR_EACH_MAP_ELEM_STOP     1
 #define BPF_FOR_EACH_MAP_ELEM_CONTINUE 0
 
-inline int k1_strcmp(char *first, char *second) {
+inline int k1_strcmp(char *first, char *second)
+{
     int cnt = 0;
     while(*first && *second && cnt < K1_BPF_STRING_MAXSIZE) {
         if(*first != *second)
@@ -41,7 +42,8 @@ enum K1_FLAG_CHANGE_OPS {
     _K1_FLAG_CHANGE_OPS_ENUM_SIZE,
 };
 
-static inline void k1_do_op_on_flag(__u64 *flag, enum K1_FLAG_CHANGE_OPS op) {
+static inline void k1_do_op_on_flag(__u64 *flag, enum K1_FLAG_CHANGE_OPS op)
+{
     switch(op) {
     case(K1_FLAG_CHANGE_CLEAR):
         __sync_lock_test_and_set(flag, 0);
@@ -60,7 +62,8 @@ static inline void k1_do_op_on_flag(__u64 *flag, enum K1_FLAG_CHANGE_OPS op) {
     return;
 }
 
-inline __u64 k1_bpf_get_current_sessionid() {
+inline __u64 k1_bpf_get_current_sessionid()
+{
 
     struct task_struct *current_task = NULL;
     current_task = (struct task_struct *)bpf_get_current_task_btf();
@@ -76,7 +79,8 @@ inline __u64 k1_bpf_get_current_sessionid() {
 inline void k1_change_session_auth_state(
     struct k1_verdict_entry_lookup_info *verdict_entry_lookup_info,
     pid_t sessionid,
-    enum K1_FLAG_CHANGE_OPS op) {
+    enum K1_FLAG_CHANGE_OPS op)
+{
 
     const int zero = 0;
     struct k1_verdict_map_session_value *elem = NULL;
@@ -107,7 +111,8 @@ inline void k1_change_session_auth_state(
 inline void k1_change_user_auth_state(
     struct k1_verdict_entry_lookup_info *verdict_entry_lookup_info,
     uid_t uid,
-    enum K1_FLAG_CHANGE_OPS op) {
+    enum K1_FLAG_CHANGE_OPS op)
+{
 
     struct k1_verdict_map_user_value *elem = NULL;
     struct k1_verdict_map_user_key key = {
@@ -140,7 +145,8 @@ static long first_auth_record_with_uid_of_context(
     struct bpf_map *registered_map,
     const void *current_uid_key,
     void *value,
-    void *ctx) {
+    void *ctx)
+{
     void *lookup_result;
     struct find_auth_record_ctx *ctx_casted = ctx;
     __u32 current_uid = *(__u32 *)current_uid_key;
@@ -158,7 +164,8 @@ static long first_auth_record_with_uid_of_context(
     return BPF_FOR_EACH_MAP_ELEM_STOP;
 }
 
-inline void *_k1_bpf_auth_map_lookup_any_uid(struct k1_auth_map_key *key) {
+inline void *_k1_bpf_auth_map_lookup_any_uid(struct k1_auth_map_key *key)
+{
     __u32 tmp_ptr;
     __u32 uid_ptr;
     long err;
@@ -189,7 +196,8 @@ inline void *_k1_bpf_auth_map_lookup_any_uid(struct k1_auth_map_key *key) {
  * last called bpf_map_lookup_elem if returned
  */
 inline struct k1_auth_map_value *
-k1_bpf_auth_map_lookup(struct k1_auth_map_key *key) {
+k1_bpf_auth_map_lookup(struct k1_auth_map_key *key)
+{
     if(AUTHMAP_KEY_GET_UID(key) == INVALID_UID) {
         return _k1_bpf_auth_map_lookup_any_uid(key);
     }

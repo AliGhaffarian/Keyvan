@@ -17,7 +17,8 @@
 #define LSM_DENY  -1
 
 SEC("lsm/bprm_creds_for_exec")
-int BPF_PROG(verdict_execve_lsm) {
+int BPF_PROG(verdict_execve_lsm)
+{
 
     __u64 current_sid = k1_bpf_get_current_sessionid();
     u32 uid = bpf_get_current_uid_gid() & NBYTES_MASK(4);

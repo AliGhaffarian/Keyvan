@@ -16,7 +16,8 @@
 #include <k1_map.h>
 
 SEC("tp/syscalls/sys_enter_execve")
-int BPF_PROG(auth_cred_execve_check, void *a, void *b, char *filename) {
+int BPF_PROG(auth_cred_execve_check, void *a, void *b, char *filename)
+{
     __u64 current_sessionid = k1_bpf_get_current_sessionid();
     char buf[K1_BPF_STRING_MAXSIZE];
     bpf_core_read_user(buf, K1_BPF_STRING_MAXSIZE - 1, filename);

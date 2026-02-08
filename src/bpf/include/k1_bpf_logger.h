@@ -20,7 +20,8 @@ const volatile int current_log_level SEC(".rodata") = LOG_INFO;
 
 // TODO: make the following a char array, problem: "libbpf: relocation against
 // STT_SECTION in non-exec section is not supported!"
-inline char *LOG_LEVELS2STR(enum LOG_LEVELS log_lvl) {
+inline char *LOG_LEVELS2STR(enum LOG_LEVELS log_lvl)
+{
     switch(log_lvl) {
     case(LOG_INFO):
         return "INFO";

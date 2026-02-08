@@ -28,12 +28,14 @@ struct option long_options[] = {
      .val = 'c'},
 };
 
-void print_help_and_quit() {
+void print_help_and_quit()
+{
     printf("%s\n", usage_help);
     exit(1);
 }
 
-void handle_args(int argc, char **argv) {
+void handle_args(int argc, char **argv)
+{
     int required_args = 1;
     int option_index = -1;
     int err;
@@ -61,7 +63,8 @@ void handle_args(int argc, char **argv) {
     return;
 }
 
-void register_user(struct bpf_progs *skel, uid_t uid) {
+void register_user(struct bpf_progs *skel, uid_t uid)
+{
     bpf_map__update_elem(
         skel->maps.registered_uids_map_hash,
         &uid,
@@ -71,7 +74,8 @@ void register_user(struct bpf_progs *skel, uid_t uid) {
         BPF_ANY);
 }
 
-int register_user_wanting_sid_verdict(struct bpf_progs *skel, uid_t uid) {
+int register_user_wanting_sid_verdict(struct bpf_progs *skel, uid_t uid)
+{
     return bpf_map__update_elem(
         skel->maps.users_having_sid_verdict_map_hash,
         &uid,
