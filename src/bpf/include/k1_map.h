@@ -19,7 +19,6 @@ struct k1_refcounting_map_session_hash {
     __uint(max_entries, 1024);
     __type(key, struct k1_refcounting_map_session_key);
     __type(value, struct k1_refcounting_map_session_value);
-    __uint(pinning, LIBBPF_PIN_BY_NAME);
 };
 
 struct k1_verdict_map_session_hash {
@@ -27,7 +26,6 @@ struct k1_verdict_map_session_hash {
     __uint(max_entries, 1024);
     __type(key, struct k1_verdict_map_session_key);
     __type(value, struct k1_verdict_map_session_value);
-    __uint(pinning, LIBBPF_PIN_BY_NAME);
 };
 
 struct k1_auth_map_hash {
@@ -35,7 +33,6 @@ struct k1_auth_map_hash {
     __uint(max_entries, 1024);
     __type(key, struct k1_auth_map_key);
     __type(value, struct k1_auth_map_value);
-    __uint(pinning, LIBBPF_PIN_BY_NAME);
 };
 
 struct k1_verdict_map_user_hash {
@@ -43,7 +40,6 @@ struct k1_verdict_map_user_hash {
     __uint(max_entries, 1024);
     __type(key, struct k1_verdict_map_user_key);
     __type(value, struct k1_verdict_map_user_value);
-    __uint(pinning, LIBBPF_PIN_BY_NAME);
 };
 
 struct k1_users_having_sid_verdict_map_hash {
@@ -51,7 +47,6 @@ struct k1_users_having_sid_verdict_map_hash {
     __uint(max_entries, 1024);
     __type(key, struct k1_users_having_sid_verdict_map_key);
     __type(value, DUMMY_MAP_VALUE_T); /* won't be used */
-    __uint(pinning, LIBBPF_PIN_BY_NAME);
 };
 
 struct k1_registered_uids_map_hash {
@@ -59,7 +54,6 @@ struct k1_registered_uids_map_hash {
     __uint(max_entries, 1024);
     __type(key, struct k1_registered_uids_map_key);
     __type(value, DUMMY_MAP_VALUE_T); /* won't be used */
-    __uint(pinning, LIBBPF_PIN_BY_NAME);
 };
 
 struct k1_refcounting_map_session_hash
