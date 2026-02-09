@@ -1,6 +1,6 @@
 find_program(CLANG_FORMAT NAMES clang-format REQUIRED)
 
-file(GLOB_RECURSE srcs 
+file(GLOB_RECURSE srcs
 ${CMAKE_SOURCE_DIR}/*.c
 ${CMAKE_SOURCE_DIR}/*.h
 )

@@ -6,7 +6,7 @@ Keyvan is a suite of BPF programs that together enable various interesting authe
 Some characteristics of Keyvan include:
 - **TODO Hidden:** with the use of `--stealth` option, Keyvan hides its presence from the unauthorized users, making it very hard to understand why some resources are limited/unavailable
 - **TODO Easy to setup:** Keyvan be initialized using a config file
-- **TODO Userspace api:** Keyvan can be used by userpace programs for authentication, one instance of such usage is a login page
+- **TODO Userspace api:** Keyvan can be used by userspace programs for authentication, one instance of such usage is a login page
 - **Modular architecture:** any type of authentication method can be added to Keyvan, see [adding a authenticate checker-]
 - **TODO PAM(Pluggable Authentication Module) compatible:**
 	- Keyvan can be used by PAM modules to query the status of authentication of a user
@@ -59,32 +59,32 @@ In hidden mode, Keyvan operates in daemonless mode, it works by relying on the d
 # Internals
 
 ## Keyvan architecture
-each link from keyvand to a user space program type of a separate unix domain socket, differenciate between root and normal api user by separating sockets
-``` 
+each link from keyvand to a user space program type of a separate unix domain socket, differentiate between root and normal api user by separating sockets
+```
 Legend:
 A ->--->- B: A writes to B OR B reads from A
 A --<->-- B: A and B talk
 *B* resresents the original B somewhere else in the diagram, for readability
 
 
---------------                 
+--------------
 |user space  |     PAM--<->--keyvand/k1cli
 -------------------------------------------------------------------------------
-|kernel space|                /\    \/                                   
---------------                |     |                                      
-				              |     |                                      
-				              |     |                                      
-/--->-------------------------/     |                                     
-/\                                  |                                     
-|     /---------------------------<-|->-------------\                        
-|	  \/			                				\/				         
+|kernel space|                /\    \/
+--------------                |     |
+				              |     |
+				              |     |
+/--->-------------------------/     |
+/\                                  |
+|     /---------------------------<-|->-------------\
+|	  \/			                				\/
 |     |              /-----------------------< |users_having_sid_verdict_map|
 |     |              /-----------------------< |registerd_uids_map|
 |     |             \/                              \/
 |     |<-----< auth_checkers <---------------< |auth_checker_map|
-|     |                                                                    
-|     \------------>|verdict_map_user|----<->--\                         
-|     \------------>|verdict_map_session|-<->--|                         
+|     |
+|     \------------>|verdict_map_user|----<->--\
+|     \------------>|verdict_map_session|-<->--|
 |                                             /\
 /\                                            \/
 \----------------------------------------< verdicts

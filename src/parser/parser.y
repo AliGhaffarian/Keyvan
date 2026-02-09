@@ -173,7 +173,7 @@ auth_policy:
            };
 
 execve_verdict_struct: TYPE ':' EXECVE
-                   { 
+                   {
                    struct k1_verdict_map_user_pair *self = malloc(sizeof(*self));
                    if(!self) yyerror("nomem");
                    self->key.verdict_hook = K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC;
@@ -205,4 +205,3 @@ void yyerror(const char *s) {
     fprintf(stderr, "Parse error: %s\n", s);
     exit(1);
 }
-

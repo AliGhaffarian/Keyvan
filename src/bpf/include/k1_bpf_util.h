@@ -125,7 +125,7 @@ inline void k1_change_user_auth_state(
 
     elem = bpf_map_lookup_elem(&verdict_map_user_hash, &key);
 
-    // caller needs to make sure this doesnt happen
+    // caller needs to make sure this doesn't happen
     if(!elem)
         return;
 

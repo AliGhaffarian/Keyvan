@@ -7,7 +7,7 @@ make_directory(${K1_BPF_OUTPUT_DIR})
 add_custom_command(
     OUTPUT ${CMAKE_BINARY_DIR}/src/bpf/include/vmlinux.h
     DEPENDS /sys/kernel/btf/vmlinux
-    COMMAND bpftool 
+    COMMAND bpftool
     ARGS btf dump file /sys/kernel/btf/vmlinux format c > ${CMAKE_BINARY_DIR}/src/bpf/include/vmlinux.h
 )
 add_custom_target(
