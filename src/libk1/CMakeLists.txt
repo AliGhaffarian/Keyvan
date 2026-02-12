@@ -3,6 +3,7 @@ add_library(
     k1
     linked_list.c
     logger.c
+    ima.c
 )
 install(TARGETS k1)
 install(

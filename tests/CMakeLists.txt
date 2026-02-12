@@ -5,7 +5,7 @@ add_custom_target(
     COMMAND
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test.sh
     COMMAND
-    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/run_units
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/run_units ARGS --dummy-executable-path ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dummy_executable.sh
 )
 
 configure_file(functional/test.sh ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test.sh COPYONLY)
