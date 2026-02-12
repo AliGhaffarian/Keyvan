@@ -1,5 +1,5 @@
-file(GLOB COMMON_SOURCES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/src/common/*.c")
 file(GLOB INCLUDE_DEFS CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/src/user_include/*.c")
+include_directories(${K1_USER_INCLUDES})
 add_executable(k1cli k1cli.c opt.c ${COMMON_SOURCES} ${INCLUDE_DEFS})
 target_link_libraries(k1cli bpf)
 target_link_libraries(k1cli parser)

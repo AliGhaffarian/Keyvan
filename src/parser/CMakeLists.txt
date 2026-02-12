@@ -1,4 +1,5 @@
 include_directories(${CMAKE_SOURCE_DIR}/src/common)
+include_directories(${K1_USER_INCLUDES})
 
 add_custom_command(
     OUTPUT ${CMAKE_BINARY_DIR}/parser.tab.c ${CMAKE_BINARY_DIR}/src/include/parser.tab.h
@@ -23,3 +24,5 @@ add_library(parser
     ${CMAKE_BINARY_DIR}/src/include/parser.tab.h
     ${CMAKE_BINARY_DIR}/lexer.yy.c
 )
+
+target_include_directories(parser SYSTEM BEFORE PRIVATE ${K1_USER_INCLUDES})
