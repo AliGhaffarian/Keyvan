@@ -14,13 +14,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <test_shared.h>
 #include <unistd.h>
 
 #define SET_NTH_BIT(n) (((k1_set_batch_t)1) << (n));
-
-const char *dummy_executable_sha256 =
-    "9ce4d205ede1d2b1cfc0a2e7fbb4f1adcfd0d8d0370c77bae30c23a12a784054";
-char *dummy_executable_relative_path = "./dummy_executable.sh";
 
 void test_k1_ima_current_hash_algo(void **state)
 {

@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <test_shared.h>
 
 struct option long_options[] = {
     {.name = "dummy-executable-path",

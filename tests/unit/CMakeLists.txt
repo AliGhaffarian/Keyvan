@@ -2,6 +2,8 @@ file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.
 set(TO_TEST_SOURCES ${CMAKE_SOURCE_DIR}/src/common/k1_set.h ${CMAKE_SOURCE_DIR}/src/libk1/ima.c)
 set(DEPENDANCY_SOURCES ${CMAKE_SOURCE_DIR}/src/libk1/logger.c)
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/test_shared)
+
 add_executable(run_units
     ${TEST_SOURCES}
     ${TO_TEST_SOURCES}
