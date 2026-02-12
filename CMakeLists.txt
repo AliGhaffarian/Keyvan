@@ -15,7 +15,10 @@ Include_directories(src/common)
 Include_directories(src/external/include)
 Include_directories(${CMAKE_BINARY_DIR}/src/include)
 
-add_subdirectory(devtools)
+# includes cmake modules
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/tools/cmake)
+
+add_subdirectory(tools)
 add_subdirectory(src/bpf)
 add_subdirectory(src/libk1)
 add_subdirectory(src/parser)
