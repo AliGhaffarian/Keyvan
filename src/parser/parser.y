@@ -151,17 +151,20 @@ auth_policy:
                 yyerror("unknown verdict_sub_type");
                 }
 
+           if(current_auth_map_pair->value.verdict_entry_lookup_info.verdict_map_type != K1_VERDICT_MAP_SID){
+                struct k1_node *verdict_node = k1_make_node((void **)&current_verdict_map_user_pair);
+                if(!verdict_node) yyerror("nomem");
+                k1_linked_list_append(&head_verdict_map_user_pair, &verdict_node);
+           }
+
            current_auth_map_pair->key.uid = parser_ctx.current_uid;
 
            current_verdict_map_user_pair->key.uid = parser_ctx.current_uid;
 
            struct k1_node *auth_node = k1_make_node((void **)&current_auth_map_pair);
            if(!auth_node) yyerror("nomem");
-           struct k1_node *verdict_node = k1_make_node((void **)&current_verdict_map_user_pair);
-           if(!verdict_node) yyerror("nomem");
 
            k1_linked_list_append(&head_auth_map_pair, &auth_node);
-           k1_linked_list_append(&head_verdict_map_user_pair, &verdict_node);
            }
            | AUTH ':' '{' auth_policy_specs '}'
            {
