@@ -1,4 +1,3 @@
-set(CMAKE_C_COMPILER clang)
 set(K1_BPF_OUTPUT_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bpf)
 
 make_directory(${K1_BPF_OUTPUT_DIR})

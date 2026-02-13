@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.31.6)
 project(keyvan)
 
+set(CMAKE_C_COMPILER clang)
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 set(K1_OUTPUT_DIR output)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${K1_OUTPUT_DIR})
