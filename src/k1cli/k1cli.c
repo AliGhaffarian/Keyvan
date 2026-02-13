@@ -8,11 +8,15 @@
 
 #include <auth_record.h>
 #include <bpf_progs.skel.h>
+#include <k1/exception/pathname.h>
+#include <k1/logger.h>
+#include <parser_structs.h>
 
 #include "opt.h"
 
 extern struct k1_node *head_auth_map_pair;
 extern struct k1_node *head_verdict_map_user_pair;
+extern struct k1_node *head_parsed_exception_pathname;
 
 int yyparse();
 
@@ -69,6 +73,36 @@ finish:
     return err;
 }
 
+int register_exceptions_pathname(struct bpf_progs *skel, struct k1_node *head)
+{
+    struct k1_node *current_node = head;
+    int err = 0;
+    while(current_node) {
+        struct k1_parsed_exception_pathname *current_parsed_exception =
+            current_node->data;
+        err = register_exception_pathname(
+            skel,
+            current_parsed_exception->pathname,
+            current_parsed_exception->uid,
+            current_parsed_exception->verdict_hook,
+            current_parsed_exception->verdict_map_type,
+            current_parsed_exception->is_whitelist);
+        if(err) {
+            printf("%s\n", strerror(errno));
+            goto finish;
+        }
+        logger(
+            LOG_DEBUG,
+            stdout,
+            "excluding %s: is_whitelist: %d\n",
+            current_parsed_exception->pathname,
+            current_parsed_exception->is_whitelist);
+        current_node = current_node->next;
+    }
+finish:
+    return err;
+}
+
 int main(int argc, char **argv)
 {
     FILE *stdin_bak = stdin;
@@ -94,6 +128,9 @@ int main(int argc, char **argv)
     if(err)
         return err;
     err = register_verdict_pairs_to_map(skel, head_verdict_map_user_pair);
+    if(err)
+        return err;
+    err = register_exceptions_pathname(skel, head_parsed_exception_pathname);
     if(err)
         return err;
 

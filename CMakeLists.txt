@@ -7,6 +7,7 @@ set(K1_OUTPUT_DIR output)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${K1_OUTPUT_DIR})
 
 add_compile_options("-fmacro-prefix-map=${CMAKE_SOURCE_DIR}/src/=")
+add_compile_options("-g")
 make_directory(${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 make_directory(${CMAKE_BINARY_DIR}/src/bpf/include/)
@@ -17,6 +18,7 @@ Include_directories(src/external/include)
 Include_directories(${CMAKE_BINARY_DIR}/src/include)
 
 set(K1_USER_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/libk1/include)
+set(K1_PARSER_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/parser/include)
 file(GLOB COMMON_SOURCES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/src/common/*.c")
 
 # includes cmake modules

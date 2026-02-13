@@ -91,4 +91,37 @@ struct k1_verdict_map_user_pair {
     struct k1_verdict_map_user_value value;
 };
 
+struct k1_exception_map_pathname_key {
+    uid_t uid;
+    enum K1_VERDICT_HOOK verdict_hook;
+    enum K1_VERDICT_MAP_TYPE verdict_map_type;
+    __u64 inode_no;
+    dev_t s_dev;
+};
+
+// if this value exists, it means this pathname is either black listed or white
+// listed, we can diffrenciate using a boolean
+struct k1_exception_map_pathname_value {
+    bool is_whitelist;
+};
+
+struct k1_exception_map_pathname_pair {
+    struct k1_exception_map_pathname_key key;
+    struct k1_exception_map_pathname_value value;
+};
+
+// uniqely identify files across filesystems
+struct k1_trust_map_file2sha256_key {
+    __u64 inode_no;
+    dev_t s_dev;
+};
+
+struct k1_trust_map_file2sha256_value {
+    __u8 sha256[32];
+};
+
+struct k1_trust_map_file2sha256_pair {
+    struct k1_trust_map_file2sha256_key key;
+    struct k1_trust_map_file2sha256_value value;
+};
 #endif

@@ -4,7 +4,9 @@ add_library(
     linked_list.c
     logger.c
     ima.c
+    exception/pathname.c
 )
+target_link_libraries(k1 bpf)
 install(TARGETS k1)
 install(
     DIRECTORY

@@ -18,6 +18,9 @@ str [a-zA-Z0-9_/.-]+
 "execve"            { return EXECVE; }
 "usb"               { return USB; }
 
+"whitelists"        {return WHITELISTS;}
+"blacklists"        {return BLACKLISTS;}
+
 "serial"[[:blank:]]*: { BEGIN(BEGIN_SERIAL_MATCH); }
 <BEGIN_SERIAL_MATCH>{
     {str} {

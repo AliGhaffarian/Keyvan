@@ -1,5 +1,6 @@
 include_directories(${CMAKE_SOURCE_DIR}/src/common)
 include_directories(${K1_USER_INCLUDES})
+include_directories(${K1_PARSER_INCLUDES})
 
 add_custom_command(
     OUTPUT ${CMAKE_BINARY_DIR}/parser.tab.c ${CMAKE_BINARY_DIR}/src/include/parser.tab.h

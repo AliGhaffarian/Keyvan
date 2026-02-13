@@ -21,6 +21,31 @@
 #define BPF_FOR_EACH_MAP_ELEM_STOP     1
 #define BPF_FOR_EACH_MAP_ELEM_CONTINUE 0
 
+enum K1_VERDICT_ACTION {
+    K1_VERDICT_NOOP,
+    K1_VERDICT_ALLOW,
+    K1_VERDICT_DENY,
+    _K1_VERDICT_DENY_SIZE,
+};
+
+enum LSM_ACTION {
+    LSM_DENY = -1,
+    LSM_ALLOW = 0
+};
+
+__always_inline int
+verdict_action2lsm_verdict(enum K1_VERDICT_ACTION verdict_action)
+{
+    switch(verdict_action) {
+    case K1_VERDICT_ALLOW:
+        return LSM_ALLOW;
+    case K1_VERDICT_DENY:
+        return LSM_DENY;
+    default:
+        return LSM_DENY;
+    }
+}
+
 inline int k1_strcmp(char *first, char *second)
 {
     int cnt = 0;
