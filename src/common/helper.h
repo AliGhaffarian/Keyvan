@@ -15,7 +15,7 @@
 #define INVALID_UID       -1
 #define INVALID_SESSIONID -1
 
-#define NBITS_MASK(n)  (((1ULL << n) - 1))
+#define NBITS_MASK(n)  ((n >= 64 ? 0 : 1ULL << n) - 1)
 #define NBYTES_MASK(n) (NBITS_MASK(n * 8))
 
 #define SHA256_STR_SIZE 64
