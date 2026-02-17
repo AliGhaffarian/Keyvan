@@ -87,7 +87,7 @@ A --<->-- B: A and B talk
 |     \------------>|verdict_map_session|-<->--|
 |                                             /\
 /\                                            \/
-\----------------------------------------< verdicts
+\----------------------------------------< verdicts <----|exception_map_pathname|
 ```
 ### Diagram explanation
 The following sections describe the portion of the diagram that enable PAM compatibility.
