@@ -65,8 +65,7 @@ sudo ./output/k1cli --config-file CONFIG_FILENAME
 
 ## Development roadmap
 - [x] Proper naming convention in the source code
-- [x] Consider requiring re-authentication for each session (like sudo)?
-    - This is implemented and will be usable after adding white listing subsystem
+- [x] re-authentication for each session
 - [x] More flexible approach to store authentication information in maps
 - [ ] Implement userspace daemon to load/write maps so Keyvan can persist across reboots
 - [x] Implement config parser
