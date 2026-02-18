@@ -20,6 +20,14 @@ uid: Y
 ...
 ```
 
+# Order of Effect
+
+Verdict rules are triggered based on the following order, whenever one is triggered, the rest is ignored:
+1. per-session exception
+2. per-session verdict
+3. per-user exception
+4. per-user verdict
+
 ## User Identification (uid)
 
 Every policy block begins by specifying the target user ID.

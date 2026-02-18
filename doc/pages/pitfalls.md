@@ -1,5 +1,7 @@
 @page pitfalls Pitfalls
 
+@tableofcontents
+
 # Pitfalls
 
 These pitfalls are mostly about not getting locked out. If you are stuck, restarting your display manager or system as a whole will fix the issue.
@@ -11,7 +13,7 @@ These pitfalls are mostly about not getting locked out. If you are stuck, restar
 
 ## Execve Verdicts
 
-### Getting Locked Out
+### Desktop Environment Crash
 
 This is very environment specific, in my experience whenever i tried to make a new window and Keyvan were to deny me of doing so, display manager stopped responding and i couldn't create new windows even if i authenticated, leaving me no choice but to restart the display manager.
 This is probably less of an issue in terminal only environments.
