@@ -5,9 +5,7 @@ It provides silent authentication checks and access control verdicts for resourc
 (files, execs, and later network actions). The goal is to allow a machine to appear
 unlocked to an unauthorized user while restricting their access in order to confuse them.
 
-<!-- ![](https://github.com/AliGhaffarian/Keyvan/blob/main/doc/assets/demo.gif) -->
-
-![](/home/user/Clones/Keyvan/doc/assets/demo.gif)
+![](https://alighaffarian.github.io/Keyvan/doc/assets/demo.gif)
 
 ## Quick start
 

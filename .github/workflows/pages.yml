@@ -28,8 +28,9 @@ jobs:
           sudo apt install cmake doxygen graphviz -y
           cmake -S . -B build
           make -Cbuild doc
-          mkdir -p site
+          mkdir -p site/doc
           cp -r build/doc/html/* site/
+          cp -r doc/assets site/doc
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
