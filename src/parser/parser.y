@@ -243,9 +243,7 @@ verdict_policy: VERDICT ':' '{' verdict_policy_specs exceptions'}'
             struct k1_verdict_map_user_pair *current_verdict_map_user_pair = $4;
             struct k1_node *exceptions = $5;
             current_verdict_map_user_pair->key.uid = parser_ctx.current_uid;
-            struct k1_node *verdict_register = k1_make_node((void **)&current_verdict_map_user_pair);
-            if(!verdict_register) yyerror("nomem");
-            k1_linked_list_append(&head_verdict_map_user_pair, &verdict_register);
+            struct k1_node *verdict_register = NULL;
 
             // handle exceptions
             complete_exception_pathname_list(
@@ -255,6 +253,10 @@ verdict_policy: VERDICT ':' '{' verdict_policy_specs exceptions'}'
                 K1_VERDICT_MAP_SID // default value for verdict that's not associated with a auth checker
                 );
             k1_linked_list_append(&head_parsed_exception_pathname, &exceptions);
+
+            verdict_register = k1_make_node((void **)&current_verdict_map_user_pair);
+            if(!verdict_register) yyerror("nomem");
+            k1_linked_list_append(&head_verdict_map_user_pair, &verdict_register);
             };
 
 policy: auth_policy | verdict_policy;
