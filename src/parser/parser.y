@@ -173,7 +173,7 @@ whitelists:
 blacklists:
           STRING
           {
-                $$ = append_exception_pathname__pathname_is_whitelisted(NULL, strdup($1), 1);
+                $$ = append_exception_pathname__pathname_is_whitelisted(NULL, strdup($1), 0);
           }
           | blacklists STRING
           {
@@ -285,7 +285,7 @@ struct k1_node *append_exception_pathname__pathname_is_whitelisted(struct k1_nod
             if(!elem) yyerror("nomem");
             memset(elem, 0, sizeof(*elem));
 
-            elem->is_whitelist = 1;
+            elem->is_whitelist = is_whitelist;
             elem->pathname = pathname;
 
             struct k1_node *node = k1_make_node((void **)&elem);
