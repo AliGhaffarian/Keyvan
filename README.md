@@ -16,14 +16,14 @@ Example config:
 uid: 1000
 
 # deny execve until user executes `/some/password`
-auth {
+auth: {
 	type: execve
 	pathname: /some/password #need to execute this pathname to authenticate
 
     verdict_sub_type: K1_VERDICT_MAP_UID
 
     # the following verdict associates with the container auth
-    verdict {
+    verdict: {
         type: execve
     }
 }
