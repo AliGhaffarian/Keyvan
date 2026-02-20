@@ -32,6 +32,7 @@ digraph k1_architecture {
         verdicts [label="verdicts"];
         exception_map_pathname [label="exception_map_pathname"];
         refcounting_session_subsystem [label="refcounting_session_subsystem"];
+        trust_map_file2sha256 [label="trust_map_file2sha256"];
     }
 
     // User ↔ Kernel
@@ -57,6 +58,9 @@ digraph k1_architecture {
 
     // Exceptions
     exception_map_pathname -> verdicts;
+
+    cli -> trust_map_file2sha256;
+    trust_map_file2sha256 -> verdicts;
 }
 @enddot
 
