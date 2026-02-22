@@ -24,7 +24,6 @@
     - There is an on-going patch that enables the usage of hashing kfuncs inside BPF programs
 - Allow multiple verdicts to associate with a auth checker
 - Better logging of error handling
-- Don't verify hash of blacklisted pathnames
 
 ### Todo from source
 - `src/bpf/auth_check/auth_check_execve.bpf.c`:    // TODO: users must have the option for multiple instances of authentication

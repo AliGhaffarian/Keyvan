@@ -55,8 +55,9 @@ __always_inline enum K1_VERDICT_ACTION k1_bpf_handle_exception_pathname(
         return K1_VERDICT_NOOP;
     }
 
-    // hash mismatch
-    if(__builtin_memcmp(
+    // check hash only if is whitelist
+    if(value->is_whitelist &&
+       __builtin_memcmp(
            hash, trust_map_file2sha256_value->sha256, sizeof(hash))) {
         bpf_printk("exception hash mismatch");
         return K1_VERDICT_NOOP;
