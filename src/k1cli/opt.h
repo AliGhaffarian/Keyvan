@@ -14,6 +14,7 @@ extern char *usage_help;
 
 struct args_struct {
     char *config_filename;
+    int loglevel;
 };
 
 extern struct args_struct args;

@@ -80,6 +80,12 @@ int register_exceptions_pathname(struct bpf_progs *skel, struct k1_node *head)
     while(current_node) {
         struct k1_parsed_exception_pathname *current_parsed_exception =
             current_node->data;
+        logger(
+            LOG_DEBUG,
+            stdout,
+            "exception pathname %s, is_whitelist: %d\n",
+            current_parsed_exception->pathname,
+            current_parsed_exception->is_whitelist);
         err = register_exception_pathname(
             skel,
             current_parsed_exception->pathname,
@@ -111,6 +117,7 @@ int main(int argc, char **argv)
     struct bpf_progs *skel = NULL;
 
     handle_args(argc, argv);
+    current_log_level = args.loglevel;
 
     skel = bpf_progs__open_and_load();
     if(!skel) {

@@ -37,4 +37,6 @@ extern volatile int current_log_level;
             _logger(log_lvl, dest, fmt, ##__VA_ARGS__)                         \
     } while(0)
 
+enum LOG_LEVELS enum_from_string_log_levels(char *str);
+
 #endif // K1_LOGGER
