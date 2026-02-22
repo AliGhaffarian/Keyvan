@@ -79,7 +79,8 @@
 
 %type <node> whitelists
 %type <node> blacklists
-%type <node> exceptions
+%type <node> exception_list
+%type <node> exception_lists
 
 %%
 uid: UID ':' NUMBER { parser_ctx.current_uid = $3; };
@@ -182,17 +183,29 @@ blacklists:
           }
 ;
 
-exceptions:
+exception_list:
           %empty { $$ = NULL; }
           | WHITELISTS ':' whitelists { $$ = $3; }
           | BLACKLISTS ':' blacklists { $$ = $3; }
+;
+exception_lists:
+          exception_list
+          {
+                $$ = $1;
+          }
+          | exception_lists exception_list
+          {
+                k1_linked_list_append(&$1, &$2);
+                $$ = $1;
+          }
+;
 
 auth_policy:
-            AUTH ':' '{' auth_policy_specs VERDICT_SUB_TYPE ':' STRING VERDICT ':' '{' verdict_policy_specs exceptions '}' '}'
+            AUTH ':' '{' auth_policy_specs VERDICT_SUB_TYPE ':' STRING VERDICT ':' '{' verdict_policy_specs exception_lists '}' '}'
             {
             struct k1_auth_map_pair *current_auth_map_pair = $4;
             struct k1_verdict_map_user_pair *current_verdict_map_user_pair = $11;
-            struct k1_node *exceptions = $12;
+            struct k1_node *exception_lists = $12;
 
             current_auth_map_pair->key.uid = parser_ctx.current_uid;
             current_auth_map_pair->value.verdict_entry_lookup_info.verdict_hook = current_verdict_map_user_pair->key.verdict_hook;
@@ -202,14 +215,14 @@ auth_policy:
                     yyerror("unknown verdict_sub_type");
                     }
 
-            // handle exceptions
+            // handle exception_lists
             complete_exception_pathname_list(
-                exceptions,
+                exception_lists,
                 parser_ctx.current_uid,
                 current_verdict_map_user_pair->key.verdict_hook,
                 current_auth_map_pair->value.verdict_entry_lookup_info.verdict_map_type
                 );
-            k1_linked_list_append(&head_parsed_exception_pathname, &exceptions);
+            k1_linked_list_append(&head_parsed_exception_pathname, &exception_lists);
 
             // handle user verdicts
             current_verdict_map_user_pair->key.uid = parser_ctx.current_uid;
@@ -245,21 +258,21 @@ execve_verdict_struct: TYPE ':' EXECVE
 
 verdict_policy_specs: execve_verdict_struct;
 
-verdict_policy: VERDICT ':' '{' verdict_policy_specs exceptions'}'
+verdict_policy: VERDICT ':' '{' verdict_policy_specs exception_lists'}'
             {
             struct k1_verdict_map_user_pair *current_verdict_map_user_pair = $4;
-            struct k1_node *exceptions = $5;
+            struct k1_node *exception_lists = $5;
             current_verdict_map_user_pair->key.uid = parser_ctx.current_uid;
             struct k1_node *verdict_register = NULL;
 
-            // handle exceptions
+            // handle exception_lists
             complete_exception_pathname_list(
-                exceptions,
+                exception_lists,
                 parser_ctx.current_uid,
                 current_verdict_map_user_pair->key.verdict_hook,
                 K1_VERDICT_MAP_SID // default value for verdict that's not associated with a auth checker
                 );
-            k1_linked_list_append(&head_parsed_exception_pathname, &exceptions);
+            k1_linked_list_append(&head_parsed_exception_pathname, &exception_lists);
 
             verdict_register = k1_make_node((void **)&current_verdict_map_user_pair);
             if(!verdict_register) yyerror("nomem");

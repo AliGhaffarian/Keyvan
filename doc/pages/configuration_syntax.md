@@ -96,8 +96,9 @@ Syntax:
 ```
 verdict: {
     type: <type_name>
-    [ whitelists: <pathnames> ]
-    [ blacklists: <pathnames> ]
+    [ whitelists: <pathnames> | blacklists: <pathnames>]
+    [ whitelists: <pathnames> | blacklists: <pathnames>]
+    ...
 }
 ```
 
@@ -144,6 +145,8 @@ auth: {
         whitelists:
             /usr/bin/login
             /bin/x-window-manager
+        blacklists:
+            /bin/7z
     }
 }
 
