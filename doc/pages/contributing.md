@@ -17,8 +17,7 @@
 - Allow user to set initial value of `is_authenticated` to true
 - Use logging in bpfside
 - Allow per rule log level
-- Hash the credentials before writing maps on the disc
-- Web hosted documentation
+- Hash the credentials in config file
 - Unit testing
 - Determine white list programs to prevent locking the user out
     - There is an on-going patch that enables the usage of hashing kfuncs inside BPF programs
