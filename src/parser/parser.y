@@ -93,9 +93,8 @@ execve_auth_fields:
                   struct k1_auth_cred_execve *self = NULL;
                   int pathname_strlen = strlen($1);
 
-                  self = malloc(sizeof(*self));
+                  self = calloc(1, sizeof(*self));
                   if(!self) yyerror("nomem");
-                  memset(self, 0, sizeof(*self));
 
                   if(pathname_strlen >= K1_BPF_STRING_MAXSIZE - 1)
                         yyerror("bpf string exceeds max len");
@@ -112,7 +111,7 @@ execve_auth_struct: TYPE ':' EXECVE execve_auth_fields { $$ = $4; };
 usb_auth_fields:
                SERIAL
                {
-                struct k1_auth_cred_usb *self = malloc(sizeof(*self));
+                struct k1_auth_cred_usb *self = calloc(1, sizeof(*self));
                 int serial_strlen = strlen($1);
                 if(!self) yyerror("nomem");
 
@@ -130,9 +129,8 @@ usb_auth_struct: TYPE ':' USB usb_auth_fields { $$ = $4; };
 
 auth_policy_specs:
                  execve_auth_struct {
-                 struct k1_auth_map_pair *self = malloc(sizeof(*self));
+                 struct k1_auth_map_pair *self = calloc(1, sizeof(*self));
                  if(!self) yyerror("nomem");
-                 memset(self, 0, sizeof(*self));
 
                  memcpy(&self->value.record.auth_cred_execve, $1, sizeof(*$1));
                  free($1);
@@ -144,9 +142,8 @@ auth_policy_specs:
                  }
                  | usb_auth_struct
                  {
-                 struct k1_auth_map_pair *self = malloc(sizeof(*self));
+                 struct k1_auth_map_pair *self = calloc(1, sizeof(*self));
                  if(!self) yyerror("nomem");
-                 memset(self, 0, sizeof(*self));
 
                  memcpy(&self->value.record.auth_cred_usb, $1, sizeof(*$1));
                  free($1);
@@ -248,9 +245,8 @@ auth_policy:
 
 execve_verdict_struct: TYPE ':' EXECVE
                    {
-                   struct k1_verdict_map_user_pair *self = malloc(sizeof(*self));
+                   struct k1_verdict_map_user_pair *self = calloc(1, sizeof(*self));
                    if(!self) yyerror("nomem");
-                   memset(self, 0, sizeof(*self));
 
                    self->key.verdict_hook = K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC;
                    $$ = self;
@@ -294,9 +290,8 @@ void yyerror(const char *s) {
     exit(1);
 }
 struct k1_node *append_exception_pathname__pathname_is_whitelisted(struct k1_node *head, char *pathname, bool is_whitelist){
-            struct k1_parsed_exception_pathname *elem = malloc(sizeof(*elem));
+            struct k1_parsed_exception_pathname *elem = calloc(1, sizeof(*elem));
             if(!elem) yyerror("nomem");
-            memset(elem, 0, sizeof(*elem));
 
             elem->is_whitelist = is_whitelist;
             elem->pathname = pathname;

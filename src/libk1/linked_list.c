@@ -14,7 +14,7 @@ void k1_linked_list_append(struct k1_node **head, struct k1_node **to_append)
 
 struct k1_node *k1_make_node(void **data)
 {
-    struct k1_node *tmp_node = malloc(sizeof(struct k1_node));
+    struct k1_node *tmp_node = calloc(1, sizeof(struct k1_node));
     if(!tmp_node)
         return (struct k1_node *)NULL;
 
