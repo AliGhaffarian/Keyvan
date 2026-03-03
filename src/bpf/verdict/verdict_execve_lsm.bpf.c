@@ -104,12 +104,25 @@ int BPF_PROG(verdict_execve_lsm, struct linux_binprm *bprm)
     enum K1_VERDICT_ACTION verdict_action = K1_VERDICT_NOOP;
 
     verdict_action = verdict_execve_lsm_sid(bprm);
-    if(verdict_action != K1_VERDICT_NOOP)
+    if(verdict_action != K1_VERDICT_NOOP) {
+        if(verdict_action == K1_VERDICT_DENY)
+            bpf_printk(
+                "sid mode: denying %s sid: %d euid: %d",
+                bprm->filename,
+                k1_bpf_get_current_sessionid(),
+                k1_bpf_get_current_euid());
         return verdict_action2lsm_verdict(verdict_action);
+    }
 
 fallback_euid_mode:
     // fall back to euid based authentication
     verdict_action = verdict_execve_lsm_euid(bprm);
+    if(verdict_action == K1_VERDICT_DENY)
+        bpf_printk(
+            "euid mode: denying %s sid: %d euid: %d",
+            bprm->filename,
+            k1_bpf_get_current_sessionid(),
+            k1_bpf_get_current_euid());
     return verdict_action2lsm_verdict(verdict_action);
 }
 
