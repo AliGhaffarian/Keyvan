@@ -89,9 +89,9 @@ int BPF_PROG(refcount_session_sched_process_fork)
 {
     __u64 current_sid = k1_bpf_get_current_sessionid();
     struct k1_refcounting_map_session_value refcount_one = {.refcount = 1};
-    pid_t current_uid = bpf_get_current_uid_gid() & NBYTES_MASK(4);
+    pid_t current_euid = k1_bpf_get_current_euid();
     void *do_track_session =
-        bpf_map_lookup_elem(&users_having_sid_verdict_map_hash, &current_uid);
+        bpf_map_lookup_elem(&users_having_sid_verdict_map_hash, &current_euid);
 
     if(!do_track_session)
         return 0;
@@ -114,12 +114,12 @@ int BPF_PROG(refcount_session_exit_setsid, int nr, int ret)
     struct k1_refcounting_map_session_value refcounting_map_session_value = {
         .refcount = 1};
     struct task_struct *current_task = NULL;
-    __u32 current_uid = bpf_get_current_uid_gid() & NBYTES_MASK(4);
+    __u32 current_euid = k1_bpf_get_current_euid();
     __u64 original_refcount = -1;
 
     if(ret < 0)
         return 0;
-    if(!bpf_map_lookup_elem(&users_having_sid_verdict_map_hash, &current_uid))
+    if(!bpf_map_lookup_elem(&users_having_sid_verdict_map_hash, &current_euid))
         return 0;
     if(refcounting_map_session_key.sid == INVALID_SESSIONID)
         return 0;

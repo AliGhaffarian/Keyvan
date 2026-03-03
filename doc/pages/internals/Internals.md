@@ -23,7 +23,7 @@ digraph k1_architecture {
         auth_checkers [label="auth_checkers"];
 
         users_having_sid_verdict_map [label="users_having_sid_verdict_map"];
-        registered_uids_map [label="registered_uids_map"];
+        registered_euids_map [label="registered_euids_map"];
         auth_checker_map [label="auth_checker_map"];
 
         verdict_user [label="verdict_map_user"];
@@ -39,13 +39,13 @@ digraph k1_architecture {
 
     // User - Kernel
     cli -> users_having_sid_verdict_map;
-    cli -> registered_uids_map;
+    cli -> registered_euids_map;
     cli -> exception_map_pathname;
     cli -> auth_checker_map;
 
     // Auth checker inputs
     users_having_sid_verdict_map -> auth_checkers;
-    registered_uids_map -> auth_checkers;
+    registered_euids_map -> auth_checkers;
     auth_checker_map -> auth_checkers;
     auth_checkers -> auth_checker_map;
 

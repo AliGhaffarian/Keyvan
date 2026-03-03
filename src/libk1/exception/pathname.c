@@ -33,14 +33,14 @@ static dev_t new_decode_dev(uint32_t dev)
  * 1. get the hash of pathname's file
  * 2. get inode number of the file
  * 3. get st_dev of file (same as sb->s_dev)
- * 4. update the exception map via uid + verdict_hook + verdict_map_type +
+ * 4. update the exception map via euid + verdict_hook + verdict_map_type +
  * inode_no + sb
  * 5. update the file2sha256 map via inode_no + sb
  */
 int register_exception_pathname(
     struct bpf_progs *skel,
     char *pathname,
-    uid_t uid,
+    uid_t euid,
     enum K1_VERDICT_HOOK verdict_hook,
     enum K1_VERDICT_MAP_TYPE verdict_map_type,
     bool is_whitelist)
@@ -65,7 +65,7 @@ int register_exception_pathname(
 
     exception_map_pair.key.inode_no = st.st_ino;
     exception_map_pair.key.s_dev = new_decode_dev(st.st_dev);
-    exception_map_pair.key.uid = uid;
+    exception_map_pair.key.euid = euid;
     exception_map_pair.key.verdict_hook = verdict_hook;
     exception_map_pair.key.verdict_map_type = verdict_map_type;
 

@@ -101,6 +101,18 @@ inline __u64 k1_bpf_get_current_sessionid()
         current_task, signal, pids[PIDTYPE_SID], numbers[0].nr);
 }
 
+inline __u32 k1_bpf_get_current_euid()
+{
+    __u32 err = INVALID_UID;
+    struct task_struct *current_task =
+        (struct task_struct *)bpf_get_current_task_btf();
+    if(!current_task) {
+        bpf_printk("unexpected error getting euid");
+        return err;
+    }
+    return BPF_CORE_READ(current_task, cred, euid).val;
+}
+
 inline void k1_change_session_auth_state(
     struct k1_verdict_entry_lookup_info *verdict_entry_lookup_info,
     pid_t sessionid,
@@ -135,18 +147,18 @@ inline void k1_change_session_auth_state(
 
 inline void k1_change_user_auth_state(
     struct k1_verdict_entry_lookup_info *verdict_entry_lookup_info,
-    uid_t uid,
+    uid_t euid,
     enum K1_FLAG_CHANGE_OPS op)
 {
 
     struct k1_verdict_map_user_value *elem = NULL;
     struct k1_verdict_map_user_key key = {
-        .uid = uid,
+        .euid = euid,
         .verdict_hook = verdict_entry_lookup_info->verdict_hook,
     };
 
-    if(uid == INVALID_UID)
-        key.uid = bpf_get_current_uid_gid() & NBYTES_MASK(4);
+    if(euid == INVALID_UID)
+        key.euid = k1_bpf_get_current_euid();
 
     elem = bpf_map_lookup_elem(&verdict_map_user_hash, &key);
 
@@ -164,24 +176,24 @@ struct find_auth_record_ctx {
 
 /**
  * @return on success, ctx->result points to the found auth_record, with the
- * related uid in ctx->key, on error, uid of ctx->key is INVALID_UID
+ * related euid in ctx->key, on error, euid of ctx->key is INVALID_UID
  */
-static long first_auth_record_with_uid_of_context(
+static long first_auth_record_with_euid_of_context(
     struct bpf_map *registered_map,
-    const void *current_uid_key,
+    const void *current_euid_key,
     void *value,
     void *ctx)
 {
     void *lookup_result;
     struct find_auth_record_ctx *ctx_casted = ctx;
-    __u32 current_uid = *(__u32 *)current_uid_key;
+    __u32 current_euid = *(__u32 *)current_euid_key;
 
-    AUTHMAP_KEY_SET_UID(ctx_casted->key, current_uid);
+    AUTHMAP_KEY_SET_EUID(ctx_casted->key, current_euid);
 
     lookup_result = bpf_map_lookup_elem(&auth_map_hash, ctx_casted->key);
 
     if(!lookup_result) {
-        AUTHMAP_KEY_SET_UID(ctx_casted->key, INVALID_UID);
+        AUTHMAP_KEY_SET_EUID(ctx_casted->key, INVALID_UID);
         return BPF_FOR_EACH_MAP_ELEM_CONTINUE;
     }
 
@@ -189,10 +201,10 @@ static long first_auth_record_with_uid_of_context(
     return BPF_FOR_EACH_MAP_ELEM_STOP;
 }
 
-inline void *_k1_bpf_auth_map_lookup_any_uid(struct k1_auth_map_key *key)
+inline void *_k1_bpf_auth_map_lookup_any_euid(struct k1_auth_map_key *key)
 {
     __u32 tmp_ptr;
-    __u32 uid_ptr;
+    __u32 euid_ptr;
     long err;
 
     struct find_auth_record_ctx ctx = {
@@ -201,8 +213,8 @@ inline void *_k1_bpf_auth_map_lookup_any_uid(struct k1_auth_map_key *key)
     };
 
     err = bpf_for_each_map_elem(
-        &registered_uids_map_hash,
-        first_auth_record_with_uid_of_context,
+        &registered_euids_map_hash,
+        first_auth_record_with_euid_of_context,
         &ctx,
         0);
     if(err == -EINVAL)
@@ -214,17 +226,17 @@ inline void *_k1_bpf_auth_map_lookup_any_uid(struct k1_auth_map_key *key)
 /**
  * @brief lookup the auth_record related to the given key
  *
- * @param key key to search, use AUTHMAP_KEY_SET_UID(*key, INVALID_UID) to
- * search for any uid related to the rest of the key
+ * @param key key to search, use AUTHMAP_KEY_SET_EUID(*key, INVALID_UID) to
+ * search for any euid related to the rest of the key
  *
- * @return result of bpf_map_lookup_elem, if uid is INVALID_UID, result of the
+ * @return result of bpf_map_lookup_elem, if euid is INVALID_UID, result of the
  * last called bpf_map_lookup_elem if returned
  */
 inline struct k1_auth_map_value *
 k1_bpf_auth_map_lookup(struct k1_auth_map_key *key)
 {
-    if(AUTHMAP_KEY_GET_UID(key) == INVALID_UID) {
-        return _k1_bpf_auth_map_lookup_any_uid(key);
+    if(AUTHMAP_KEY_GET_EUID(key) == INVALID_UID) {
+        return _k1_bpf_auth_map_lookup_any_euid(key);
     }
     return bpf_map_lookup_elem((void *)&auth_map_hash, (void *)key);
 }

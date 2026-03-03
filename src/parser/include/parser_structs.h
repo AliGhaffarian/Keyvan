@@ -8,7 +8,7 @@
 
 struct k1_parsed_exception_pathname {
     char *pathname;
-    uid_t uid;
+    uid_t euid;
     enum K1_VERDICT_HOOK verdict_hook;
     enum K1_VERDICT_MAP_TYPE verdict_map_type;
     bool is_whitelist;

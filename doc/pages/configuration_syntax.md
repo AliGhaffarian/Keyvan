@@ -4,17 +4,17 @@
 
 # Configuration Syntax
 
-The configuration format is hierarchical. The top-level entry point must always specify a UID, followed by one or more policy definition for that user.
+The configuration format is hierarchical. The top-level entry point must always specify a euid, followed by one or more policy definition for that user.
 
 ```
 # the following policies will affect user X
-uid: X
+euid: X
 <policy1>
 <policy2>
 ...
 
 # the following policies will affect user Y
-uid: Y
+euid: Y
 <policy1>
 <policy2>
 ...
@@ -28,17 +28,17 @@ Verdict rules are triggered based on the following order, whenever one is trigge
 3. per-user exception
 4. per-user verdict
 
-## User Identification (uid)
+## User Identification (euid)
 
 Every policy block begins by specifying the target user ID.
 
-    Syntax: uid: <integer>
+    Syntax: euid: <integer>
 
-    Example: uid: 1000
+    Example: euid: 1000
 
 ## Policy Types
 
-After specifying a uid, you can define one of two policy types: Authentication (auth) or Verdict (verdict).
+After specifying a euid, you can define one of two policy types: Authentication (auth) or Verdict (verdict).
 
 ###  Authentication Policy (auth)
 
@@ -65,7 +65,7 @@ The type field determines:
 
 Supported authentication types:
 1. `execve`
-    - Description: checks the given `pathname` against pathname argument of `execve`, invoked by the given uid
+    - Description: checks the given `pathname` against pathname argument of `execve`, invoked by the given euid
     - Required Fields
         - pathname: The file path to the executable acting as the credential.
     - Can be used for per-session verdict: YES
@@ -78,10 +78,10 @@ Supported authentication types:
 
 #### auth.verdict_sub_type
 
-Determines if the verdict that follows needs to work in either per-uid or per-session mode.
+Determines if the verdict that follows needs to work in either per-euid or per-session mode.
 - Possible Values
     - K1_VERDICT_MAP_SID: per-session mode
-    - K1_VERDICT_MAP_UID: per-user mode
+    - K1_VERDICT_MAP_EUID: per-user mode
 
 #### auth.verdict
 
@@ -89,7 +89,7 @@ An auth block can contain a nested verdict block (wrapped in braces { }) to defi
 
 ### Verdict Policy (verdict)
 
-The verdict block defines allow-lists and block-lists for system events. This can appear nested inside an auth block or as a standalone policy for a UID.
+The verdict block defines allow-lists and block-lists for system events. This can appear nested inside an auth block or as a standalone policy for a euid.
 @note verdicts that are not associated with a auth checker have no way for them to change state
 
 Syntax:
@@ -119,23 +119,23 @@ blacklists: Paths that are explicitly denied even if authenticated.
 
 # Configuration Examples
 
-This policy uses `/password` as a credential links it to a UID-based verdict map without specific whitelists defined in this block.
+This policy uses `/password` as a credential links it to a euid-based verdict map without specific whitelists defined in this block.
 
 ```
-uid: 1000
+euid: 1000
 auth: {
     type: execve
     pathname: /password
-    verdict_sub_type: K1_VERDICT_MAP_UID
+    verdict_sub_type: K1_VERDICT_MAP_EUID
     verdict: {
         type: execve
     }
 }
 ```
 
-Use USB authentication for uid 1001 and prevent root from accessing running `acpi`.
+Use USB authentication for euid 1001 and prevent root from accessing running `acpi`.
 ```
-uid: 1001
+euid: 1001
 auth: {
     type: usb
     serial: A1B2C3D4E5
@@ -150,11 +150,11 @@ auth: {
     }
 }
 
-uid: 0
+euid: 0
 auth: {
     type: execve
     pathname: /password
-    verdict_sub_type: K1_VERDICT_MAP_UID
+    verdict_sub_type: K1_VERDICT_MAP_EUID
     verdict: {
         type: execve
         blacklists:

@@ -25,7 +25,7 @@ void print_help_and_quit();
 
 void handle_args(int argc, char **argv);
 
-void register_user(struct bpf_progs *skel, uid_t uid);
-int register_user_wanting_sid_verdict(struct bpf_progs *skel, uid_t uid);
+void register_user(struct bpf_progs *skel, uid_t euid);
+int register_user_wanting_sid_verdict(struct bpf_progs *skel, uid_t euid);
 
 #endif

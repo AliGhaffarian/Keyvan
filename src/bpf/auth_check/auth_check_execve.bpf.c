@@ -23,9 +23,9 @@ int BPF_PROG(auth_cred_execve_check, void *a, void *b, char *filename)
     bpf_core_read_user(buf, K1_BPF_STRING_MAXSIZE - 1, filename);
     buf[K1_BPF_STRING_MAXSIZE - 1] = 0;
 
-    u32 uid = bpf_get_current_uid_gid() & NBYTES_MASK(4);
+    u32 euid = k1_bpf_get_current_euid();
     struct k1_auth_map_key key = {
-        .uid = uid,
+        .euid = euid,
         .auth_type = K1_AUTH_TYPE_EXECVE,
     };
     struct k1_auth_map_value *elem = k1_bpf_auth_map_lookup(&key);
@@ -53,10 +53,10 @@ int BPF_PROG(auth_cred_execve_check, void *a, void *b, char *filename)
             K1_FLAG_CHANGE_TOGGLE);
         break;
     }
-    case K1_VERDICT_MAP_UID: {
+    case K1_VERDICT_MAP_EUID: {
         k1_do_op_on_flag(&elem->is_authenticated, K1_FLAG_CHANGE_TOGGLE);
         k1_change_user_auth_state(
-            &elem->verdict_entry_lookup_info, uid, K1_FLAG_CHANGE_TOGGLE);
+            &elem->verdict_entry_lookup_info, euid, K1_FLAG_CHANGE_TOGGLE);
         break;
     }
     default:

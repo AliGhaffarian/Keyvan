@@ -44,7 +44,7 @@ enum K1_VERDICT_MAP_TYPE enum_from_string_k1_verdict_map_type(char *str)
 
 char *enum_to_string_k1_verdict_map_type[] = {
     [_K1_VERDICT_MAP_UNSPEC] = STR(_K1_VERDICT_MAP_UNSPEC),
-    [K1_VERDICT_MAP_UID] = STR(K1_VERDICT_MAP_UID),
+    [K1_VERDICT_MAP_EUID] = STR(K1_VERDICT_MAP_EUID),
     [K1_VERDICT_MAP_SID] = STR(K1_VERDICT_MAP_SID)};
 
 enum hash_algo enum_from_string_hash_algo(char *str)

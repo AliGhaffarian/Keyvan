@@ -40,7 +40,8 @@ int register_auth_pairs_to_map(struct bpf_progs *skel, struct k1_node *head)
         }
         if(current_auth_pair->value.verdict_entry_lookup_info
                .verdict_map_type == K1_VERDICT_MAP_SID)
-            register_user_wanting_sid_verdict(skel, current_auth_pair->key.uid);
+            register_user_wanting_sid_verdict(
+                skel, current_auth_pair->key.euid);
         current_auth = current_auth->next;
     }
 finish:
@@ -66,7 +67,7 @@ int register_verdict_pairs_to_map(struct bpf_progs *skel, struct k1_node *head)
             printf("%s\n", strerror(errno));
             goto finish;
         }
-        register_user(skel, current_verdict_pair->key.uid);
+        register_user(skel, current_verdict_pair->key.euid);
         current_verdict = current_verdict->next;
     }
 finish:
@@ -89,7 +90,7 @@ int register_exceptions_pathname(struct bpf_progs *skel, struct k1_node *head)
         err = register_exception_pathname(
             skel,
             current_parsed_exception->pathname,
-            current_parsed_exception->uid,
+            current_parsed_exception->euid,
             current_parsed_exception->verdict_hook,
             current_parsed_exception->verdict_map_type,
             current_parsed_exception->is_whitelist);

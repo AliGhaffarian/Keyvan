@@ -23,7 +23,7 @@ int BPF_PROG(auth_check_usb_create_sysfs, struct usb_device *udev)
     bpf_printk("connected udev: %s", udev->serial);
 
     struct k1_auth_map_key key = {
-        .uid = INVALID_UID,
+        .euid = INVALID_UID,
         .auth_type = K1_AUTH_TYPE_USB,
     };
     struct k1_auth_map_value *elem = k1_bpf_auth_map_lookup(&key);
@@ -32,7 +32,7 @@ int BPF_PROG(auth_check_usb_create_sysfs, struct usb_device *udev)
         return 0;
 
     k1_change_user_auth_state(
-        &elem->verdict_entry_lookup_info, key.uid, K1_FLAG_CHANGE_SET);
+        &elem->verdict_entry_lookup_info, key.euid, K1_FLAG_CHANGE_SET);
 
     elem->is_authenticated = 1;
 
@@ -49,7 +49,7 @@ int BPF_PROG(auth_check_usb_remove_sysfs, struct usb_device *udev)
     bpf_printk("disconnected udev: %s", udev->serial);
 
     struct k1_auth_map_key key = {
-        .uid = INVALID_UID,
+        .euid = INVALID_UID,
         .auth_type = K1_AUTH_TYPE_USB,
     };
     struct k1_auth_map_value *elem = k1_bpf_auth_map_lookup(&key);
@@ -58,7 +58,7 @@ int BPF_PROG(auth_check_usb_remove_sysfs, struct usb_device *udev)
         return 0;
 
     k1_change_user_auth_state(
-        &elem->verdict_entry_lookup_info, key.uid, K1_FLAG_CHANGE_SET);
+        &elem->verdict_entry_lookup_info, key.euid, K1_FLAG_CHANGE_SET);
 
     elem->is_authenticated = 0;
 

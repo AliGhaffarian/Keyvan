@@ -17,12 +17,12 @@
 /**
  * @brief get and set macros for auth_key, to decouple the code
  */
-#define AUTHMAP_KEY_SET_UID(key_ptr, u) (key_ptr)->uid = u
-#define AUTHMAP_KEY_GET_UID(key_ptr)    ((key_ptr)->uid)
+#define AUTHMAP_KEY_SET_EUID(key_ptr, u) (key_ptr)->euid = u
+#define AUTHMAP_KEY_GET_EUID(key_ptr)    ((key_ptr)->euid)
 
 enum K1_VERDICT_MAP_TYPE {
     _K1_VERDICT_MAP_UNSPEC,
-    K1_VERDICT_MAP_UID,
+    K1_VERDICT_MAP_EUID,
     K1_VERDICT_MAP_SID,
     _K1_VERDICT_MAP_SIZE,
 };
@@ -33,21 +33,21 @@ struct k1_verdict_entry_lookup_info {
 };
 
 struct k1_auth_map_key {
-    __u32 uid;
+    __u32 euid;
     enum K1_AUTH_TYPE auth_type;
 };
 
 struct k1_verdict_map_user_key {
-    __u32 uid;
+    __u32 euid;
     enum K1_VERDICT_HOOK verdict_hook;
 };
 
 struct k1_users_having_sid_verdict_map_key {
-    __u32 uid;
+    __u32 euid;
 };
 
-struct k1_registered_uids_map_key {
-    __u32 uid;
+struct k1_registered_euids_map_key {
+    __u32 euid;
 };
 
 struct k1_auth_map_value {
@@ -92,7 +92,7 @@ struct k1_verdict_map_user_pair {
 };
 
 struct k1_exception_map_pathname_key {
-    uid_t uid;
+    uid_t euid;
     enum K1_VERDICT_HOOK verdict_hook;
     enum K1_VERDICT_MAP_TYPE verdict_map_type;
     __u64 inode_no;

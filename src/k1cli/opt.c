@@ -80,24 +80,24 @@ void handle_args(int argc, char **argv)
     return;
 }
 
-void register_user(struct bpf_progs *skel, uid_t uid)
+void register_user(struct bpf_progs *skel, uid_t euid)
 {
     bpf_map__update_elem(
-        skel->maps.registered_uids_map_hash,
-        &uid,
+        skel->maps.registered_euids_map_hash,
+        &euid,
         sizeof(struct k1_users_having_sid_verdict_map_key),
-        &uid,
+        &euid,
         sizeof(DUMMY_MAP_VALUE_T),
         BPF_ANY);
 }
 
-int register_user_wanting_sid_verdict(struct bpf_progs *skel, uid_t uid)
+int register_user_wanting_sid_verdict(struct bpf_progs *skel, uid_t euid)
 {
     return bpf_map__update_elem(
         skel->maps.users_having_sid_verdict_map_hash,
-        &uid,
+        &euid,
         sizeof(struct k1_users_having_sid_verdict_map_key),
-        &uid,
+        &euid,
         sizeof(DUMMY_MAP_VALUE_T),
         BPF_ANY);
 }

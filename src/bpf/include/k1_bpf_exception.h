@@ -20,7 +20,7 @@ __always_inline enum K1_VERDICT_ACTION k1_bpf_handle_exception_pathname(
     enum K1_VERDICT_MAP_TYPE verdict_map_type,
     struct file *f,
     dev_t s_dev,
-    uid_t uid)
+    uid_t euid)
 {
     __u8 hash[SHA256_STR_SIZE / 2] = {0};
     struct k1_exception_map_pathname_value *value = NULL;
@@ -36,7 +36,7 @@ __always_inline enum K1_VERDICT_ACTION k1_bpf_handle_exception_pathname(
     exception_map_pathname_key.verdict_map_type = verdict_map_type;
     exception_map_pathname_key.inode_no = f->f_inode->i_ino;
     exception_map_pathname_key.s_dev = s_dev;
-    exception_map_pathname_key.uid = uid;
+    exception_map_pathname_key.euid = euid;
 
     value = bpf_map_lookup_elem(
         &exception_map_pathname_hash, &exception_map_pathname_key);

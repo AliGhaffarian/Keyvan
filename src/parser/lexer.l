@@ -9,7 +9,7 @@ str [a-zA-Z0-9_/.-]+
 
 #.*\n
 
-"uid"               { return UID; }
+"euid"               { return EUID; }
 
 "auth"              { return AUTH; }
 "verdict"           { return VERDICT; }
