@@ -9,3 +9,4 @@ output
 cscope.*
 *.skel.h
 *.o
+__pycache__
