@@ -264,6 +264,11 @@ auth: { #comment
 
 
 if __name__ == "__main__":
+    def sighandler(__, _):
+        logger.info("got interrupted, cleaning up")
+        cleanup_n_exit(1)
+
+    signal.signal(signal.SIGINT, sighandler)
     if os.geteuid() != 0:
         logger.critical("run me as root")
         cleanup_n_exit(1)
