@@ -12,15 +12,15 @@ unlocked to an unauthorized user while restricting their access in order to conf
 Example config:
 
 ```
-# The following configs are related to uid 1000
-uid: 1000
+# The following configs are related to euid 1000
+euid: 1000
 
 # deny execve until user executes `/some/password`
 auth: {
 	type: execve
 	pathname: /some/password #need to execute this pathname to authenticate
 
-    verdict_sub_type: K1_VERDICT_MAP_UID
+    verdict_sub_type: K1_VERDICT_MAP_EUID
 
     # the following verdict associates with the container auth
     verdict: {
