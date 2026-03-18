@@ -4,6 +4,8 @@
 
 %s BEGIN_SERIAL_MATCH
 
+%option noyywrap
+
 str [a-zA-Z0-9_/.-]+
 %%
 
@@ -43,5 +45,3 @@ str [a-zA-Z0-9_/.-]+
 [ \t\n]+            ;
 .                   { return yytext[0]; }
 %%
-
-int yywrap(void) { return 1; }
