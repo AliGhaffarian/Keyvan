@@ -50,14 +50,13 @@ The auth block defines:
 Syntax:
 ```
 auth: {
-    type: <type_name>
+    auth_type: <type_name>
     <specific_fields>
-    verdict_sub_type: <map_type_string>
     [ verdict: { <verdict_body> } ]
 }
 ```
 
-#### auth.type
+#### auth.auth_type
 
 The type field determines:
 - How credentials are passed
@@ -76,13 +75,6 @@ Supported authentication types:
     - Can be used for per-session verdict: NO
 
 
-#### auth.verdict_sub_type
-
-Determines if the verdict that follows needs to work in either per-euid or per-session mode.
-- Possible Values
-    - K1_VERDICT_MAP_SID: per-session mode
-    - K1_VERDICT_MAP_EUID: per-user mode
-
 #### auth.verdict
 
 An auth block can contain a nested verdict block (wrapped in braces { }) to define the verdict associated with this authentication.
@@ -95,12 +87,20 @@ The verdict block defines allow-lists and block-lists for system events. This ca
 Syntax:
 ```
 verdict: {
-    type: <type_name>
+    verdict_type: <type_name>
+    verdict_sub_type: <sub_type>
     [ whitelists: <pathnames> | blacklists: <pathnames>]
     [ whitelists: <pathnames> | blacklists: <pathnames>]
     ...
 }
 ```
+
+#### verdict.verdict_sub_type
+
+Determines if the verdict that follows needs to work in either per-euid or per-session mode.
+- Possible Values
+    - per_session: per-session mode
+    - per_user: per-user mode
 
 #### verdict.type
 
@@ -124,11 +124,11 @@ This policy uses `/password` as a credential links it to a euid-based verdict ma
 ```
 euid: 1000
 auth: {
-    type: execve
+    auth_type: execve
     pathname: /password
-    verdict_sub_type: K1_VERDICT_MAP_EUID
     verdict: {
-        type: execve
+        verdict_sub_type: per_user
+        verdict_type: execve
     }
 }
 ```
@@ -137,11 +137,11 @@ Use USB authentication for euid 1001 and prevent root from accessing running `ac
 ```
 euid: 1001
 auth: {
-    type: usb
+    auth_type: usb
     serial: A1B2C3D4E5
-    verdict_sub_type: K1_VERDICT_MAP_SID
     verdict: {
-        type: execve
+        verdict_sub_type: per_session
+        verdict_type: execve
         whitelists:
             /usr/bin/login
             /bin/x-window-manager
@@ -152,11 +152,11 @@ auth: {
 
 euid: 0
 auth: {
-    type: execve
+    auth_type: execve
     pathname: /password
-    verdict_sub_type: K1_VERDICT_MAP_EUID
     verdict: {
-        type: execve
+        verdict_sub_type: per_user
+        verdict_type: execve
         blacklists:
             /bin/acpi
     }

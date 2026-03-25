@@ -24,6 +24,8 @@ add_library(parser
     ${CMAKE_BINARY_DIR}/parser.tab.c
     ${CMAKE_BINARY_DIR}/src/include/parser.tab.h
     ${CMAKE_BINARY_DIR}/lexer.yy.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/parser_enum_maps/parser_enum_maps.c
 )
 
 target_include_directories(parser SYSTEM BEFORE PRIVATE ${K1_USER_INCLUDES})
+target_include_directories(parser SYSTEM BEFORE PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/parser_enum_maps)

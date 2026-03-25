@@ -154,11 +154,11 @@ def test_execve_euid():
 euid: <euid> #comment
 #comment
 auth: { #comment
-    type: execve #comment
+    auth_type: execve #comment
     pathname: <password> #comment
-    verdict_sub_type: K1_VERDICT_MAP_EUID #comment
     verdict: { #comment
-        type: execve #comment
+        verdict_type: execve #comment
+        verdict_sub_type: per_user #comment
         whitelists:
             <whitelists>
         blacklists:
@@ -221,11 +221,11 @@ def test_execve_sid():
 euid: <euid> #comment
 #comment
 auth: { #comment
-    type: execve #comment
+    auth_type: execve #comment
     pathname: <password> #comment
-    verdict_sub_type: K1_VERDICT_MAP_SID #comment
     verdict: { #comment
-        type: execve #comment
+        verdict_sub_type: per_session #comment
+        verdict_type: execve #comment
         whitelists:
             /bin/sh
             <whitelists>

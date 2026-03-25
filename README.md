@@ -5,8 +5,6 @@ It provides silent authentication checks and access control verdicts for resourc
 (files, execs, and later network actions). The goal is to allow a machine to appear
 unlocked to an unauthorized user while restricting their access in order to confuse them.
 
-![](https://alighaffarian.github.io/Keyvan/doc/assets/demo.gif)
-
 ## Quick start
 
 Example config:
@@ -17,14 +15,13 @@ euid: 1000
 
 # deny execve until user executes `/some/password`
 auth: {
-	type: execve
+	auth_type: execve
 	pathname: /some/password #need to execute this pathname to authenticate
-
-    verdict_sub_type: K1_VERDICT_MAP_EUID
 
     # the following verdict associates with the container auth
     verdict: {
-        type: execve
+        verdict_sub_type: per_user
+        verdict_type: execve
     }
 }
 ```
