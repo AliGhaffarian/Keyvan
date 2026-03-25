@@ -28,16 +28,16 @@ int main(int argc, char **argv)
     handle_args(argc, argv);
     current_log_level = args.loglevel;
 
+    config_file = fopen(args.config_filename, "r");
+
+    yyin = config_file;
+    yyparse();
+
     skel = bpf_progs__open_and_load();
     if(!skel) {
         printf("%s\n", strerror(errno));
         return 1;
     }
-
-    config_file = fopen(args.config_filename, "r");
-
-    yyin = config_file;
-    yyparse();
 
     complete_ruleset_linked_list(ruleset_linked_list);
     if(current_log_level == LOG_DEBUG)
