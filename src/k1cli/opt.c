@@ -21,7 +21,7 @@ struct args_struct args = {
     .loglevel = LOG_INFO,
 };
 
-char *usage_help = "usage: k1cli -c[onfig-file] -l[og-level] CONFIG_FILE";
+char *usage_help = "usage: k1cli -c[onfig-file] CONFIG_FILE -l[og-level]";
 
 struct option long_options[] = {
     {.name = "config-file",
