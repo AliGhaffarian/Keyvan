@@ -1,6 +1,9 @@
 #ifndef K1_LINKED_LIST
 #define K1_LINKED_LIST
 
+/**
+ * @brief Linked list node. Also acts as the head node.
+ */
 struct k1_node {
     struct k1_node *next;
     void *data;

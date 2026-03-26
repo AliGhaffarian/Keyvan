@@ -169,6 +169,9 @@ inline void k1_change_user_auth_state(
     k1_do_op_on_flag(&elem->record.is_authenticated, op);
 }
 
+/**
+ * @brief context struct used in `first_auth_record_with_euid_of_context()`
+ */
 struct find_auth_record_ctx {
     struct k1_auth_map_key *key;
     struct k1_auth_map_value *result;

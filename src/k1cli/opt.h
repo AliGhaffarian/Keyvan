@@ -12,6 +12,9 @@
 
 extern char *usage_help;
 
+/**
+ * @brief Stores parsed command line arguments.
+ */
 struct args_struct {
     char *config_filename;
     int loglevel;

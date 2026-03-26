@@ -14,6 +14,10 @@
 #include <k1_map_pairs.h>
 #include <verdict_record.h>
 
+/**
+ * @brief BPF map exposed by the session refcounting subsystem. Is mostly used
+ * to check if a session is refcounted.
+ */
 struct k1_refcounting_map_session_hash {
     __uint(type, BPF_MAP_TYPE_HASH);
     __uint(max_entries, 1024);
@@ -42,6 +46,13 @@ struct k1_verdict_map_user_hash {
     __type(value, struct k1_verdict_map_user_value);
 };
 
+/**
+ * @brief BPF map that stores effective user ID of users that registered a
+ * per-session verdict.
+ *
+ * The map has values for users that registered a per-session verdict. A lookup
+ * for a user that does not returns `NULL`.
+ */
 struct k1_users_having_sid_verdict_map_hash {
     __uint(type, BPF_MAP_TYPE_HASH);
     __uint(max_entries, 1024);
@@ -49,6 +60,13 @@ struct k1_users_having_sid_verdict_map_hash {
     __type(value, DUMMY_MAP_VALUE_T); /* won't be used */
 };
 
+/**
+ * @brief BPF map that stores effective user ID of users that registered
+ * anything.
+ *
+ * The map has values for users that registered anything. A lookup for a user
+ * that does not returns `NULL`.
+ */
 struct k1_registered_euids_map_hash {
     __uint(type, BPF_MAP_TYPE_HASH);
     __uint(max_entries, 1024);
@@ -63,6 +81,9 @@ struct k1_exception_map_pathname_hash {
     __type(value, struct k1_exception_map_pathname_value);
 };
 
+/**
+ * @brief BPF map that maps files to their trusted hash.
+ */
 struct k1_trust_map_file2sha256_hash {
     __uint(type, BPF_MAP_TYPE_HASH);
     __uint(max_entries, 1024);

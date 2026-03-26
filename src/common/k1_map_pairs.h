@@ -27,6 +27,9 @@ enum K1_VERDICT_MAP_TYPE {
     _K1_VERDICT_MAP_SIZE,
 };
 
+/**
+ * @brief Helps auth checkers to find the corresponding verdict map entry.
+ */
 struct k1_verdict_entry_lookup_info {
     enum K1_VERDICT_MAP_TYPE verdict_map_type;
     enum K1_VERDICT_HOOK verdict_hook;
@@ -76,6 +79,12 @@ struct k1_verdict_map_session_value {
     struct k1_verdict_record record;
 };
 
+/**
+ * @brief (unused) key-value pair for `verdict_map_session_hash`
+ *
+ * This struct is not constructed anywhere, but the key and value themselves
+ * are. It is declared so we don't have to declare it again when needed.
+ */
 struct k1_verdict_map_session_pair {
     struct k1_verdict_map_session_key key;
     struct k1_verdict_map_session_value value;
@@ -86,6 +95,17 @@ struct k1_auth_map_pair {
     struct k1_auth_map_value value;
 };
 
+/**
+ * @brief key-value pair for `verdict_map_user_hash`
+ *
+ * This struct has an implicit usage in the parser, that is it will always be
+ * constructed whether the verdict block specifies per-user or per-session
+ * verdict sub type. The rational is that we need this struct to hold the values
+ * needed to fill the other part of parsed policy, such as
+ * `k1_verdict_entry_lookup_info` needed for auth checkers when they want to
+ * update a verdict. `k1_verdict_map_session_pair` unlike this struct, is never
+ * constructed in the parser.
+ */
 struct k1_verdict_map_user_pair {
     struct k1_verdict_map_user_key key;
     struct k1_verdict_map_user_value value;
