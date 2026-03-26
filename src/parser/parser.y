@@ -75,7 +75,7 @@
 %type <parsed_verdict_block_fields> verdict_block_fields
 %type <policy> verdict_policy
 
-%type <policy> policy   // completes the incomplete structures, such as keys and exception lists
+%type <policy> policy
 %type <node> policies   //linked list of policies
 %type <node> entry      //linked list of ruleset heads
 
