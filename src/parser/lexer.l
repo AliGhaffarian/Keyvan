@@ -12,7 +12,7 @@ void yyerror(const char *s);
 
 %s BEGIN_SERIAL_MATCH
 %s BEGIN_PATHNAME_MATCH
-%s BEGIN_U32_MATCH
+%s BEGIN_EUID_MATCH
 %s BEGIN_VERDICT_SUB_TYPE_MATCH
 %s BEGIN_AUTH_TYPE_MATCH
 %s BEGIN_VERDICT_TYPE_MATCH
@@ -27,8 +27,8 @@ integer [[:digit:]]+
 
 #.*\n
 
-euid[[:blank:]]*:[[:blank:]]* { BEGIN(BEGIN_U32_MATCH); }
-<BEGIN_U32_MATCH>{
+euid[[:blank:]]*:[[:blank:]]* { BEGIN(BEGIN_EUID_MATCH); }
+<BEGIN_EUID_MATCH>{
     {hex}[[:blank:]]* {
         //TODO: handle errors for numbers higher than u32
         BEGIN(INITIAL);
