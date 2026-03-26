@@ -23,8 +23,6 @@
 %token <str>  PATHNAME
 %token <str>  STRING
 %token <str>  SERIAL
-%token EXECVE
-%token USB
 %token AUTH
 %token VERDICT
 %token <verdict_map_type> VERDICT_SUB_TYPE
