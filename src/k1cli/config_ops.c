@@ -94,6 +94,11 @@ int complete_ruleset(struct k1_policies_head_node *policies_head_node)
 
             current_policy->auth_map_pair->value.verdict_entry_lookup_info
                 .verdict_map_type = current_policy->verdict_sub_type;
+
+            current_policy->auth_map_pair->value.is_authenticated =
+                current_policy->verdict_map_user_pair->value.record
+                    .is_authenticated;
+
             current_policy->auth_map_pair->value.verdict_entry_lookup_info
                 .verdict_hook =
                 current_policy->verdict_map_user_pair->key.verdict_hook;

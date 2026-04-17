@@ -262,6 +262,138 @@ auth: { #comment
     terminate_k1cli(k1cli)
     logger.info("passed")
 
+def test_default_is_authenticated_sid():
+    global conf
+    #simple case
+    whitelist = TRUE_PROG
+    blacklist = "/bin/ip"
+    password = "/password"
+    euid = 1000
+
+    script = [
+        [LS_PROG],
+        [password],
+        [LS_PROG],
+        [blacklist]
+    ]
+
+    #simple case
+    k1_conf = """
+euid: <euid> #comment
+#comment
+auth: { #comment
+    auth_type: execve #comment
+    pathname: <password> #comment
+    verdict: { #comment
+        verdict_sub_type: per_session #comment
+        verdict_type: execve #comment
+        is_authenticated: true
+        whitelists:
+            /bin/sh
+            <whitelists>
+        blacklists:
+            <blacklists>
+    } #comment
+} #comment
+"""
+
+    k1_conf = k1_conf.replace("<password>", password)\
+    .replace("<whitelists>", whitelist)\
+    .replace("<blacklists>", blacklist)\
+    .replace("<euid>", str(euid))
+
+    conf_file = write_conf_to_tmpfile(k1_conf)
+
+    k1cli = run_k1cli(conf_file)
+    if k1cli is None:
+        return None
+
+    expect_cmd_success_uid([LS_PROG], 1000, start_new_session=False)
+    expect_cmd_success_uid([LS_PROG], 1000, start_new_session=True)
+    expect_cmd_success_uid([whitelist], 1000, start_new_session=True)
+    expect_cmd_fail_uid([blacklist], 1000, start_new_session=True)
+
+    errors = do_shellscript_uid(script, euid, start_new_session = True)
+
+    # before auth, we are authenticated, so we expect commands to succeed
+    assert(errors[0] == 0) # before auth
+    #errors[1] is at de-auth
+    assert(errors[2] != 0) # after auth
+    assert(errors[3] != 0) # black list
+
+    errors = do_shellscript_uid(script, euid, start_new_session = True)
+
+    assert(errors[0] != 0) # before auth
+    #errors[1] is at auth
+    assert(errors[2] == 0) # after auth
+    assert(errors[3] != 0) # black list
+
+    conf_file.close()
+
+    terminate_k1cli(k1cli)
+    logger.info("passed")
+
+def test_default_is_authenticated_euid():
+    global conf
+    #simple case
+    whitelist = TRUE_PROG
+    blacklist = "/bin/ip"
+    password = "/password"
+    euid = 1000
+
+    script = [
+        [LS_PROG],
+        [password],
+        [LS_PROG],
+        [blacklist]
+    ]
+
+    #simple case
+    k1_conf = """
+euid: <euid> #comment
+#comment
+auth: { #comment
+    auth_type: execve #comment
+    pathname: <password> #comment
+    verdict: { #comment
+        verdict_sub_type: per_user #comment
+        verdict_type: execve #comment
+        is_authenticated: true
+        whitelists:
+            /bin/sh
+            <whitelists>
+        blacklists:
+            <blacklists>
+    } #comment
+} #comment
+"""
+
+    k1_conf = k1_conf.replace("<password>", password)\
+    .replace("<whitelists>", whitelist)\
+    .replace("<blacklists>", blacklist)\
+    .replace("<euid>", str(euid))
+
+    conf_file = write_conf_to_tmpfile(k1_conf)
+
+    k1cli = run_k1cli(conf_file)
+    if k1cli is None:
+        return None
+
+    expect_cmd_success_uid([LS_PROG], 1000, start_new_session=False)
+    expect_cmd_success_uid([whitelist], 1000, start_new_session=False)
+    expect_cmd_fail_uid([blacklist], 1000, start_new_session=False)
+
+    # de-auth
+    do_cmd_as_uid([password], euid, start_new_session = False)
+
+    expect_cmd_fail_uid([LS_PROG], 1000, start_new_session=False)
+    expect_cmd_success_uid([whitelist], 1000, start_new_session=False)
+    expect_cmd_fail_uid([blacklist], 1000, start_new_session=False)
+
+    conf_file.close()
+
+    terminate_k1cli(k1cli)
+    logger.info("passed")
 
 if __name__ == "__main__":
     def sighandler(__, _):
@@ -276,5 +408,7 @@ if __name__ == "__main__":
     trigger_ima()
     test_execve_euid()
     test_execve_sid()
+    test_default_is_authenticated_sid()
+    test_default_is_authenticated_euid()
 
     cleanup_n_exit(0)

@@ -31,9 +31,11 @@
 %token AUTH_TYPE_USB
 %token AUTH_TYPE_EXECVE
 %token VERDICT_TYPE_EXECVE
+%token <boolval> IS_AUTHENTICATED
 
 %union {
     int number;
+    bool boolval;
     char *str;
     uint32_t u32val;
     uid_t euidval;
@@ -70,6 +72,7 @@
 %type <parsed_auth_block_fields> auth_block_fields
 %type <policy> auth_policy
 
+%type <verdict_map_user_pair> execve_verdict_struct_field
 %type <verdict_map_user_pair> execve_verdict_struct
 %type <parsed_verdict_block_fields> verdict_block_field
 %type <parsed_verdict_block_fields> verdict_block_fields
@@ -321,14 +324,55 @@ exception_lists:
                 }
 ;
 
-execve_verdict_struct:
+execve_verdict_struct_field:
                 VERDICT_TYPE_EXECVE
                 {
                     struct k1_verdict_map_user_pair *self = calloc(1, sizeof(*self));
                     if(!self) yyerror("failed to allocate self for execve_verdict_struct");
 
+                    // when we have other verdict_hook's, this will be fetched from the token, rather than being hardcoded.
                     self->key.verdict_hook = K1_VERDICT_HOOK_LSM_BPRM_CREDS_FOR_EXEC;
 
+                    $$ = self;
+                }
+                | IS_AUTHENTICATED
+                {
+                    struct k1_verdict_map_user_pair *self = calloc(1, sizeof(*self));
+                    if(!self) yyerror("failed to allocate self for exception_lists of verdict_block_field");
+
+                    self->value.record.is_authenticated = $1;
+
+                    $$ = self;
+                }
+;
+execve_verdict_struct:
+                %empty
+                {
+                    $$ = NULL;
+                }
+                | execve_verdict_struct execve_verdict_struct_field
+                {
+                    struct k1_verdict_map_user_pair *self = $1;
+                    struct k1_verdict_map_user_pair *parsed_verdict_map_user_pair = $2;
+                    if(!self)
+                        self = calloc(1, sizeof(*self));
+                    if(!self)
+                        yyerror("failed to allocate self for execve_verdict_struct");
+
+                    if(parsed_verdict_map_user_pair->key.verdict_hook){
+                        if(self->key.verdict_hook)
+                            yyerror("duplicate verdict_type");
+                        self->key.verdict_hook = parsed_verdict_map_user_pair->key.verdict_hook;
+                    }
+
+                    if(parsed_verdict_map_user_pair->value.record.is_authenticated){
+                        // this check is unreliable, since 0 is a valid value for the field
+                        if(self->value.record.is_authenticated)
+                            yyerror("duplicate is_authenticated");
+                        self->value.record.is_authenticated = parsed_verdict_map_user_pair->value.record.is_authenticated;
+                    }
+
+                    free(parsed_verdict_map_user_pair);
                     $$ = self;
                 }
 ;
@@ -392,7 +436,7 @@ verdict_block_fields:
 
                     if(parsed_field->verdict_map_user_pair){
                         if(self->verdict_map_user_pair)
-                            yyerror("duplicate verdict information");
+                            yyerror("duplicate verdict information (maybe you didn't put verdict specs together?)");
                         self->verdict_map_user_pair = parsed_field->verdict_map_user_pair;
                     }
 

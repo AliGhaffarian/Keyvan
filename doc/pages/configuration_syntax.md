@@ -89,6 +89,7 @@ Syntax:
 verdict: {
     verdict_type: <type_name>
     verdict_sub_type: <sub_type>
+    [is_authenticated: (true|false)]
     [ whitelists: <pathnames> | blacklists: <pathnames>]
     [ whitelists: <pathnames> | blacklists: <pathnames>]
     ...
@@ -107,6 +108,11 @@ Determines if the verdict that follows needs to work in either per-euid or per-s
 Supported verdict types:
 1. `execve`
     - Description: controls `execve` calls via LSM
+
+#### verdict.is_authenticated
+
+If set to true, state of verdict and authenticate checker will start as if the user is already authenticated. Once use case for this is blacklisting binaries.
+- Possible Values: true and false
 
 #### Exception Lists
 

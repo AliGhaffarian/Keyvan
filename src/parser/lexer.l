@@ -16,6 +16,7 @@ void yyerror(const char *s);
 %s BEGIN_VERDICT_SUB_TYPE_MATCH
 %s BEGIN_AUTH_TYPE_MATCH
 %s BEGIN_VERDICT_TYPE_MATCH
+%s BEGIN_IS_AUTHENTICATED_MATCH
 
 %option noyywrap
 
@@ -134,6 +135,27 @@ euid[[:blank:]]*:[[:blank:]]* { BEGIN(BEGIN_EUID_MATCH); }
     }
     . {
         yyerror("invalid pathname");
+    }
+}
+
+"is_authenticated"[[:blank:]]*":"[[:blank:]] { BEGIN(BEGIN_IS_AUTHENTICATED_MATCH); }
+<BEGIN_IS_AUTHENTICATED_MATCH>{
+    "true" {
+        BEGIN(INITIAL);
+
+        yylval.boolval = 1;
+
+        return IS_AUTHENTICATED;
+    }
+    "false" {
+        BEGIN(INITIAL);
+
+        yylval.boolval = 0;
+
+        return IS_AUTHENTICATED;
+    }
+    . {
+        yyerror("invalid boolval (must be \"true\" or \"false\")");
     }
 }
 
