@@ -1,10 +1,8 @@
 @page session_refcounting Session Reference Counting
 
-# Session Reference Counting
-
-
 @dot
 digraph session_refcounting {
+    newrank=true;
     graph [
         ranksep=0.8,
         nodesep=0.8,
@@ -27,18 +25,18 @@ digraph session_refcounting {
         exit_setsid [label="tp/syscalls/sys_exit_setsid"]
         enter_setsid [label="tp/syscalls/sys_enter_setsid"]
 
-        refcounting_map_old_sessionid [label="refcounting_map_old_sessionid"]
+        refcounting_map_old_sessionid [label="refcounting_map_old_sessionid", shape=ellipse]
     }
 
     subgraph cluster_keyvan {
-        label="keyvan";
+        label="keyvan (kernel space)";
         style=rounded;
 
-        users_having_sid_verdict_map [label="users_having_sid_verdict_map"];
+        users_having_sid_verdict_map [label="users_having_sid_verdict_map", shape=ellipse];
 
-        verdict_map_session [label="verdict_map_session"];
+        verdict_map_session [label="verdict_map_session", shape=ellipse];
 
-        refcounting_map_session [label="refcounting_map_session"];
+        refcounting_map_session [label="refcounting_map_session", shape=ellipse];
 
     }
 

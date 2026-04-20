@@ -22,32 +22,32 @@ digraph k1_architecture {
 
         auth_checkers [label="auth_checkers"];
 
-        users_having_sid_verdict_map [label="users_having_sid_verdict_map"];
-        registered_euids_map [label="registered_euids_map"];
-        auth_checker_map [label="auth_checker_map"];
+        users_having_sid_verdict_map [label="users_having_sid_verdict_map", shape=ellipse];
+        registered_euids_map [label="registered_euids_map", shape=ellipse];
+        auth_map [label="auth_map", shape=ellipse];
 
-        verdict_user [label="verdict_map_user"];
-        verdict_session [label="verdict_map_session"];
+        verdict_user [label="verdict_map_user", shape=ellipse];
+        verdict_session [label="verdict_map_session", shape=ellipse];
 
         verdicts [label="verdicts"];
-        exception_map_pathname [label="exception_map_pathname"];
-        refcounting_session_subsystem [label="refcounting_session_subsystem"];
-        refcounting_map_session [label="refcounting_map_session"]
+        exception_map_pathname [label="exception_map_pathname", shape=ellipse];
+        refcounting_session_subsystem [label="refcounting_session_subsystem", shape=tab];
+        refcounting_map_session [label="refcounting_map_session", shape=ellipse]
 
-        trust_map_file2sha256 [label="trust_map_file2sha256"];
+        trust_map_file2sha256 [label="trust_map_file2sha256", shape=ellipse];
     }
 
     // User - Kernel
     cli -> users_having_sid_verdict_map;
     cli -> registered_euids_map;
     cli -> exception_map_pathname;
-    cli -> auth_checker_map;
+    cli -> auth_map;
 
     // Auth checker inputs
-    users_having_sid_verdict_map -> auth_checkers;
+    users_having_sid_verdict_map -> refcounting_session_subsystem;
     registered_euids_map -> auth_checkers;
-    auth_checker_map -> auth_checkers;
-    auth_checkers -> auth_checker_map;
+    auth_map -> auth_checkers;
+    auth_checkers -> auth_map;
 
     // Verdict propagation
     auth_checkers -> verdict_user;
@@ -70,9 +70,7 @@ digraph k1_architecture {
 }
 @enddot
 
-## Components
-@subpage bpf_programs
-
-@subpage session_refcounting
-
-@subpage pathname_exception
+**Components**
+- @subpage bpf_programs
+- @subpage session_refcounting
+- @subpage pathname_exception

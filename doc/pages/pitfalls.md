@@ -2,8 +2,6 @@
 
 @tableofcontents
 
-# Pitfalls
-
 These pitfalls are mostly about not getting locked out. If you are stuck, restarting your display manager or system as a whole will fix the issue.
 
 ## Exception rules

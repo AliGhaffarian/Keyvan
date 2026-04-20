@@ -2,7 +2,6 @@
 
 @tableofcontents
 
-# Configuration Syntax
 
 The configuration format is hierarchical. The top-level entry point must always specify a euid, followed by one or more policy definition for that user.
 
@@ -28,7 +27,7 @@ Verdict rules are triggered based on the following order, whenever one is trigge
 3. per-user exception
 4. per-user verdict
 
-## User Identification (euid)
+# User Identification (euid)
 
 Every policy block begins by specifying the target user ID.
 
@@ -36,11 +35,11 @@ Every policy block begins by specifying the target user ID.
 
     Example: euid: 1000
 
-## Policy Types
+# Policy Types
 
 After specifying a euid, you can define one of two policy types: Authentication (auth) or Verdict (verdict).
 
-###  Authentication Policy (auth)
+##  Authentication Policy (auth)
 
 The auth block defines:
 - Authentication type
@@ -56,7 +55,7 @@ auth: {
 }
 ```
 
-#### auth.auth_type
+### auth.auth_type
 
 The type field determines:
 - How credentials are passed
@@ -75,11 +74,11 @@ Supported authentication types:
     - Can be used for per-session verdict: NO
 
 
-#### auth.verdict
+### auth.verdict
 
 An auth block can contain a nested verdict block (wrapped in braces { }) to define the verdict associated with this authentication.
 
-### Verdict Policy (verdict)
+## Verdict Policy (verdict)
 
 The verdict block defines allow-lists and block-lists for system events. This can appear nested inside an auth block or as a standalone policy for a euid.
 @note verdicts that are not associated with a auth checker have no way for them to change state
@@ -96,25 +95,25 @@ verdict: {
 }
 ```
 
-#### verdict.verdict_sub_type
+### verdict.verdict_sub_type
 
 Determines if the verdict that follows needs to work in either per-euid or per-session mode.
 - Possible Values
     - per_session: per-session mode
     - per_user: per-user mode
 
-#### verdict.type
+### verdict.type
 
 Supported verdict types:
 1. `execve`
     - Description: controls `execve` calls via LSM
 
-#### verdict.is_authenticated
+### verdict.is_authenticated
 
 If set to true, state of verdict and authenticate checker will start as if the user is already authenticated. Once use case for this is blacklisting binaries.
 - Possible Values: true and false
 
-#### Exception Lists
+### Exception Lists
 
 You can define lists of paths that are explicitly allowed or denied. These lists contain whitespace-separated strings (no commas required).
 @note Currently exception lists works only if all the pathnames point to an executable AND have been executable prior to running keyvan

@@ -1,13 +1,13 @@
 # Overview
 
-**Keyvan** (aka `k1`) is a kernel level access control mechanism implemented using eBPF.
+**Keyvan** is a kernel level access control system implemented using eBPF.
 It provides silent authentication checks and access control verdicts for resources
-(files, execs, and later network actions). The goal is to allow a machine to appear
-unlocked to an unauthorized user while restricting their access in order to confuse them.
+(files, execs, and later network actions). The goal is to cause confusion on how a
+access to a resource is permitted.
 
-## Quick start
+## Quick Start
 
-Example config:
+Example configuration:
 
 ```
 # The following configs are related to euid 1000

@@ -1,6 +1,4 @@
-@page pathname_exception pathname exception
-
-# Pathname Exception
+@page pathname_exception Pathname Exception
 
 Pathnames are identified by the combination of their inode number and decoded device number.
 
