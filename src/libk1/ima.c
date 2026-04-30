@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-const char *fmt_proc_cmdline_ima_hash = "ima_hash=%s";
+const char *fmt_proc_cmdline_ima_hash = "ima_hash=%63s";
 const char *pathname_ima_runtime_measurements_sha256 =
     "/sys/kernel/security/ima/ascii_runtime_measurements_sha256";
 
