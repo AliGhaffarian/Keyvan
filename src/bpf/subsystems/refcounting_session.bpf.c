@@ -14,7 +14,7 @@
 #endif
 
 struct k1_refcounting_map_old_sessionid_value {
-    __u64 sesssoinid;
+    __u64 sessionid;
 };
 struct k1_refcounting_map_old_sessionid_hash {
     __uint(type, BPF_MAP_TYPE_TASK_STORAGE);
@@ -142,13 +142,13 @@ int BPF_PROG(refcount_session_exit_setsid, int nr, int ret)
 
     /*error is ignored, a user's old sessions are not tracked*/
     original_refcount = k1_bpf_dec_sessionid_refcount(
-        refcounting_map_old_sessionid_value->sesssoinid);
+        refcounting_map_old_sessionid_value->sessionid);
 
     if(original_refcount < 0)
         return 0;
     if(original_refcount == 1)
         k1_bpf_cleanup_sessionid(
-            refcounting_map_old_sessionid_value->sesssoinid);
+            refcounting_map_old_sessionid_value->sessionid);
 
     return 0;
 }
@@ -159,9 +159,9 @@ int BPF_PROG(refcount_session_enter_setsid)
     struct task_struct *current_task =
         (struct task_struct *)bpf_get_current_task_btf();
     struct k1_refcounting_map_old_sessionid_value value = {
-        .sesssoinid = k1_bpf_get_current_sessionid()};
+        .sessionid = k1_bpf_get_current_sessionid()};
 
-    if(value.sesssoinid == INVALID_SESSIONID)
+    if(value.sessionid == INVALID_SESSIONID)
         return 0;
 
     if(!current_task)
@@ -177,11 +177,11 @@ int BPF_PROG(refcount_session_enter_setsid)
         bpf_printk("enexpected error updating task storage");
         return 0;
     }
-    if(test->sesssoinid != value.sesssoinid)
+    if(test->sessionid != value.sessionid)
         bpf_printk(
             "task storage didn't update, expected: %d, got: %d",
-            value.sesssoinid,
-            test->sesssoinid);
+            value.sessionid,
+            test->sessionid);
     return 0;
 }
 
