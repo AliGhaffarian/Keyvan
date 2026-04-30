@@ -63,8 +63,10 @@ void handle_args(int argc, char **argv)
             break;
         case 'l':
             args.loglevel = enum_from_string_log_levels(optarg);
-            if(!args.loglevel)
+            if(!args.loglevel) {
+                printf("invalid log level: %s\n", optarg);
                 print_help_and_quit();
+            }
             break;
         case 'h':
             print_help_and_quit();

@@ -14,11 +14,13 @@
 #endif
 
 enum LOG_LEVELS {
+    _LOG_UNSPEC,
     LOG_NOLOG,
     LOG_INFO,
     LOG_WARN,
     LOG_ERROR,
-    LOG_DEBUG
+    LOG_DEBUG,
+    _LOG_SIZE,
 };
 
 extern const char *LOG_LEVELS2STR[];
