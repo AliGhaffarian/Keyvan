@@ -69,6 +69,7 @@ enum K1_FLAG_CHANGE_OPS {
 
 static inline void k1_do_op_on_flag(__u64 *flag, enum K1_FLAG_CHANGE_OPS op)
 {
+    __u64 set_num = 0;
     switch(op) {
     case(K1_FLAG_CHANGE_CLEAR):
         __sync_lock_test_and_set(flag, 0);
@@ -78,7 +79,10 @@ static inline void k1_do_op_on_flag(__u64 *flag, enum K1_FLAG_CHANGE_OPS op)
         __sync_lock_test_and_set(flag, 1);
         break;
     case(K1_FLAG_CHANGE_TOGGLE):
-        __sync_fetch_and_xor(flag, 1);
+        // TODO: can we have a xor mask that enables this in a single xor?
+        bpf_printk("warning, racy operation used: toggle");
+        set_num = (*flag) == 1 ? 0 : 1;
+        __sync_lock_test_and_set(flag, set_num);
         break;
     // should never happen
     default:
