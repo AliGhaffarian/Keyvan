@@ -42,6 +42,7 @@ digraph k1_architecture {
     cli -> registered_euids_map;
     cli -> exception_map_pathname;
     cli -> auth_map;
+    cli -> verdict_user;
 
     // Auth checker inputs
     users_having_sid_verdict_map -> refcounting_session_subsystem;
