@@ -112,6 +112,7 @@ Supported verdict types:
 
 If set to true, state of verdict and authenticate checker will start as if the user is already authenticated. Once use case for this is blacklisting binaries.
 - Possible Values: true and false
+@note this field is note supported for per_session verdicts, and it will be ignored
 
 ### Exception Lists
 

@@ -54,9 +54,6 @@ int BPF_PROG(auth_cred_execve_check, void *a, void *b, char *filename)
 
     cred_check = k1_strcmp(buf, elem->record.auth_cred_execve.pathname) == 0;
 
-    if(cred_check == 1)
-        k1_do_op_on_flag(&elem->is_authenticated, default_action_on_cred_pass);
-
     /* if cred_check has failed, we didn't change our verdict so we don't need
      * to manipulate the destination verdict if elem->is_authenticated is 1 and
      * cred check has failed, it means we still believe the verdict should
@@ -64,10 +61,18 @@ int BPF_PROG(auth_cred_execve_check, void *a, void *b, char *filename)
      * creation on the verdict side (such as per-session verdict type), in that
      * case the verdict will think it should deny the request
      */
-    if(cred_check == 0 && elem->is_authenticated == 0)
-        return 0;
+    // TODO: fix this mess, there was a bug with default value and
+    // K1_VERDICT_MAP_SID, i did this workaround just to ignore it for now
+    if(cred_check == 1) {
+        k1_do_op_on_flag(&elem->is_authenticated, default_action_on_cred_pass);
+    }
 
-    if(elem->is_authenticated)
+    if(elem->verdict_entry_lookup_info.verdict_map_type == K1_VERDICT_MAP_SID)
+        if(cred_check == 1)
+            flag_change_op_on_verdict = default_action_on_cred_pass;
+        else
+            return 0;
+    else if(elem->is_authenticated)
         flag_change_op_on_verdict = K1_FLAG_CHANGE_SET;
     else
         flag_change_op_on_verdict = K1_FLAG_CHANGE_CLEAR;
@@ -81,7 +86,9 @@ int BPF_PROG(auth_cred_execve_check, void *a, void *b, char *filename)
         if(!bpf_map_lookup_elem(
                &refcounting_map_session_hash, &current_sessionid))
             return 0; /*this session is started before us, thus not tracked*/
-        bpf_printk("changing state of session");
+        bpf_printk(
+            "changing state of session: TOGGLE:%d",
+            flag_change_op_on_verdict == K1_FLAG_CHANGE_TOGGLE);
         k1_change_session_auth_state(
             &elem->verdict_entry_lookup_info,
             current_sessionid,
